@@ -32,13 +32,11 @@
 ## 三、使用步骤
 ### 集成
 ```
-gradle:7.0.2以上  settings.gradle --> repositories下面也要引入,同上.
-项目 app --> build.gradle  dependencies 下面 引入:
-    api 'com.quectel.app.service:quec-sdkmerge:1.0.0-SNAPSHOT'
-    
+gradle:7.0.2以上  settings.gradle --> repositories下面也要引入
+
 ```
 
-### 具体API用法可以参考 AndroidSDKDemo [example](http://192.168.23.184:8108/frontend/app/AndroidSDK/AndroidSDKDemo.git )。
+
 
 
 

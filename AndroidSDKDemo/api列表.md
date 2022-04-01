@@ -763,7 +763,7 @@ public void queryAcceptSharedDeviceGroup(String shareCode ,IHttpCallBack callbac
 |参数|	是否必传|说明|	
 | --- | --- | --- |
 | type |是|  1：透传 2：属性 3：服务	| 
-| data |是| 属性bool/int/float/double/enum/date/text" [{\"key\":\"value\"}]"  属性array "[{\"key\":[{\"id\":\"value1\"},{\"id\":\"value2\"}]}]"（id为0） 属性struct  "[{\"key\":[{\"key1\":\"value1\"},{\"key2\":\"value2\"}]}]"    属性array含有struct  "[{\"key\":[{\"id\":[{\"key1\":\"value1\"}]},{\"id\":[{\"key2\":\"value2\"}]}]}]"（id为0）
+| data |是| 属性bool int float double enum date text" [{\"key\":\"value\"}]"  属性array "[{\"key\":[{\"id\":\"value1\"},{\"id\":\"value2\"}]}]"（id为0） 属性struct  "[{\"key\":[{\"key1\":\"value1\"},{\"key2\":\"value2\"}]}]"    属性array含有struct  "[{\"key\":[{\"id\":[{\"key1\":\"value1\"}]},{\"id\":[{\"key2\":\"value2\"}]}]}]"（id为0）
 |
 | dataFormat |是|数据类型 1：Hex 2：Text （当 type 为透传时，需要指定 dataFormat） 默认传2	|
 | isCache |是| 是否启用缓存 1：启用  2：不启用    http下发要启用, 默认传1	|
