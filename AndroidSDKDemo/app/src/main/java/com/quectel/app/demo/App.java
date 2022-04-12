@@ -23,7 +23,7 @@ public class App extends Application {
          * 初始化SDK 配置 serviceType  0国内  其他国外
          *  设置 userDomain ,DomainSecret
          */
-       // QuecSDKMergeManager.getInstance().initProject(0,userDomain,domainSecret);
+        QuecSDKMergeManager.getInstance().initProject(0,userDomain,domainSecret);
 
         //开始日志记录功能
         LogService.get(ILogService.class).startLog(this);

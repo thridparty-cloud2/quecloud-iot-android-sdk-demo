@@ -84,7 +84,7 @@ public class EmailLoginActivity extends BaseActivity {
                             }
 
                             @Override
-                            public void onError(String errorMsg) {
+                            public void onError(int code,String errorMsg) {
                                 ToastUtils.showLong(activity,errorMsg);
 
                             }

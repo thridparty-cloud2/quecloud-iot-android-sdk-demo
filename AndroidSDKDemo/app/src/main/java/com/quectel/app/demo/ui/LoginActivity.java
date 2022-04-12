@@ -245,7 +245,7 @@ public class LoginActivity  extends BaseActivity {
                                 }
 
                                 @Override
-                                public void onError(String errorMsg) {
+                                public void onError(int code,String errorMsg) {
                                     ToastUtils.showShort(activity,errorMsg);
                                 }
                             }
@@ -278,7 +278,7 @@ public class LoginActivity  extends BaseActivity {
                                 }
 
                                 @Override
-                                public void onError(String errorMsg) {
+                                public void onError(int code,String errorMsg) {
                                     ToastUtils.showShort(activity,errorMsg);
                                 }
                             }
