@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="343dp"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp"
+        android:layout_centerInParent="true"
+        >
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+           <LinearLayout
+                   android:layout_width="match_parent"
+                   android:orientation="vertical"
+                  android:gravity="center_horizontal"
+                  android:paddingTop="10dp"
+                  android:paddingBottom="10dp"
+                   android:layout_height="wrap_content">
+
+               <Button
+                   android:id="@+id/bt_queryGroup"
+                   android:layout_width="match_parent"
+                   android:background="@color/white"
+                   android:text="查询设备组详情"
+                   android:textSize="16sp"
+                   android:textColor="@color/new_lan"
+                   android:gravity="center"
+                   android:layout_height="45dp"/>
+
+               <View
+                   android:layout_width="match_parent"
+                   android:layout_height="0.5dp"
+                   android:background="#e5e5e5"
+                   />
+               <Button
+                   android:id="@+id/bt_change_device_group"
+                   android:layout_width="match_parent"
+                   android:background="@color/white"
+                   android:text="修改设备组"
+                   android:textSize="16sp"
+                   android:textColor="@color/new_lan"
+                   android:gravity="center"
+                   android:layout_height="45dp"/>
+
+               <View
+                   android:layout_width="match_parent"
+                   android:layout_height="0.5dp"
+                   android:background="#e5e5e5"
+                   />
+
+               <Button
+                   android:id="@+id/bt_add_device_to_group"
+                   android:layout_width="match_parent"
+                   android:background="@color/white"
+                   android:text="添加设备到设备组"
+                   android:textSize="16sp"
+                   android:textColor="@color/new_lan"
+                   android:gravity="center"
+                   android:layout_height="45dp"/>
+
+               <View
+                   android:layout_width="match_parent"
+                   android:layout_height="0.5dp"
+                   android:background="#e5e5e5"
+                   />
+
+               <Button
+                   android:id="@+id/bt_query_in_group"
+                   android:layout_width="match_parent"
+                   android:background="@color/white"
+                   android:text="查询设备组中的设备列表"
+                   android:textSize="16sp"
+                   android:textColor="@color/new_lan"
+                   android:gravity="center"
+                   android:layout_height="45dp"/>
+
+               <View
+                   android:layout_width="match_parent"
+                   android:layout_height="0.5dp"
+                   android:background="#e5e5e5"
+                   />
+
+               <Button
+                   android:id="@+id/bt_delete_device_in_group"
+                   android:layout_width="match_parent"
+                   android:background="@color/white"
+                   android:text="移除设备组中的设备"
+                   android:textSize="16sp"
+                   android:textColor="@color/new_lan"
+                   android:gravity="center"
+                   android:layout_height="45dp"/>
+
+               <View
+                   android:layout_width="match_parent"
+                   android:layout_height="0.5dp"
+                   android:background="#e5e5e5"
+                   />
+
+               <Button
+                   android:id="@+id/bt_delete_group"
+                   android:layout_width="match_parent"
+                   android:background="@color/white"
+                   android:text="删除设备组"
+                   android:textSize="16sp"
+                   android:textColor="@color/new_lan"
+                   android:gravity="center"
+                   android:layout_height="45dp"/>
+
+               <View
+                   android:layout_width="match_parent"
+                   android:layout_height="0.5dp"
+                   android:background="#e5e5e5"
+                   />
+
+
+               <Button
+                   android:id="@+id/bt_set_group_share"
+                   android:layout_width="match_parent"
+                   android:background="@color/white"
+                   android:text="分享人设置设备组分享信息"
+                   android:textSize="16sp"
+                   android:textColor="@color/new_lan"
+                   android:gravity="center"
+                   android:layout_height="45dp"/>
+
+               <View
+                   android:layout_width="match_parent"
+                   android:layout_height="0.5dp"
+                   android:background="#e5e5e5"
+                   />
+
+               <Button
+                   android:id="@+id/bt_query_group_accept_users"
+                   android:layout_width="match_parent"
+                   android:background="@color/white"
+                   android:text="分享人查询设备组的被分享人列表"
+                   android:textSize="16sp"
+                   android:textColor="@color/new_lan"
+                   android:gravity="center"
+                   android:layout_height="45dp"/>
+
+
+               <View
+                   android:layout_width="match_parent"
+                   android:layout_height="0.5dp"
+                   android:background="#e5e5e5"
+                   />
+
+
+               <Button
+                   android:id="@+id/bt_change_shared_device_group"
+                   android:layout_width="match_parent"
+                   android:background="@color/white"
+                   android:text="被分享人修改分享的设备组名称"
+                   android:textSize="16sp"
+                   android:textColor="@color/new_lan"
+                   android:gravity="center"
+                   android:layout_height="45dp"/>
+
+
+               <View
+                   android:layout_width="match_parent"
+                   android:layout_height="0.5dp"
+                   android:background="#e5e5e5"
+                   />
+
+               <Button
+                   android:id="@+id/bt_sharer_cancel_group"
+                   android:layout_width="match_parent"
+                   android:background="@color/white"
+                   android:text="被分享人取消设备组分享"
+                   android:textSize="16sp"
+                   android:textColor="@color/new_lan"
+                   android:gravity="center"
+                   android:layout_height="45dp"/>
+
+
+               <View
+                   android:layout_width="match_parent"
+                   android:layout_height="0.5dp"
+                   android:background="#e5e5e5"
+                   />
+
+               <Button
+                   android:id="@+id/bt_user_cancel_share"
+                   android:layout_width="match_parent"
+                   android:background="@color/white"
+                   android:text="分享人取消设备组分享"
+                   android:textSize="16sp"
+                   android:textColor="@color/new_lan"
+                   android:gravity="center"
+                   android:layout_height="45dp"/>
+
+
+               <View
+                   android:layout_width="match_parent"
+                   android:layout_height="0.5dp"
+                   android:background="#e5e5e5"
+                   />
+
+               <Button
+                   android:id="@+id/bt_cancel"
+                   android:layout_width="match_parent"
+                   android:background="@color/white"
+                   android:text="取消"
+                   android:textSize="16sp"
+                   android:textColor="@color/new_lan"
+                   android:gravity="center"
+                   android:layout_height="45dp"/>
+
+
+           </LinearLayout>
+        </ScrollView>
+
+    </androidx.cardview.widget.CardView>
+
+
+</RelativeLayout>
