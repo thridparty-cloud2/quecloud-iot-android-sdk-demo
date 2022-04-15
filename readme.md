@@ -25,15 +25,6 @@
 |domainSecret| 是|	用户域秘钥，DMP平台创建APP生成	|
 
 
-## 三、使用步骤
-### 集成
-```
-gradle:7.0.2以上  settings.gradle --> repositories下面也要引入
-
-```
-
-
-
 
 
 
