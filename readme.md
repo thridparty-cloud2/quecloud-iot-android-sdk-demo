@@ -1,11 +1,7 @@
 
-## QuecMergeLibrary
+## iot-android-sdk-demo
 
-### 一、功能列表
-
-|功能	|功能说明	|实现版本	|DMP API Version|
-| --- | --- | --- | --- |
-|账户相关| 配置云服务类型|	1.0.0	| V2|
+### 一、此demo演示如何使用QuecIoTAppSDK从头开始构建物联网应用程序。QuecIoTAppSDK分为几个功能组，让开发人员清楚地了解不同功能的实现，包括用户注册过程、设备绑定和控制、设备群组设置。可绑定蜂窝设备或者WIFI/蓝牙设备。对于设备控制，可基于HTTP和WebSocket进行控制。
 
 ### 二、设计接口/属性
 
