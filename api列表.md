@@ -115,19 +115,20 @@ public void phoneSmsCodeLogin(String phone,String smsCode,String internationalCo
 
 ```
  默认重置为 12345678
- public void userPwdResetByPhone(String internationalCode, String code,String phone,IHttpCallBack callback);
+ public void userPwdResetByPhone(String internationalCode, String code,String phone,String passWord,IHttpCallBack callback);
 
 ```
 |参数|	是否必传|说明|	
 | --- | --- | --- | 
 | phone |	是|手机号码| 
 | code |	是|验证码| 
+| passWord |	是|密码| 
 | internationalCode |否|默认不传或""| 
 
 #### 通过邮箱重置密码
 
 ```
- public void userPwdResetByEmail(String internationalCode,String code,String email,IHttpCallBack callback);
+ public void userPwdResetByEmail(String internationalCode,String code,String email,String passWord,IHttpCallBack callback);
 
 ```
 
@@ -135,6 +136,7 @@ public void phoneSmsCodeLogin(String phone,String smsCode,String internationalCo
 | --- | --- | --- | 
 | email |	是|邮箱| 
 | code |是|邮箱验证码| 
+| passWord |是|密码| 
 | internationalCode |否|默认不传或""| 
 
 #### 手机号是否已经注册
@@ -537,14 +539,14 @@ public void changeShareDeviceName(String deviceName,String shareCode, IHttpCallB
 #### 查询设备升级计划
 
 ```
- public void  queryFetchPlan(String productKey,String deviceKey,String signType,IHttpCallBack callback);
+ public void  queryFetchPlan(String productKey,String deviceKey,IHttpCallBack callback);
 ```
 
 |参数|	是否必传|说明|	
 | --- | --- | --- | 
 | productKey |	是|设备pk	| 
 | deviceKey |	是|设备dk|
-| signType |	是|文件校验方式 CRC32, MD5, SHA256 其中一种	| 
+
 
 
 #### 上报组件升级状态
@@ -808,6 +810,19 @@ WebSocketServiceLocater.getService(IWebSocketService.class)
  public void unsubscribeDevice(String deviceKey,String productKey);
   
 ```
+#### 获取websocket是否开启连接
+
+```
+  public boolean  isWebSocketOpenCallback();
+  
+```
+
+####  获取websocket是否登录成功
+
+```
+  public boolean  isWebSocketLoginCallback();
+  
+```
 
 
 #### 下发基本类型数据  bool/int/float/double/enum/date/text
@@ -1002,6 +1017,24 @@ public void stopScan();
 #### 设备是否已经连接 已经连接返回true
 ```
    public boolean isConnected(String mac);
+```
+
+
+#### 设置设备连接状态回调
+```
+   public void setiConnectChange(IConnectChange iConnectChange);
+```
+
+
+#### 根据 uuid判断  该uuid是否支持 notify
+```
+    public void isNotifiable(String uuid,INotifyCallBack iNotifyCallBack);
+```
+
+
+#### 根据 uuid判断  该uuid是否支持 indicate
+```
+    public void isIndicatable(String uuid,IndicateCallBack indicateCallBack);
 ```
 
 
