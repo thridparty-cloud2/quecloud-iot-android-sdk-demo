@@ -562,7 +562,7 @@ public class DeviceFragment extends BaseMainFragment {
             public void onClick(View view) {
                 mDialog.dismiss();
                 startLoading();
-                DeviceServiceFactory.getInstance().getService(IDevService.class).queryFetchPlan(pk, dk,"SHA256", new IHttpCallBack() {
+                DeviceServiceFactory.getInstance().getService(IDevService.class).queryFetchPlan(pk, dk, new IHttpCallBack() {
                     @Override
                     public void onSuccess(String result) {
                         try {

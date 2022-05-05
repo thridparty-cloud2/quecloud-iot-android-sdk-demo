@@ -315,7 +315,7 @@ public class DistributionNetworkActivity extends BaseActivity {
         });
         mDialog.show();
          Set<ScanDevice> useSet = new HashSet<ScanDevice>();
-        BleServiceLocater.getService(IBleService.class).scan(activity,
+        BleServiceLocater.getService(IBleService.class).scan(
                 "", "", new IScanCallBack() {
                     @Override
                     public void onScan(ScanDevice scanDevice) {

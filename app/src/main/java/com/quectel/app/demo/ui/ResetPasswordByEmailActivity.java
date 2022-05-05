@@ -123,16 +123,16 @@ public class ResetPasswordByEmailActivity extends BaseActivity {
                     ToastUtils.showLong(activity,"请输入验证码");
                     return;
                 }
-
+                String password = "aA123456";
                 UserServiceFactory.getInstance().getService(IUserService.class).userPwdResetByEmail("",code,
-                        email, new IHttpCallBack() {
+                        email,password, new IHttpCallBack() {
                             @Override
                             public void onSuccess(String result) {
                                 //{"code":200,"msg":"","data":"密码已重置为 12345678"}
                                 try {
                                     JSONObject  obj = new JSONObject(result);
                                     if (obj.getInt("code") == 200) {
-                                        ToastUtils.showShort(activity,"密码成功重置为12345678");
+                                       // ToastUtils.showShort(activity,"密码成功重置为12345678");
                                         finish();
                                     }
 

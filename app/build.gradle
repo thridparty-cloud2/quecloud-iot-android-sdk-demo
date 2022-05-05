@@ -96,5 +96,7 @@ dependencies {
     api 'org.greenrobot:eventbus:3.0.0'
     api 'com.neovisionaries:nv-websocket-client:2.14'
 
+    api 'com.quectel.app.service:quec-log:1.0.0-SNAPSHOT'
+
 
 }

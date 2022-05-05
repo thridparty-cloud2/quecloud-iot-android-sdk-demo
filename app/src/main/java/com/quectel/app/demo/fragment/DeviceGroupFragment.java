@@ -31,6 +31,7 @@ import com.quectel.app.demo.utils.ToastUtils;
 import com.quectel.app.demo.widget.BottomItemDecorationSystem;
 import com.quectel.app.demo.widget.PayBottomDialog;
 import com.quectel.app.device.bean.BusinessValue;
+import com.quectel.app.device.bean.UpdateGroup;
 import com.quectel.app.device.deviceservice.IDevService;
 import com.quectel.app.device.param.AddDeviceParam;
 import com.quectel.app.device.utils.DeviceServiceFactory;
@@ -564,7 +565,11 @@ public class DeviceGroupFragment extends BaseMainFragment {
                     return;
                 }
                 startLoading();
-                DeviceServiceFactory.getInstance().getService(IDevService.class).updateDeviceGroup(name,item.getDgid(),
+
+                UpdateGroup updateGroup =  new UpdateGroup();
+                updateGroup.setName(name);
+                updateGroup.setDgid(item.getDgid());
+                DeviceServiceFactory.getInstance().getService(IDevService.class).updateDeviceGroup(updateGroup,
                         new IHttpCallBack() {
                             @Override
                             public void onSuccess(String result) {
