@@ -1,7 +1,7 @@
 package com.quectel.app.demo;
 import android.app.Application;
 import com.quectel.app.demo.utils.CrashHandler;
-import com.quectel.app.mergelibrary.demo.QuecSDKMergeManager;
+
 import com.quectel.app.quecnetwork.logservice.ILogService;
 import com.quectel.app.quecnetwork.utils.LogService;
 

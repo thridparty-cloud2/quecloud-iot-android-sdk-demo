@@ -336,7 +336,7 @@ public class DeviceControlActivity  extends BaseActivity {
 
         //传 null 查询所有属性和类型
        // DeviceServiceFactory.getInstance().getService(IDevService.class).queryBusinessAttributes(codeList,pk,dk,typeList,
-        DeviceServiceFactory.getInstance().getService(IDevService.class).queryBusinessAttributes(null,pk,dk,null,
+        DeviceServiceFactory.getInstance().getService(IDevService.class).queryBusinessAttributes(null,pk,dk,null,"","",
                 new IHttpCallBack() {
                     @Override
                     public void onSuccess(String result) {

@@ -5,16 +5,14 @@ dependencyResolutionManagement {
         mavenCentral()
         jcenter()
         maven { url 'https://www.jitpack.io' }
-        maven {
-            url 'http://106.15.139.220:8081/repository/maven-snapshots/'
-            //  url 'http://106.15.139.220:8081/repository/maven-releases/'
-            allowInsecureProtocol = true
-        }
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+        maven {
+            url "https://raw.githubusercontent.com/thridparty-cloud2/quecloud-iot-android-sdk/master"
+        }
     }
 }
 
 rootProject.name = "AndroidSDKDemo"
 include ':app'
-include ':QuecMergeLibrary' , ':ptr-lib' ,':fragmentation_core', ':fragmentation_swipeback', ':fragmentation'
+
