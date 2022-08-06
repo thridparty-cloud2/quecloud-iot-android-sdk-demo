@@ -48,6 +48,20 @@ public void sendPhoneSmsCode(String internationalCode, String phone,int type, St
 | ssid |否|短信签名,传入用自己的,不传默认""	| 
 | stid |否|短信模板，传入用自己的,不传默认""	| 
 
+
+#### 发送邮件验证码
+```
+public void sendEmailCode(String eaid, String email, String etid, int type, IHttpCallBack callback);
+
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- | 
+| eaid |	否|邮件账号| 
+| email |	是|邮箱| 
+| etid |否| 邮件模板 不传的时候传type	| 
+| type |否|  etid不传，传type   1: 注册, 2: 密码重置, 3: 注销账号模板| 
+
+
 #### 手机号密码注册
 
 ```
