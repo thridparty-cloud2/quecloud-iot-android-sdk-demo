@@ -44,7 +44,7 @@ public void sendPhoneSmsCode(String internationalCode, String phone,int type, St
 | --- | --- | --- | 
 | phone |	是|手机号码| 
 | internationalCode |	否|国际代码，默认为国内,传"86"| 
-| type |是| 1: 注册验证码, 2: 密码重置验证码, 3: 登录验证码代码	| 
+| type |是| 1: 注册验证码, 2: 密码重置验证码, 3: 登录验证码代码 , 4:注销账号| 
 | ssid |否|短信签名,传入用自己的,不传默认""	| 
 | stid |否|短信模板，传入用自己的,不传默认""	| 
 
@@ -313,6 +313,20 @@ public void queryNationalityList(IHttpCallBack callback);
 |参数|	是否必传|说明|	
 | --- | --- | --- | 
 | email |是| 邮箱 | 
+
+#### 验证用户发送的邮件验证码
+
+```
+  public void validateEmailCode(String email,String code,int isDisabled, IHttpCallBack callback);
+
+```
+
+|参数|	是否必传|说明|	
+| --- | --- | --- | 
+| email |是| 邮箱 | 
+| code |是| 验证码 | 
+| isDisabled |是| 验证码验证后是否失效，1：失效 2：不失效，默认 1 | 
+
 
 
 #### 获取用户token
