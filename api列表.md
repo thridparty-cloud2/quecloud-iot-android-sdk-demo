@@ -128,7 +128,6 @@ public void phoneSmsCodeLogin(String phone,String smsCode,String internationalCo
 #### 通过电话号码重置密码
 
 ```
- 默认重置为 12345678
  public void userPwdResetByPhone(String internationalCode, String code,String phone,String passWord,IHttpCallBack callback);
 
 ```
@@ -156,7 +155,7 @@ public void phoneSmsCodeLogin(String phone,String smsCode,String internationalCo
 #### 手机号是否已经注册
 
 ```
- public void phoneIsRegister(String phone,IHttpCallBack callback);
+ public void phoneIsRegister(String internationalCode, String phone,IHttpCallBack callback);
 
 ```
 
@@ -325,7 +324,7 @@ public void queryNationalityList(IHttpCallBack callback);
 | --- | --- | --- | 
 | email |是| 邮箱 | 
 | code |是| 验证码 | 
-| isDisabled |是| 验证码验证后是否失效，1：失效 2：不失效，默认 1 | 
+| isDisabled |是| 验证码验证后是否失效，1：失效 2：不失效，默认 1  (备注:该接口只是验证注销用户时候发送的邮箱验证码)| 
 
 
 
@@ -343,10 +342,83 @@ public void queryNationalityList(IHttpCallBack callback);
 
 ```
 
+#### 手机号码一键登录
+
+```
+  public void phoneOneKeyLogin(OneKeyBean oneKeyBean, IHttpCallBack callback);
+  参考移动文档 http://dev.10086.cn/dev10086/pub/loadAttach?attachId=6EF75FD09D4F40D1973CB7C36C3DB2E2
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| appid |是| 业务在统一认证申请的应用id | 
+| version |是| 2.0 | 
+| strictcheck |是| 暂时填写"0"，填写“1”时，将对服务器IP白名单进行强校验（后续将强制要求IP 强校验）| 
+| token |是| 业务凭证| 
+| sign |是| 请求签名 appid+version+msgid+systemtime+strictcheck+oneKeyBean.getToken()+appSecret MD5 字节转16进制 | 
+| userDomain |是| 用户域| 
+| systemtime |是|请求消息发送的系统时间，精确到毫秒，共17位，格式：20121227180001165 | 
+| msgid |是|标识请求的随机数即可(1-36 位) | 
+
+
+#### 用户消息列表
+
+```
+  public void queryUserMessageList(String pk,String dk,int msgType, int page,int pageSize,boolean isRead, String content,String title,IHttpCallBack callback);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| pk |否| product key| 
+| dk |否| device key| 
+| msgType |否|消息类型 1-设备通知  2-设备告警  3-设备故障  4-系统消息| 
+| page |否| | 
+| pageSize |否|  | 
+| isRead |是| 是否已读| 
+| content |是|查询内容 | 
+| title |是|查询 title | 
+
+#### 阅读消息
+
+```
+ public void userReadMessage(String msgIdList,int msgType,IHttpCallBack callback);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| msgIdList |否| 阅读的消息ID列表,多个 ID 使用英文逗号分隔，如果不传，会阅读所有消息| 
+| msgType |否| 消息类型| 
+
+
+#### 删除消息
+
+```
+ public void userDeleteMessage(String msgId,String language,IHttpCallBack callback);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| msgId |是| 消息ID| 
+| language |是| 非必传 不传 传""| 
+
+
+#### 查询用户消息类型
+
+```
+ public void queryUserMessageType(IHttpCallBack callback);
+ {"code":200,"msg":"","data":"1,2,3"}
+```
+
+#### 设置用户消息类型
+
+```
+ public void setUserMessageType(String recvMsgPushType, IHttpCallBack callback);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| recvMsgPushType |是| 1-设备通知  2-设备告警  3-设备故障  4-系统消息  接收的消息类型和任意组合,多个类型使用英文逗号分隔| 
+
+
 |http响应码|	value|说明|	
 | --- | --- | --- | 
 | code |200|成功	| 
-| code |5032|token_invalid,code返回5032,请退出当前页面,主动跳转到登录页面重新获取token|
+| code |5032|token_invalid,code返回5032,请退出当前页面,主动跳转到登录页面,让用户重新获取token|
 | code |5106|请输入token,用户没有登录直接调用接口返回此内容	|
 
 
@@ -410,13 +482,14 @@ DeviceServiceFactory.getInstance().getService(IDevService.class)
 #### 查询用户设备列表
 
 ```
-public void queryUserDeviceList(int page,int pageSize,IHttpCallBack callback);
+public void queryUserDeviceList(String deviceName,int page,int pageSize,IHttpCallBack callback);
 
 ```
 |参数|	是否必传|说明|	
 | --- | --- | --- | 
 | page |	是|分页查询当前页	| 
 | pageSize |是|每页多少条|
+| deviceName |否| 设备名称 |
 
 
 #### 蓝牙设备绑定
@@ -467,12 +540,13 @@ public void queryUserDeviceList(int page,int pageSize,IHttpCallBack callback);
 #### 被分享人接受分享
 
 ```
- public void acceptShareDevice(String shareCode,IHttpCallBack callback);
+  public void acceptShareDevice(String shareCode,String deviceName,IHttpCallBack callback);
 
 ```
 |参数|	是否必传|说明|	
 | --- | --- | --- | 
 | shareCode |	是| 分享码|
+| deviceName |	否| 设备名称|
 
 
 #### 被分享人取消设备分享
@@ -554,7 +628,8 @@ public void changeShareDeviceName(String deviceName,String shareCode, IHttpCallB
 #### 查询设备业务属性
 
 ```
- public void queryBusinessAttributes(List<String> codeList,String pk,String dk,List<String> typeList, IHttpCallBack callback);
+ public void queryBusinessAttributes(List<String> codeList, String pk, String dk, List<String> typeList, String gatewayPk, String gatewayDk, IHttpCallBack callback);
+ 
 ```
 
 |参数|	是否必传|说明|	
@@ -562,7 +637,9 @@ public void changeShareDeviceName(String deviceName,String shareCode, IHttpCallB
 | codeList |	否|要查询的属性标识符; 和查询类型配合使用，如果传null 查询所有属性，同时typeList也传null	| 
 | pk |	是|pk|
 | dk |	是|dk|
-| typeList |	否|查询类型:  1 查询设备基础属性  2 查询物模型属性  3 查询定位信息。查询类型可以单选和多选| 
+| gatewayPk |	否|网关设备pk 没有传空字符串""	| 
+| gatewayDk |	否|网关设备dk	没有传空字符串""| 
+| typeList |	否| 查询类型  1 查询设备基础属性  2 查询物模型属性  3 查询定位信息| 
 
 #### 查询设备升级计划
 
@@ -692,6 +769,96 @@ public void deleteDeviceToGroup(String dgid,List<AddDeviceParam> list,IHttpCallB
 | --- | --- | --- | 
 | pk |	是| pk	| 
 | dk |	是|dk	| 
+
+#### 查询不在设备组内的设备列表
+```
+public void getDeviceListByNotInDeviceGroup(int page, int pageSize, String dgid, IHttpCallBack callback);
+```
+
+|参数|	是否必传|说明|	
+| --- | --- | --- | 
+| dgid |	是| 设备组ID	| 
+| page |	是|当前页，默认为第 1 页	| 
+| pageSize |	是| 页大小，默认为 10 条	| 
+
+
+#### 查询网关设备下子设备列表
+```
+    public void getGatewayChildList(String pk, String dk, int page, int pageSize, IHttpCallBack callback);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- | 
+| pk |	是| product key	| 
+| dk |	是| device key	| 
+| page |	是|当前页，默认为第 1 页	| 
+| pageSize |	是| 页大小，默认为 10 条	| 
+
+
+#### 获取设备属性数据列表
+```
+    public void getPropertyDataList(DeviceCodeList deviceCodeList, IHttpCallBack callback);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- | 
+| attributeCode  |	是|  物模型属性标识符	| 
+| pk |	是| product key	| 
+| dk |	是| device key	|
+| startTimestamp  |	是|  开始时间（毫秒时间戳）	| 
+| endTimestamp  |	是|  结束时间（毫秒时间戳）	| 
+| gatewayDk  |	否|  网关设备的 Device Key	| 
+| gatewayPk  |	否|  网关设备的 Product Key	| 
+| page  |	否|  当前页，默认为第 1 页	| 
+| pageSize  |	否|  页大小，默认为 10 条	| 
+
+
+#### 获取设备属性图表列表
+```
+    public void getPropertyChartList(DeviceChartListBean deviceChartListBean, IHttpCallBack callback);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- | 
+| attributeCode  |	是|  物模型属性标识符，查询多个属性时使用英文逗号分隔，最多查询 10 个	| 
+| pk |	是| product key	| 
+| dk |	是| device key	|
+| startTimestamp  |	是|  开始时间（毫秒时间戳）	| 
+| endTimestamp  |	是|  结束时间（毫秒时间戳）	| 
+| gatewayDk  |	否|  网关设备的 Device Key	| 
+| gatewayPk  |	否|  网关设备的 Product Key	|
+| countType  |	否| 聚合类型（默认3）: 1-最大值 2-最小值 3-平均值 4-差值 5-总值	| 
+| timeGranularity  |	否| 统计时间粒度（默认2）：1-月 2-日 3-小时 4-分钟 5-秒	| 
+| timezone  |	否| 时区偏差，格式：±hh:mm| 
+
+
+#### 获取设备历史轨迹
+```
+    public void getLocationHistory(TrackBean trackBean, IHttpCallBack callback);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| pk |	是| product key	| 
+| dk |	是| device key	|
+| startTimestamp  |	是|  开始时间（毫秒时间戳）	| 
+| endTimestamp  |	是|  结束时间（毫秒时间戳）	| 
+| gatewayDk  |	否|  网关设备的 Device Key	| 
+| gatewayPk  |	否|  网关设备的 Product Key	|
+| locateTypes  |	否| 定位类型（默认查询所有类型的定位）：GP/GL/GA/GN/BD/PQ/LBS，查询多种定位时使用英文逗号分隔| 
+
+
+#### 获取设备属性环比统计数据
+```
+    public void getPropertyCompare(DeviceCompareBean deviceCompareBean, IHttpCallBack callback);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- | 
+| attributeCode  |	是|  物模型属性标识符	| 
+| pk |	是| product key	| 
+| dk |	是| device key	|
+| startTimestamp  |	是|  开始时间（毫秒时间戳）	| 
+| endTimestamp  |	是|  结束时间（毫秒时间戳）	| 
+| gatewayDk  |	否|  网关设备的 Device Key	| 
+| gatewayPk  |	否|  网关设备的 Product Key	|
+| countType  |	否| 聚合类型（默认3）: 1-最大值 2-最小值 3-平均值 4-差值 5-总值	| 
+| timeGranularity  |	否| 统计时间粒度，查询多个粒度时使用英文逗号分隔（默认1）：1-日 2-周 3-月 4-年	| 
 
 
 #### 分享人设置设备组分享信息
