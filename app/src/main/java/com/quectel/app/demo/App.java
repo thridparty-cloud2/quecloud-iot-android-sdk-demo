@@ -4,6 +4,7 @@ import com.quectel.app.demo.utils.CrashHandler;
 
 import com.quectel.app.quecnetwork.logservice.ILogService;
 import com.quectel.app.quecnetwork.utils.LogService;
+import com.quectel.sdk.QuecSDKMergeManager;
 
 public class App extends Application {
 
