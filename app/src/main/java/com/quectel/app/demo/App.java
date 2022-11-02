@@ -7,8 +7,8 @@ import com.quectel.app.quecnetwork.utils.LogService;
 
 public class App extends Application {
 
-    String userDomain = "xxxx";
-    String domainSecret = "xxxx";
+    String userDomain = "";
+    String domainSecret = "";
 
     @Override
     public void onCreate() {

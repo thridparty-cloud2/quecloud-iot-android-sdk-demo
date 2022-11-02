@@ -1,5 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/drawable/white_bg.xml" value="0.1775" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/accepter_change_device_ingroup_dialog.xml" value="0.23229166666666667" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/accepter_change_group_name_dialog.xml" value="0.23229166666666667" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_device_control.xml" value="0.23229166666666667" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_email_login.xml" value="0.23229166666666667" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_email_register.xml" value="0.23229166666666667" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_home.xml" value="0.23229166666666667" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_list_update.xml" value="0.23229166666666667" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_login.xml" value="0.254981884057971" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_select_login.xml" value="0.23229166666666667" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_shared_group_device.xml" value="0.23229166666666667" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_update_headimage.xml" value="0.23229166666666667" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_update_user_phone.xml" value="0.23229166666666667" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_wifi_network.xml" value="0.23229166666666667" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/add_device_to_group_dialog.xml" value="0.23229166666666667" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/add_group.xml" value="0.23229166666666667" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/bind_device_dialog.xml" value="0.23229166666666667" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/ble_scan_result_dialog.xml" value="0.23229166666666667" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/bottom_pop_device_layout.xml" value="0.23229166666666667" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/device_select_dialog.xml" value="0.23229166666666667" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/devicegroup_select_dialog.xml" value="0.23229166666666667" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/mac_dialog.xml" value="0.23229166666666667" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/mine_layout.xml" value="0.19791666666666666" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/model_item_layout.xml" value="0.23229166666666667" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/owner_cancel_share_dialog.xml" value="0.23229166666666667" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/query_device_ingroup_dialog.xml" value="0.23229166666666667" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/receiver_accept_shareinformation_dialog.xml" value="0.221875" />
+        <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/receiver_cancel_share_dialog.xml" value="0.23229166666666667" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

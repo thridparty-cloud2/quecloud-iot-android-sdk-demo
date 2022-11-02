@@ -228,7 +228,7 @@ public class LoginActivity  extends BaseActivity {
 
 
                     UserServiceFactory.getInstance().getService(IUserService.class).phonePwdLogin(
-                            phone, pass, "", new IResponseCallBack() {
+                            phone, pass, "86", new IResponseCallBack() {
                                 @Override
                                 public void onSuccess() {
                                     System.out.println("--onSuccess-phoneLogin-");
@@ -263,7 +263,7 @@ public class LoginActivity  extends BaseActivity {
                     }
 
                     UserServiceFactory.getInstance().getService(IUserService.class).phoneSmsCodeLogin(phone,
-                            verifyCode, "", new IResponseCallBack() {
+                            verifyCode, "86", new IResponseCallBack() {
                                 @Override
                                 public void onSuccess() {
                                     System.out.println("login success Sms");

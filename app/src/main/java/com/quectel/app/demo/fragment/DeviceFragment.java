@@ -68,7 +68,7 @@ import io.reactivex.functions.Consumer;
 
 public class DeviceFragment extends BaseMainFragment {
 
-    EditText edit_device_name;
+  //  EditText edit_device_name;
     public static synchronized DeviceFragment newInstance() {
         DeviceFragment frag = new DeviceFragment();
 
@@ -125,7 +125,7 @@ public class DeviceFragment extends BaseMainFragment {
     private void queryDevice()
     {
         startLoading();
-        DeviceServiceFactory.getInstance().getService(IDevService.class).queryUserDeviceList(edit_device_name.getText().toString(),1,50,
+        DeviceServiceFactory.getInstance().getService(IDevService.class).queryUserDeviceList("",1,50,
                 new IHttpCallBack() {
                     @Override
                     public void onSuccess(String result) {
@@ -259,7 +259,7 @@ public class DeviceFragment extends BaseMainFragment {
                     return;
                 }
                 startLoading();
-                DeviceServiceFactory.getInstance().getService(IDevService.class).acceptShareDevice(edit_device_name.getText().toString(),code,
+                DeviceServiceFactory.getInstance().getService(IDevService.class).acceptShareDevice("",code,
                         new IHttpCallBack() {
                             @Override
                             public void onSuccess(String result) {
@@ -414,7 +414,7 @@ public class DeviceFragment extends BaseMainFragment {
         mDialog.setCanceledOnTouchOutside(false);
         EditText edit_pk = (EditText) mDialog.findViewById(R.id.edit_pk);
         EditText edit_sn = (EditText) mDialog.findViewById(R.id.edit_sn);
-         edit_device_name = (EditText) mDialog.findViewById(R.id.edit_device_name);
+        EditText edit_device_name = (EditText) mDialog.findViewById(R.id.edit_device_name);
         Button bt_sure = (Button) mDialog.findViewById(R.id.bt_sure);
         Button bt_cancel = (Button) mDialog.findViewById(R.id.bt_cancel);
         bt_cancel.setOnClickListener(new View.OnClickListener() {
