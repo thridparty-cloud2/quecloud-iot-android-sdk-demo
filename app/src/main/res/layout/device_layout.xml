@@ -14,7 +14,7 @@
                   android:layout_height="wrap_content"
                   android:layout_centerInParent="true"
                   android:gravity="center"
-                  android:text="我的设备"
+                  android:text="设备列表"
                   android:textColor="@color/main1"
                   android:textSize="18sp" />
 

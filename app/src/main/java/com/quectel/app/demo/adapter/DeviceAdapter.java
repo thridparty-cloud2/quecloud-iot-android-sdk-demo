@@ -22,14 +22,8 @@ public class DeviceAdapter extends BaseQuickAdapter<UserDeviceList.DataBean.List
     }
     @Override
     protected void convert(BaseViewHolder helper, final UserDeviceList.DataBean.ListBean item) {
-        helper.setText(R.id.tv_pk, "pk: "+ item.getProductKey());
-        helper.setText(R.id.tv_dk,"dk: "+ item.getDeviceKey());
-        helper.setText(R.id.tv_device_name,"deviceName: "+ item.getDeviceName());
-        helper.setText(R.id.tv_device_status,"设备状态: "+ item.getDeviceStatus());
-
-        boolean isShare = TextUtils.isEmpty(item.getShareCode());
-        helper.setText(R.id.tv_share_status,isShare?"自己设备":"被分享设备");
-
+        helper.setText(R.id.tvDeviceName, item.getDeviceName());
+        helper.setText(R.id.tvStatus, item.getDeviceStatus());
 
     }
 

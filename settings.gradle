@@ -1,14 +1,20 @@
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        google()
-        mavenCentral()
-        jcenter()
-        maven { url 'https://www.jitpack.io' }
-
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+        maven { url 'https://maven.aliyun.com/repository/public'}
+        maven { url 'https://maven.aliyun.com/repository/central'}
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        maven { url 'https://developer.huawei.com/repo/' }
+        maven { url 'https://maven.aliyun.com/repository/releases' }
+        maven { url "https://www.jitpack.io" }
         maven {
-            url "https://raw.githubusercontent.com/thridparty-cloud2/quecloud-iot-android-sdk/master"
+            url 'http://106.15.139.220:8081/repository/maven-snapshots/'
+            allowInsecureProtocol = true
+        }
+        maven {
+            url 'http://106.15.139.220:8081/repository/maven-releases/'
+            allowInsecureProtocol = true
         }
     }
 }

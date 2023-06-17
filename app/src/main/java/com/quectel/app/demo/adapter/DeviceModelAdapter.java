@@ -8,10 +8,10 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.quectel.app.demo.R;
-import com.quectel.app.demo.bean.UserDeviceList;
 import com.quectel.app.device.bean.BusinessValue;
 import com.quectel.app.device.constant.ModelStyleConstant;
 import com.suke.widget.SwitchButton;
+
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

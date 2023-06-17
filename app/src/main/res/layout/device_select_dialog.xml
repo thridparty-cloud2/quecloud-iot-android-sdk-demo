@@ -36,6 +36,7 @@
                    />
 
                <Button
+                   android:visibility="gone"
                    android:id="@+id/bt_queryDeviceInfor"
                    android:layout_width="match_parent"
                    android:background="@color/white"
@@ -45,13 +46,14 @@
                    android:gravity="center"
                    android:layout_height="45dp"/>
 
-               <View
-                   android:layout_width="match_parent"
-                   android:layout_height="0.5dp"
-                   android:background="#e5e5e5"
-                   />
+<!--               <View-->
+<!--                   android:layout_width="match_parent"-->
+<!--                   android:layout_height="0.5dp"-->
+<!--                   android:background="#e5e5e5"-->
+<!--                   />-->
 
                <Button
+                   android:visibility="gone"
                    android:id="@+id/bt_queryShareUserList"
                    android:layout_width="match_parent"
                    android:background="@color/white"
@@ -61,13 +63,14 @@
                    android:gravity="center"
                    android:layout_height="45dp"/>
 
-               <View
-                   android:layout_width="match_parent"
-                   android:layout_height="0.5dp"
-                   android:background="#e5e5e5"
-                   />
+<!--               <View-->
+<!--                   android:layout_width="match_parent"-->
+<!--                   android:layout_height="0.5dp"-->
+<!--                   android:background="#e5e5e5"-->
+<!--                   />-->
 
                <Button
+                   android:visibility="gone"
                    android:id="@+id/bt_queryUpgradePlan"
                    android:layout_width="match_parent"
                    android:background="@color/white"
@@ -77,14 +80,15 @@
                    android:gravity="center"
                    android:layout_height="45dp"/>
 
-               <View
-                   android:layout_width="match_parent"
-                   android:layout_height="0.5dp"
-                   android:background="#e5e5e5"
-                   />
+<!--               <View-->
+<!--                   android:layout_width="match_parent"-->
+<!--                   android:layout_height="0.5dp"-->
+<!--                   android:background="#e5e5e5"-->
+<!--                   />-->
 
 
                <Button
+                   android:visibility="gone"
                    android:id="@+id/bt_set_share"
                    android:layout_width="match_parent"
                    android:background="@color/white"
@@ -94,13 +98,14 @@
                    android:gravity="center"
                    android:layout_height="45dp"/>
 
-               <View
-                   android:layout_width="match_parent"
-                   android:layout_height="0.5dp"
-                   android:background="#e5e5e5"
-                   />
+<!--               <View-->
+<!--                   android:layout_width="match_parent"-->
+<!--                   android:layout_height="0.5dp"-->
+<!--                   android:background="#e5e5e5"-->
+<!--                   />-->
 
                <Button
+                   android:visibility="gone"
                    android:id="@+id/bt_owner_cancelShare"
                    android:layout_width="match_parent"
                    android:background="@color/white"
@@ -110,14 +115,15 @@
                    android:gravity="center"
                    android:layout_height="45dp"/>
 
-               <View
-                   android:layout_width="match_parent"
-                   android:layout_height="0.5dp"
-                   android:background="#e5e5e5"
-                   />
+<!--               <View-->
+<!--                   android:layout_width="match_parent"-->
+<!--                   android:layout_height="0.5dp"-->
+<!--                   android:background="#e5e5e5"-->
+<!--                   />-->
 
 
                <Button
+                   android:visibility="gone"
                    android:id="@+id/bt_cancelShareByReceiver"
                    android:layout_width="match_parent"
                    android:background="@color/white"
@@ -151,6 +157,7 @@
                    />
 
                <Button
+                   android:visibility="gone"
                    android:id="@+id/bt_query_group"
                    android:layout_width="match_parent"
                    android:background="@color/white"

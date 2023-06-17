@@ -36,58 +36,30 @@
 
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/bt_scan"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:text="扫描设备"
-        android:background="@color/new_lan"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/bt_scan"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="开始扫描"
+            android:background="@color/new_lan"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:layout_height="wrap_content"/>
 
-    <Button
-        android:id="@+id/bt_stop_scan"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_marginTop="@dimen/dp_10"
         android:layout_width="match_parent"
-        android:text="停止扫描"
-        android:background="@color/new_lan"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:layout_height="wrap_content"/>
-
-
-    <Button
-        android:id="@+id/bt_connect"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_width="match_parent"
-        android:text="根据MAC连接设备"
-        android:background="@color/new_lan"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:layout_height="wrap_content"/>
-
-
-    <Button
-        android:id="@+id/bt_write"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_width="match_parent"
-        android:text="配网write wifi名称和wifi密码"
-        android:background="@color/new_lan"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:gravity="center"
         android:layout_height="wrap_content"/>
 
 </LinearLayout>

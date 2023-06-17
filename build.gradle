@@ -1,20 +1,27 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
-        google()
-        mavenCentral()
-        jcenter()
-        mavenLocal()
-        maven { url 'https://www.jitpack.io' }
+        maven { url 'https://maven.aliyun.com/repository/public'}
+        maven { url 'https://maven.aliyun.com/repository/central'}
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        maven { url 'https://developer.huawei.com/repo/' }
+        maven { url 'https://maven.aliyun.com/repository/releases' }
+        maven { url "https://www.jitpack.io" }
         maven {
-            url "https://raw.githubusercontent.com/thridparty-cloud2/quecloud-iot-android-sdk/master"
+            url 'http://106.15.139.220:8081/repository/maven-snapshots/'
+            allowInsecureProtocol = true
         }
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+        maven {
+            url 'http://106.15.139.220:8081/repository/maven-releases/'
+            allowInsecureProtocol = true
+        }
 
     }
     dependencies {
         classpath "com.android.tools.build:gradle:7.0.3"
         classpath 'com.jakewharton:butterknife-gradle-plugin:10.2.3'
+        classpath 'com.github.hufeiyang.Android-AppLifecycleMgr:applifecycle-plugin:1.0.4'
     }
 }
 

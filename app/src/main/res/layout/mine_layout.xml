@@ -40,7 +40,7 @@
                android:paddingTop="15dp"
               android:layout_height="match_parent">
 
-          <de.hdodenhof.circleimageview.CircleImageView
+          <ImageView
               android:id="@+id/civ_head"
               android:layout_width="50dp"
               android:layout_height="50dp"
@@ -117,6 +117,7 @@
               />
 
           <LinearLayout
+              android:visibility="gone"
               android:id="@+id/ll_email"
               android:layout_width="match_parent"
               android:orientation="horizontal"
@@ -144,11 +145,11 @@
 
           </LinearLayout>
 
-          <View
-              android:layout_width="match_parent"
-              android:layout_height="0.5dp"
-              android:background="@color/gray_line"
-              />
+<!--          <View-->
+<!--              android:layout_width="match_parent"-->
+<!--              android:layout_height="0.5dp"-->
+<!--              android:background="@color/gray_line"-->
+<!--              />-->
 
 
           <LinearLayout
@@ -187,6 +188,7 @@
 
 
           <LinearLayout
+              android:visibility="gone"
               android:id="@+id/ll_sex"
               android:layout_width="match_parent"
               android:orientation="horizontal"
@@ -214,13 +216,14 @@
 
           </LinearLayout>
 
-          <View
-              android:layout_width="match_parent"
-              android:layout_height="0.5dp"
-              android:background="@color/gray_line"
-              />
+<!--          <View-->
+<!--              android:layout_width="match_parent"-->
+<!--              android:layout_height="0.5dp"-->
+<!--              android:background="@color/gray_line"-->
+<!--              />-->
 
           <LinearLayout
+              android:visibility="gone"
               android:id="@+id/ll_lan"
               android:layout_width="match_parent"
               android:orientation="horizontal"
@@ -248,13 +251,14 @@
 
           </LinearLayout>
 
-          <View
-              android:layout_width="match_parent"
-              android:layout_height="0.5dp"
-              android:background="@color/gray_line"
-              />
+<!--          <View-->
+<!--              android:layout_width="match_parent"-->
+<!--              android:layout_height="0.5dp"-->
+<!--              android:background="@color/gray_line"-->
+<!--              />-->
 
           <LinearLayout
+              android:visibility="gone"
               android:id="@+id/ll_country"
               android:layout_width="match_parent"
               android:orientation="horizontal"
@@ -282,13 +286,14 @@
 
           </LinearLayout>
 
-          <View
-              android:layout_width="match_parent"
-              android:layout_height="0.5dp"
-              android:background="@color/gray_line"
-              />
+<!--          <View-->
+<!--              android:layout_width="match_parent"-->
+<!--              android:layout_height="0.5dp"-->
+<!--              android:background="@color/gray_line"-->
+<!--              />-->
 
           <LinearLayout
+              android:visibility="gone"
               android:id="@+id/ll_timezone"
               android:layout_width="match_parent"
               android:orientation="horizontal"
@@ -316,11 +321,11 @@
 
           </LinearLayout>
 
-          <View
-              android:layout_width="match_parent"
-              android:layout_height="0.5dp"
-              android:background="@color/gray_line"
-              />
+<!--          <View-->
+<!--              android:layout_width="match_parent"-->
+<!--              android:layout_height="0.5dp"-->
+<!--              android:background="@color/gray_line"-->
+<!--              />-->
 
           <LinearLayout
               android:id="@+id/ll_change_password"
@@ -357,6 +362,7 @@
               />
 
           <LinearLayout
+              android:visibility="gone"
               android:id="@+id/ll_reset_password"
               android:layout_width="match_parent"
               android:orientation="horizontal"
@@ -384,11 +390,11 @@
 
           </LinearLayout>
 
-          <View
-              android:layout_width="match_parent"
-              android:layout_height="0.5dp"
-              android:background="@color/gray_line"
-              />
+<!--          <View-->
+<!--              android:layout_width="match_parent"-->
+<!--              android:layout_height="0.5dp"-->
+<!--              android:background="@color/gray_line"-->
+<!--              />-->
 
 
           <LinearLayout
@@ -437,7 +443,7 @@
 
               <TextView
                   android:layout_width="wrap_content"
-                  android:text="删除用户"
+                  android:text="注销账号"
                   android:textColor="@color/main1"
                   android:textSize="16sp"
                   android:gravity="center"

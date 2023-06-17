@@ -1,26 +1,23 @@
 package com.quectel.app.demo.fragment;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
+
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -30,44 +27,25 @@ import com.quectel.app.demo.R;
 import com.quectel.app.demo.bean.LanVO;
 import com.quectel.app.demo.bean.UserInfor;
 import com.quectel.app.demo.fragmentbase.BaseMainFragment;
-import com.quectel.app.demo.ui.LoginActivity;
+
 import com.quectel.app.demo.ui.ResetPasswordByEmailActivity;
 import com.quectel.app.demo.ui.ResetPasswordByPhoneActivity;
-import com.quectel.app.demo.ui.SelectLoginActivity;
-import com.quectel.app.demo.ui.UpdateImageActivity;
+
 import com.quectel.app.demo.ui.UpdateUserActivity;
 import com.quectel.app.demo.ui.UpdateUserPhoneActivity;
-import com.quectel.app.demo.utils.CameraUtils;
+
 import com.quectel.app.demo.utils.DensityUtils;
-import com.quectel.app.demo.utils.GetImgFromAlbum;
-import com.quectel.app.demo.utils.GetPhotoFromPhotoAlbum;
 import com.quectel.app.demo.utils.MyUtils;
 import com.quectel.app.demo.utils.ToastUtils;
 import com.quectel.app.quecnetwork.httpservice.IHttpCallBack;
-import com.quectel.app.quecnetwork.httpservice.IHttpUpLoadFile;
 import com.quectel.app.usersdk.userservice.IUserService;
 import com.quectel.app.usersdk.utils.UserServiceFactory;
-import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 import butterknife.BindView;
 import butterknife.OnClick;
-import de.hdodenhof.circleimageview.CircleImageView;
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
+
 
 public class MineFragment extends BaseMainFragment {
 
@@ -104,7 +82,7 @@ public class MineFragment extends BaseMainFragment {
     TextView tv_email;
 
     @BindView(R.id.civ_head)
-    CircleImageView civ_head;
+    ImageView civ_head;
 
 
     @Override
@@ -404,25 +382,25 @@ public class MineFragment extends BaseMainFragment {
         AlertDialog.Builder builder = null;
         switch (view.getId()) {
 
-            case R.id.civ_head:
-                RxPermissions rxPermissions = new RxPermissions(this);
-                rxPermissions
-                        .request(  Manifest.permission.CAMERA,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                Manifest.permission.READ_EXTERNAL_STORAGE
-                        )
-                        .subscribe(new Consumer<Boolean>() {
-                                       @Override
-                                       public void accept(Boolean grant) throws Exception {
-                                           if (grant) {
-                                               Intent intent = new Intent(getActivity(), UpdateImageActivity.class);
-                                               startActivityForResult(intent,0);
-                                           }
-                                       }
-                                   }
-                        );
-
-                break;
+//            case R.id.civ_head:
+//                RxPermissions rxPermissions = new RxPermissions(this);
+//                rxPermissions
+//                        .request(  Manifest.permission.CAMERA,
+//                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//                                Manifest.permission.READ_EXTERNAL_STORAGE
+//                        )
+//                        .subscribe(new Consumer<Boolean>() {
+//                                       @Override
+//                                       public void accept(Boolean grant) throws Exception {
+//                                           if (grant) {
+//                                               Intent intent = new Intent(getActivity(), UpdateImageActivity.class);
+//                                               startActivityForResult(intent,0);
+//                                           }
+//                                       }
+//                                   }
+//                        );
+//
+//                break;
 
             case R.id.ll_change_phone:
 

@@ -29,14 +29,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(String result) {
                 String token =   UserServiceFactory.getInstance().getService(IUserService.class).getToken();
-                if(!TextUtils.isEmpty(token))
-                {
+                if(!TextUtils.isEmpty(token)) {
                     Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                     startActivity(intent);
                     finish();
-                }
-                else
-                {
+                } else {
                     Intent intent = new Intent(MainActivity.this, SelectLoginActivity.class);
                     startActivity(intent);
                     finish();

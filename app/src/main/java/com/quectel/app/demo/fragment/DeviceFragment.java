@@ -155,8 +155,16 @@ public class DeviceFragment extends BaseMainFragment {
                                 @Override
                                 public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
                                     UserDeviceList.DataBean.ListBean lanVO = mAdapter.getData().get(position);
-                                    createSelectDialog(lanVO.getProductKey(),lanVO.getDeviceKey(),lanVO.getShareCode(),lanVO.getDeviceStatus());
-
+//                                    createSelectDialog(lanVO.getProductKey(),lanVO.getDeviceKey(),lanVO.getShareCode(),lanVO.getDeviceStatus());
+//                                    Intent intent = new Intent(getActivity(),DeviceControlActivity.class);
+//                                    intent.putExtra("pk",lanVO.getProductKey());
+//                                    intent.putExtra("dk",lanVO.getDeviceKey());
+//                                    if(DeviceConfig.OFFLINE.equals(lanVO.getDeviceStatus())) {
+//                                        intent.putExtra("online",false);
+//                                    } else {
+//                                        intent.putExtra("online",true);
+//                                    }
+//                                    startActivity(intent);
                                 }
                             });
 

@@ -1,4 +1,31 @@
 
+
+## QuecIotSdk
+### 功能列表
+
+|功能	|功能说明	|实现版本	|DMP API Version|
+| --- | --- | --- | --- |
+|初始化sdk	| 设置用户域名等基本信息|	1.9.0	|	V2 |
+|设置国家/地区code	| 检查代码是否登录|	1.9.0	| V2|
+
+
+### 二、设计接口服务/属性
+
+#### QuecIotSdk初始化
+public void startWithUserDomain(@NonNull String userDomain, @NonNull String userDomainSecret, @NonNull QuecCloudServiceType cloudServiceType) 
+|参数|	是否必传|说明|	
+| --- | --- | --- | 
+| userDomain |	是|用户域| 
+| userDomainSecret |	是|用户域密钥| 
+| cloudServiceType |是| 枚举 QuecCloudServiceType,中国区/欧洲区| 
+
+#### 设置国家/地区code
+public void setCountryCode(@NonNull String countryCode) {
+|参数|	是否必传|说明|	
+| --- | --- | --- | 
+| countryCode | 是 |国际代码，默认为国内,传"+86"|
+
+
 ## 账号管理SDK
 
 ### 一、功能列表
@@ -11,7 +38,6 @@
 |用户账号管理	| 获取、更新用户信息|	1.0.0	| V2|
 
 ### 二、设计接口服务/属性
-
 
 ### IUserService 服务
 
@@ -420,6 +446,29 @@ public void queryNationalityList(IHttpCallBack callback);
 | code |200|成功	| 
 | code |5032|token_invalid,code返回5032,请退出当前页面,主动跳转到登录页面,让用户重新获取token|
 | code |5106|请输入token,用户没有登录直接调用接口返回此内容	|
+
+#### 检查用户是否登录(异步)
+```java
+    checkUserLoginState(QuecCallback<Boolean> resultCallback) 
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| QuecResultCallback |是| 回调（result.successCode ） true /false| 
+
+#### 检查用户是否登录
+```java
+    boolean isLogin(QuecResultCallback callback)
+```
+
+#### 
+
+```java
+    public void loginByAuthCode(String authCode, QuecResultCallback<QuecResult<String>> resultCallback) 
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| authCode |是| 授权code|
+| QuecResultCallback |是| 回调（result.successCode ） true /false| 
 
 
 ## 设备SDK
@@ -1079,8 +1128,6 @@ WebSocketServiceLocater.getService(IWebSocketService.class)
 ```
 
 
-
-
 ## 蓝牙通道SDK
 
 ### 一、功能列表
@@ -1103,12 +1150,10 @@ BleServiceLocater.getService(IBleService.class)
 
 #### 扫描设备  可传入name  MAC地址过滤  不过滤传""
 ```
- public void scan(Activity activity,String name, String mac, IScanCallBack iScanCallBack);
- public interface IScanCallBack {
-    public void onScan(ScanDevice scanDevice);
-    public void onFail(Throwable throwable);
-}
+   public void startScan(String name, String mac, IDeviceScanCallback iDeviceScanCallback) 
+
 ```
+
 
 #### 停止扫描
 ```
@@ -1352,5 +1397,42 @@ example:
 ```
 
 
+## 配网sdk  quec-smart-config-sdk-api
+
+### 一、功能列表
+|功能	|功能说明	|实现版本	|微服务版本号|
+| --- | --- | --- | --- |
+|	设备配网| 设备配网 |	1.0.0	| |
+|	注册配网监听|  |	1.0.0	| |
+|	注销配网监听|  |	1.0.0	| |
+
+### 二、设计接口/属性
+
+#### 开始配网
+```java
+public void startConfigDevices(@NonNull List<DeviceBean> list, @NonNull String ssid, @NonNull String password) 
+
+``` 
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| list |是| 扫描到的设备列表	| 
+| ssid |是| ssid	| 
+| password |是| password	| 
+
+
+
+#### 注册配网监听
+
+```java
+   public void addSmartConfigListener(QuecSmartConfigListener listener) 
+
+```
+
+
+#### 注销配网监听
+
+```java
+  public void removeSmartConfigListener(QuecSmartConfigListener listener) 
+```
 
 

@@ -5,24 +5,23 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
-import android.os.SystemClock;
+
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.quectel.app.demo.R;
 import com.quectel.app.demo.adapter.DeviceModelAdapter;
 import com.quectel.app.demo.base.BaseActivity;
+import com.quectel.app.demo.constants.TSLConfig;
 import com.quectel.app.demo.utils.AddOperate;
 import com.quectel.app.demo.utils.MyUtils;
 import com.quectel.app.demo.utils.ToastUtils;
@@ -38,22 +37,21 @@ import com.quectel.app.device.bean.TSLProfile;
 import com.quectel.app.device.bean.TextSpecs;
 import com.quectel.app.device.constant.ModelStyleConstant;
 import com.quectel.app.device.deviceservice.IDevService;
-import com.quectel.app.device.deviceservice.IWebSocketService;
+
 import com.quectel.app.device.receiver.NetStatusReceiver;
 import com.quectel.app.device.utils.DeviceServiceFactory;
 import com.quectel.app.device.utils.ObjectModelParse;
-import com.quectel.app.device.utils.WebSocketServiceLocater;
-import com.quectel.app.device.websocket.EventType;
-import com.quectel.app.device.websocket.SocketEvent;
-import com.quectel.app.device.websocket.WebSocketConfig;
-import com.quectel.app.device.websocket.cmd.KValue;
+
 import com.quectel.app.quecnetwork.httpservice.IHttpCallBack;
 import com.quectel.app.usersdk.userservice.IUserService;
 import com.quectel.app.usersdk.utils.UserServiceFactory;
-import com.suke.widget.SwitchButton;
+import com.quectel.app.websocket.deviceservice.IWebSocketService;
+import com.quectel.app.websocket.utils.WebSocketServiceLocater;
+import com.quectel.app.websocket.websocket.cmd.KValue;
+import com.quectel.basic.common.entity.QuecResult;
+import com.quectel.basic.common.utils.QuecThreadUtil;
+import com.quectel.basic.queclog.QLog;
 
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,9 +61,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
-import butterknife.BindView;
-import butterknife.OnClick;
 
 public class DeviceControlActivity  extends BaseActivity {
 
@@ -85,25 +82,28 @@ public class DeviceControlActivity  extends BaseActivity {
    // SwitchButton switch_button;
     NetStatusReceiver mReceiver = null;
 
-    @BindView(R.id.mList)
-    RecyclerView mRecyclerView;
+    List<ModelBasic> list = new ArrayList<>();
+
+//    @BindView(R.id.mList)
+//    RecyclerView mRecyclerView;
 
     boolean isOnline = false;
     @Override
     protected void initData() {
 
-        mReceiver = new NetStatusReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
-        filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
-        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(mReceiver, filter);
+//        mReceiver = new NetStatusReceiver();
+//        IntentFilter filter = new IntentFilter();
+//        filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+//        filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+//        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+//        registerReceiver(mReceiver, filter);
         Intent intent = getIntent();
         pk =  intent.getStringExtra("pk");
         dk =  intent.getStringExtra("dk");
         isOnline = intent.getBooleanExtra("online",false);
 
-        queryModelTSL();
+//        queryModelTSL();
+        getProductTSL(pk);
         queryBusinessAttributes();
 
         // websocket 登录  在 EventType.EVENT_TYPE_LOGIN_SUCCESS 回调中 登录成功 然后订阅设备
@@ -115,162 +115,239 @@ public class DeviceControlActivity  extends BaseActivity {
 
     public static final  int  DEVICE_ONLINE = 1;
 
-    //处理websocket 事件上报
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(SocketEvent socketEvent) {
-        System.out.println("socketEvent--:"+socketEvent);
-        String socketType =  socketEvent.getType();
-        String dataContent = null;
-        switch (socketType)
-        {
-            case  EventType.EVENT_TYPE_LOGIN_SUCCESS:
-                System.out.println("login success--:"+socketEvent.getData());
+//    //处理websocket 事件上报
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void onEvent(SocketEvent socketEvent) {
+//        System.out.println("socketEvent--:"+socketEvent);
+//        String socketType =  socketEvent.getType();
+//        String dataContent = null;
+//        switch (socketType)
+//        {
+//            case  EventType.EVENT_TYPE_LOGIN_SUCCESS:
+//                System.out.println("login success--:"+socketEvent.getData());
+//
+//                WebSocketServiceLocater.getService(IWebSocketService.class).subscribeDevice(dk,pk);
+//                break;
+//            //设备在线离线监听
+//            case  EventType.EVENT_TYPE_ONLINE:
+//                try {
+//                    JSONObject obj = new JSONObject(socketEvent.getData());
+//                    int value = obj.getJSONObject("data").getInt("value");
+//                    if(value== DEVICE_ONLINE)
+//                    {
+//                        isOnline = true;
+//                    }
+//                    else
+//                    {
+//                        isOnline = false;
+//                    }
+//                    String result = value== DEVICE_ONLINE ?"在线":"离线";
+//                    System.out.println("result-EVENT_TYPE_ONLINE-:"+result);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                break;
+//            //处理物模型属性上报
+//            case  EventType.EVENT_TYPE_M_ATTR_REPORT:
+//                dataContent = socketEvent.getData();
+//                try {
+//                    JSONObject obj = new JSONObject(dataContent);
+//                    JSONObject dataObject = obj.getJSONObject("data");
+//                    String deviceKey = obj.getString("deviceKey");
+//                    if(deviceKey.equals(dk))
+//                    {
+//                        //结构体上报 数据 code标识符:value
+//                        //{"kv":{"task":{"Time_Refresh":false,"time_duration":"16"}}
+//                        //数组上报
+//                        //{"kv":{"array":["6","11","18"]}
+//                        //{"kv":{"array_twotest":["111","2222","333333"]}
+//                        //数组嵌套结构体  上报数据  code:value
+//                        //{"kv":{"Array_Struct":[{"test1":false,"test2":"2"},{"test1":false,"test2":"2"}]}
+//                        JSONObject kvObject = dataObject.getJSONObject("kv");
+//                        for(BusinessValue bv: contentList)
+//                        {
+//                            String code =   bv.getResourceCode();
+//                           if(kvObject.has(code))
+//                           {
+//                                 String content =   kvObject.getString(code);
+//                                 bv.setResourceValce(content);
+//                           }
+//                        }
+//                        mAdapter.notifyDataSetChanged();
+//                    }
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                break;
+//            //下发指令响应
+//            case  EventType.EVENT_TYPE_CMD_ACK:
+//                dataContent = socketEvent.getData();
+//                try {
+//                    JSONObject obj = new JSONObject(dataContent);
+//                    String status = obj.getString("status");
+//                    System.out.println("status--:"+status);
+//                    if(!WebSocketConfig.CMD_ACK_STATUS_SUCCESS.equals(status))
+//                    {
+//                        //应答失败,处理数据回滚
+//                    }
+//                    else
+//                    {
+//                        ToastUtils.showShort(activity,"下发成功");
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                break;
+//            case  EventType.EVENT_TYPE_WEBSOCKET_DEVICE_UNBIND:
+//                dataContent = socketEvent.getData();
+//
+//
+//                break;
+//            case  EventType.EVENT_TYPE_WEBSOCKET_LOGIN_FAILURE:
+//
+//
+//                break;
+//            case  EventType.EVENT_TYPE_WEBSOCKET_ERROR:
+//                try {
+//                    JSONObject obj = new JSONObject(socketEvent.getData());
+//                    String msg = obj.getString("msg");
+//                    ToastUtils.showShort(activity,msg);
+//                    BusinessValue item = mAdapter.getData().get(cachePosition);
+//                    String type = item.getDataType();
+//                    if(item.getDataType().equals(ModelStyleConstant.BOOL))
+//                    {
+//                       View view =  cacheMap.get(cachePosition);
+//                        SwitchButton switch_button =  view.findViewById(R.id.switch_button);
+//                        boolean value = Boolean.parseBoolean(item.getResourceValce());
+//                        switch_button.setChecked(value);
+//                    }
+//                    else if(type.equals(ModelStyleConstant.INT)|| type.equals(ModelStyleConstant.FLOAT)
+//                            ||type.equals(ModelStyleConstant.DOUBLE)||type.equals(ModelStyleConstant.ENUM)
+//                            ||type.equals(ModelStyleConstant.DATE)||type.equals(ModelStyleConstant.TEXT)
+//                            ||type.equals(ModelStyleConstant.ARRAY)||type.equals(ModelStyleConstant.STRUCT)
+//                    )
+//                    {
+//                        BusinessValue businessValue = numberCacheMap.get(cachePosition);
+//                        contentList.set(cachePosition,businessValue);
+//                        mAdapter.notifyDataSetChanged();
+//                    }
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                break;
+//            case  EventType.EVENT_TYPE_WEBSOCKET_LOCATION:
+//
+//
+//                break;
+//            case  EventType.EVENT_TYPE_M_EVENT_REPORT:
+//
+//                break;
+//        }
+//    }
 
-                WebSocketServiceLocater.getService(IWebSocketService.class).subscribeDevice(dk,pk);
-                break;
-            //设备在线离线监听
-            case  EventType.EVENT_TYPE_ONLINE:
-                try {
-                    JSONObject obj = new JSONObject(socketEvent.getData());
-                    int value = obj.getJSONObject("data").getInt("value");
-                    if(value== DEVICE_ONLINE)
-                    {
-                        isOnline = true;
-                    }
-                    else
-                    {
-                        isOnline = false;
-                    }
-                    String result = value== DEVICE_ONLINE ?"在线":"离线";
-                    System.out.println("result-EVENT_TYPE_ONLINE-:"+result);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                break;
-            //处理物模型属性上报
-            case  EventType.EVENT_TYPE_M_ATTR_REPORT:
-                dataContent = socketEvent.getData();
-                try {
-                    JSONObject obj = new JSONObject(dataContent);
-                    JSONObject dataObject = obj.getJSONObject("data");
-                    String deviceKey = obj.getString("deviceKey");
-                    if(deviceKey.equals(dk))
-                    {
-                        //结构体上报 数据 code标识符:value
-                        //{"kv":{"task":{"Time_Refresh":false,"time_duration":"16"}}
-                        //数组上报
-                        //{"kv":{"array":["6","11","18"]}
-                        //{"kv":{"array_twotest":["111","2222","333333"]}
-                        //数组嵌套结构体  上报数据  code:value
-                        //{"kv":{"Array_Struct":[{"test1":false,"test2":"2"},{"test1":false,"test2":"2"}]}
-                        JSONObject kvObject = dataObject.getJSONObject("kv");
-                        for(BusinessValue bv: contentList)
-                        {
-                            String code =   bv.getResourceCode();
-                           if(kvObject.has(code))
-                           {
-                                 String content =   kvObject.getString(code);
-                                 bv.setResourceValce(content);
-                           }
-                        }
-                        mAdapter.notifyDataSetChanged();
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                break;
-            //下发指令响应
-            case  EventType.EVENT_TYPE_CMD_ACK:
-                dataContent = socketEvent.getData();
-                try {
-                    JSONObject obj = new JSONObject(dataContent);
-                    String status = obj.getString("status");
-                    System.out.println("status--:"+status);
-                    if(!WebSocketConfig.CMD_ACK_STATUS_SUCCESS.equals(status))
-                    {
-                        //应答失败,处理数据回滚
-                    }
-                    else
-                    {
-                        ToastUtils.showShort(activity,"下发成功");
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                break;
-            case  EventType.EVENT_TYPE_WEBSOCKET_DEVICE_UNBIND:
-                dataContent = socketEvent.getData();
 
 
-                break;
-            case  EventType.EVENT_TYPE_WEBSOCKET_LOGIN_FAILURE:
-
-
-                break;
-            case  EventType.EVENT_TYPE_WEBSOCKET_ERROR:
-                try {
-                    JSONObject obj = new JSONObject(socketEvent.getData());
-                    String msg = obj.getString("msg");
-                    ToastUtils.showShort(activity,msg);
-                    BusinessValue item = mAdapter.getData().get(cachePosition);
-                    String type = item.getDataType();
-                    if(item.getDataType().equals(ModelStyleConstant.BOOL))
-                    {
-                       View view =  cacheMap.get(cachePosition);
-                        SwitchButton switch_button =  view.findViewById(R.id.switch_button);
-                        boolean value = Boolean.parseBoolean(item.getResourceValce());
-                        switch_button.setChecked(value);
-                    }
-                    else if(type.equals(ModelStyleConstant.INT)|| type.equals(ModelStyleConstant.FLOAT)
-                            ||type.equals(ModelStyleConstant.DOUBLE)||type.equals(ModelStyleConstant.ENUM)
-                            ||type.equals(ModelStyleConstant.DATE)||type.equals(ModelStyleConstant.TEXT)
-                            ||type.equals(ModelStyleConstant.ARRAY)||type.equals(ModelStyleConstant.STRUCT)
-                    )
-                    {
-                        BusinessValue businessValue = numberCacheMap.get(cachePosition);
-                        contentList.set(cachePosition,businessValue);
-                        mAdapter.notifyDataSetChanged();
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                break;
-            case  EventType.EVENT_TYPE_WEBSOCKET_LOCATION:
-
-
-                break;
-            case  EventType.EVENT_TYPE_M_EVENT_REPORT:
-
-                break;
-        }
-    }
-
-
-
-    @OnClick({R.id.iv_back})
-    public void onViewClick(View view) {
-        Intent intent = null;
-        switch (view.getId()) {
-            case R.id.iv_back:
-                finish();
-                break;
-        }
-    }
+//    @OnClick({R.id.iv_back})
+//    public void onViewClick(View view) {
+//        Intent intent = null;
+//        switch (view.getId()) {
+//            case R.id.iv_back:
+//                finish();
+//                break;
+//        }
+//    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         WebSocketServiceLocater.getService(IWebSocketService.class).disconnect();
-        if (mReceiver != null) {
-            unregisterReceiver(mReceiver);
-        }
+//        if (mReceiver != null) {
+//            unregisterReceiver(mReceiver);
+//        }
     }
-    List<ModelBasic> modelBasics = null;
+    List<ModelBasic> modelBasics = new ArrayList<>();
+
+
+        public void getProductTSL(String pk) {
+            DeviceServiceFactory.getInstance().getService(IDevService.class).queryProductTSL(pk, new IHttpCallBack() {
+                @Override
+                public void onSuccess(String s) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(s);
+                        int code = jsonObject.getInt("code");
+                        if (code == QuecResult.SUCCESS_CODE) {
+                            JSONObject data = jsonObject.getJSONObject("data");
+                            JSONArray jsonArray = data.getJSONArray("properties");
+                            QuecThreadUtil.RunSubThread(() -> {
+                                List<ModelBasic> list = getFilter(jsonArray);
+                                if (!list.isEmpty()) {
+//                                    modelBasicLiveData.postValue(list);
+                                    modelBasics.addAll(list);
+                                }
+                            });
+                        } else {
+
+                        }
+                    } catch (Throwable e) {
+                        QLog.e(e.getLocalizedMessage());
+                    }
+                }
+
+                @Override
+                public void onFail(Throwable throwable) {
+
+                }
+            });
+        }
+
+    private List<ModelBasic> getFilter(JSONArray jsonArray) {
+        List<ModelBasic> modelBasics = new ArrayList<>();
+        try {
+            List<ModelBasic> list = ObjectModelParse.buildModelListContent(jsonArray);
+            for (ModelBasic model : list) {
+                ModelBasic modelBasic = null;
+                modelBasic = getCustomFilter(model);
+                if (modelBasic != null) {
+                    modelBasics.add(modelBasic);
+                }
+            }
+
+        } catch (JSONException e) {
+            QLog.e(e.getLocalizedMessage());
+        }
+        return modelBasics;
+    }
+
+    private ModelBasic getCustomFilter(ModelBasic model) {
+        if (TextUtils.equals(model.getSubType(), TSLConfig.TSL_SUBTYPE_RW)
+                || Objects.equals(model.getSubType(), TSLConfig.TSL_SUBTYPE_W)) {
+            if (TextUtils.equals(model.getDataType(), TSLConfig.TSL_ATTR_DATA_TYPE_ARRAY)) {
+                if (TextUtils.isEmpty(model.getCode())) {
+                    return null;
+                }
+                if (model.getSpecs() == null || model.getSpecs().get(0) == null) {
+                    return null;
+                }
+                ArraySpecs numSpecs = (ArraySpecs) model.getSpecs().get(0);
+                if (TSLConfig.TSL_ATTR_DATA_TYPE_TEXT.equals(numSpecs.getDataType())
+                        || TSLConfig.TSL_ATTR_DATA_TYPE_STRUCT.equals(numSpecs.getDataType())) {
+                    return null;
+                }
+            } else if (TextUtils.equals(model.getDataType(), TSLConfig.TSL_ATTR_DATA_TYPE_STRUCT)
+                    || TextUtils.equals(model.getDataType(), TSLConfig.TSL_ATTR_DATA_TYPE_DATE)) {
+                return null;
+            }
+        } else {
+            return null;
+        }
+        return model;
+    }
+
     private void queryModelTSL()
     {
         DeviceServiceFactory.getInstance().getService(IDevService.class).queryProductTSL(pk,
@@ -367,248 +444,248 @@ public class DeviceControlActivity  extends BaseActivity {
                                         readWriteList.add(bv);
                                     }
                                 }
-                                contentList.addAll(readList);
-                                contentList.addAll(readWriteList);
-                                mRecyclerView.setLayoutManager(new LinearLayoutManager(activity));
-                                mRecyclerView.addItemDecoration(new BottomItemDecorationSystem(activity));
+//                                contentList.addAll(readList);
+//                                contentList.addAll(readWriteList);
+//                                mRecyclerView.setLayoutManager(new LinearLayoutManager(activity));
+//                                mRecyclerView.addItemDecoration(new BottomItemDecorationSystem(activity));
+//
+//                                mAdapter = new DeviceModelAdapter(activity, contentList);
 
-                                mAdapter = new DeviceModelAdapter(activity, contentList);
-                                mRecyclerView.setAdapter(mAdapter);
 
-                                mAdapter.setOnItemClickListener(new OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-                                        System.out.println("position--:"+position);
-                                        if(isOnline)
-                                        {
-                                            BusinessValue item = mAdapter.getData().get(position);
-                                            String type = item.getDataType();
-                                            String subType = item.getSubType();
-                                            if(type.equals(ModelStyleConstant.BOOL)&&subType.equals("RW"))
-                                            {
-                                                cachePosition = position;
-                                                cacheMap.put(position,view);
-                                                SwitchButton switch_button =  view.findViewById(R.id.switch_button);
-                                                switch_button.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
-                                                    @Override
-                                                    public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-
-                                                        System.out.println("isChecked--:"+isChecked);
-                                                         booleanData = new KValue(item.getAbId(),item.getName(), item.getDataType(),String.valueOf(isChecked));
-                                                        sendWebSocketBasicData(booleanData,dk,pk);
-
-                                                    }
-                                                });
-                                                switch_button.toggle();
-                                            }
-                                            else if(subType.equals("RW"))
-                                            {
-                                                if(type.equals(ModelStyleConstant.INT)|| type.equals(ModelStyleConstant.FLOAT)||type.equals(ModelStyleConstant.DOUBLE))
-                                                {
-                                                    cachePosition = position;
-                                                    String step = null;
-                                                     String code =  item.getResourceCode();
-                                                        for( ModelBasic mb :modelBasics)
-                                                        {
-                                                            if(code.equals(mb.getCode()))
-                                                            {
-                                                                NumSpecs numSpecs = (NumSpecs) mb.getSpecs().get(0);
-                                                                step = "min:"+numSpecs.getMin()+" max:"+numSpecs.getMax()+" step:"+numSpecs.getStep();
-
-                                                                createSendDialog(numSpecs,step,item);
-                                                            }
-                                                        }
-                                                }
-                                                else if(type.equals(ModelStyleConstant.ENUM))
-                                                {
-                                                    cachePosition = position;
-                                                    String code =  item.getResourceCode();
-                                                    for( ModelBasic mb :modelBasics)
-                                                    {
-                                                        if(code.equals(mb.getCode()))
-                                                        {
-                                                            List<BooleanSpecs> specs = mb.getSpecs();
-                                                            createSendEnumDialog(specs,item);
-                                                        }
-                                                    }
-                                                }
-                                                else if(type.equals(ModelStyleConstant.DATE)||type.equals(ModelStyleConstant.TEXT))
-                                                {
-                                                    cachePosition = position;
-                                                    String code =  item.getResourceCode();
-                                                    for( ModelBasic mb :modelBasics)
-                                                    {
-                                                        if(code.equals(mb.getCode()))
-                                                        {
-                                                           if(type.equals(ModelStyleConstant.TEXT))
-                                                           {
-                                                                TextSpecs ts = (TextSpecs) mb.getSpecs().get(0);
-                                                                createDateOrTextDialog(ts,item);
-                                                           }
-                                                           else
-                                                           {
-                                                               createDateOrTextDialog(null,item);
-                                                           }
-                                                        }
-                                                    }
-                                                }
-                                                else if(type.equals(ModelStyleConstant.STRUCT))
-                                                {
-                                                    cachePosition = position;
-                                                    String code =  item.getResourceCode();
-                                                    for( ModelBasic mb :modelBasics)
-                                                    {
-                                                        if(code.equals(mb.getCode()))
-                                                        {
-                                                            List<ModelBasic> specs=  mb.getSpecs();
-                                                            createSendStructDialog(specs,item);
-                                                        }
-                                                    }
-                                                }
-                                                else if(type.equals(ModelStyleConstant.ARRAY))
-                                                {
-                                                    cachePosition = position;
-                                                    String code =  item.getResourceCode();
-                                                    for( ModelBasic mb :modelBasics)
-                                                    {
-                                                        if(code.equals(mb.getCode()))
-                                                        {
-                                                             Object obj =  mb.getSpecs().get(0);
-                                                             if(obj instanceof ArraySpecs )
-                                                             {
-                                                                 ArraySpecs as = (ArraySpecs) obj;
-                                                                 createSendSimpleArrayDialog(as,item);
-                                                             }
-                                                             else if(obj instanceof ArrayStructSpecs)
-                                                             {
-                                                                 ArrayStructSpecs arrayStructSpecs = (ArrayStructSpecs) obj;
-                                                                 createSendArrayContainStructDialog(arrayStructSpecs,item);
-                                                             }
-                                                        }
-                                                    }
-                                                }
-
-                                            }
-                                        }
-                                        else
-                                        {
-                                          //  ToastUtils.showShort(activity,"设备离线");
-                                            BusinessValue item = mAdapter.getData().get(position);
-                                            String type = item.getDataType();
-                                            String subType = item.getSubType();
-                                            if(type.equals(ModelStyleConstant.BOOL)&&subType.equals("RW"))
-                                            {
-                                                cachePosition = position;
-                                                cacheMap.put(position,view);
-                                                SwitchButton switch_button =  view.findViewById(R.id.switch_button);
-                                                switch_button.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
-                                                    @Override
-                                                    public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-                                                        try {
-                                                            JSONObject obj =   new JSONObject();
-                                                            obj.put(item.getResourceCode(),String.valueOf(isChecked));
-                                                            String data =  new JSONArray().put(obj).toString();
-                                                            sendBaseHttpData(data,pk,dk);
-
-                                                        } catch (Exception e) {
-                                                            e.printStackTrace();
-                                                        }
-                                                    }
-                                                });
-                                                switch_button.toggle();
-                                            }
-                                            else if(subType.equals("RW"))
-                                            {
-                                                if(type.equals(ModelStyleConstant.INT)|| type.equals(ModelStyleConstant.FLOAT)||type.equals(ModelStyleConstant.DOUBLE))
-                                                {
-                                                    cachePosition = position;
-                                                    String step = null;
-                                                    String code =  item.getResourceCode();
-                                                    for( ModelBasic mb :modelBasics)
-                                                    {
-                                                        if(code.equals(mb.getCode()))
-                                                        {
-                                                            NumSpecs numSpecs = (NumSpecs) mb.getSpecs().get(0);
-                                                            step = "min:"+numSpecs.getMin()+" max:"+numSpecs.getMax()+" step:"+numSpecs.getStep();
-
-                                                            createSendDialog(numSpecs,step,item);
-                                                        }
-                                                    }
-                                                }
-                                                else if(type.equals(ModelStyleConstant.ENUM))
-                                                {
-                                                    cachePosition = position;
-                                                    String code =  item.getResourceCode();
-                                                    for( ModelBasic mb :modelBasics)
-                                                    {
-                                                        if(code.equals(mb.getCode()))
-                                                        {
-                                                            List<BooleanSpecs> specs = mb.getSpecs();
-                                                            createSendEnumDialog(specs,item);
-                                                        }
-                                                    }
-                                                }
-                                                else if(type.equals(ModelStyleConstant.DATE)||type.equals(ModelStyleConstant.TEXT))
-                                                {
-                                                    cachePosition = position;
-                                                    String code =  item.getResourceCode();
-                                                    for( ModelBasic mb :modelBasics)
-                                                    {
-                                                        if(code.equals(mb.getCode()))
-                                                        {
-                                                            if(type.equals(ModelStyleConstant.TEXT))
-                                                            {
-                                                                TextSpecs ts = (TextSpecs) mb.getSpecs().get(0);
-                                                                createDateOrTextDialog(ts,item);
-                                                            }
-                                                            else
-                                                            {
-                                                                createDateOrTextDialog(null,item);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                else if(type.equals(ModelStyleConstant.STRUCT))
-                                                {
-                                                    cachePosition = position;
-                                                    String code =  item.getResourceCode();
-                                                    for( ModelBasic mb :modelBasics)
-                                                    {
-                                                        if(code.equals(mb.getCode()))
-                                                        {
-                                                            List<ModelBasic> specs=  mb.getSpecs();
-                                                            createSendStructDialog(specs,item);
-                                                        }
-                                                    }
-                                                }
-                                                else if(type.equals(ModelStyleConstant.ARRAY))
-                                                {
-                                                    cachePosition = position;
-                                                    String code =  item.getResourceCode();
-                                                    for( ModelBasic mb :modelBasics)
-                                                    {
-                                                        if(code.equals(mb.getCode()))
-                                                        {
-                                                            Object obj =  mb.getSpecs().get(0);
-                                                            if(obj instanceof ArraySpecs )
-                                                            {
-                                                                ArraySpecs as = (ArraySpecs) obj;
-                                                                createSendSimpleArrayDialog(as,item);
-                                                            }
-                                                            else if(obj instanceof ArrayStructSpecs)
-                                                            {
-                                                                ArrayStructSpecs arrayStructSpecs = (ArrayStructSpecs) obj;
-                                                                createSendArrayContainStructDialog(arrayStructSpecs,item);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-
-                                            }
-
-                                        }
-                                    }
-                                });
+//                                mAdapter.setOnItemClickListener(new OnItemClickListener() {
+//                                    @Override
+//                                    public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+//                                        System.out.println("position--:"+position);
+//                                        if(isOnline)
+//                                        {
+//                                            BusinessValue item = mAdapter.getData().get(position);
+//                                            String type = item.getDataType();
+//                                            String subType = item.getSubType();
+//                                            if(type.equals(ModelStyleConstant.BOOL)&&subType.equals("RW"))
+//                                            {
+//                                                cachePosition = position;
+//                                                cacheMap.put(position,view);
+//                                                SwitchButton switch_button =  view.findViewById(R.id.switch_button);
+//                                                switch_button.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+//                                                    @Override
+//                                                    public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+//
+//                                                        System.out.println("isChecked--:"+isChecked);
+//                                                         booleanData = new KValue(item.getAbId(),item.getName(), item.getDataType(),String.valueOf(isChecked));
+//                                                        sendWebSocketBasicData(booleanData,dk,pk);
+//
+//                                                    }
+//                                                });
+//                                                switch_button.toggle();
+//                                            }
+//                                            else if(subType.equals("RW"))
+//                                            {
+//                                                if(type.equals(ModelStyleConstant.INT)|| type.equals(ModelStyleConstant.FLOAT)||type.equals(ModelStyleConstant.DOUBLE))
+//                                                {
+//                                                    cachePosition = position;
+//                                                    String step = null;
+//                                                     String code =  item.getResourceCode();
+//                                                        for( ModelBasic mb :modelBasics)
+//                                                        {
+//                                                            if(code.equals(mb.getCode()))
+//                                                            {
+//                                                                NumSpecs numSpecs = (NumSpecs) mb.getSpecs().get(0);
+//                                                                step = "min:"+numSpecs.getMin()+" max:"+numSpecs.getMax()+" step:"+numSpecs.getStep();
+//
+//                                                                createSendDialog(numSpecs,step,item);
+//                                                            }
+//                                                        }
+//                                                }
+//                                                else if(type.equals(ModelStyleConstant.ENUM))
+//                                                {
+//                                                    cachePosition = position;
+//                                                    String code =  item.getResourceCode();
+//                                                    for( ModelBasic mb :modelBasics)
+//                                                    {
+//                                                        if(code.equals(mb.getCode()))
+//                                                        {
+//                                                            List<BooleanSpecs> specs = mb.getSpecs();
+//                                                            createSendEnumDialog(specs,item);
+//                                                        }
+//                                                    }
+//                                                }
+//                                                else if(type.equals(ModelStyleConstant.DATE)||type.equals(ModelStyleConstant.TEXT))
+//                                                {
+//                                                    cachePosition = position;
+//                                                    String code =  item.getResourceCode();
+//                                                    for( ModelBasic mb :modelBasics)
+//                                                    {
+//                                                        if(code.equals(mb.getCode()))
+//                                                        {
+//                                                           if(type.equals(ModelStyleConstant.TEXT))
+//                                                           {
+//                                                                TextSpecs ts = (TextSpecs) mb.getSpecs().get(0);
+//                                                                createDateOrTextDialog(ts,item);
+//                                                           }
+//                                                           else
+//                                                           {
+//                                                               createDateOrTextDialog(null,item);
+//                                                           }
+//                                                        }
+//                                                    }
+//                                                }
+//                                                else if(type.equals(ModelStyleConstant.STRUCT))
+//                                                {
+//                                                    cachePosition = position;
+//                                                    String code =  item.getResourceCode();
+//                                                    for( ModelBasic mb :modelBasics)
+//                                                    {
+//                                                        if(code.equals(mb.getCode()))
+//                                                        {
+//                                                            List<ModelBasic> specs=  mb.getSpecs();
+//                                                            createSendStructDialog(specs,item);
+//                                                        }
+//                                                    }
+//                                                }
+//                                                else if(type.equals(ModelStyleConstant.ARRAY))
+//                                                {
+//                                                    cachePosition = position;
+//                                                    String code =  item.getResourceCode();
+//                                                    for( ModelBasic mb :modelBasics)
+//                                                    {
+//                                                        if(code.equals(mb.getCode()))
+//                                                        {
+//                                                             Object obj =  mb.getSpecs().get(0);
+//                                                             if(obj instanceof ArraySpecs )
+//                                                             {
+//                                                                 ArraySpecs as = (ArraySpecs) obj;
+//                                                                 createSendSimpleArrayDialog(as,item);
+//                                                             }
+//                                                             else if(obj instanceof ArrayStructSpecs)
+//                                                             {
+//                                                                 ArrayStructSpecs arrayStructSpecs = (ArrayStructSpecs) obj;
+//                                                                 createSendArrayContainStructDialog(arrayStructSpecs,item);
+//                                                             }
+//                                                        }
+//                                                    }
+//                                                }
+//
+//                                            }
+//                                        }
+//                                        else
+//                                        {
+//                                          //  ToastUtils.showShort(activity,"设备离线");
+//                                            BusinessValue item = mAdapter.getData().get(position);
+//                                            String type = item.getDataType();
+//                                            String subType = item.getSubType();
+//                                            if(type.equals(ModelStyleConstant.BOOL)&&subType.equals("RW"))
+//                                            {
+//                                                cachePosition = position;
+//                                                cacheMap.put(position,view);
+//                                                SwitchButton switch_button =  view.findViewById(R.id.switch_button);
+//                                                switch_button.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+//                                                    @Override
+//                                                    public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+//                                                        try {
+//                                                            JSONObject obj =   new JSONObject();
+//                                                            obj.put(item.getResourceCode(),String.valueOf(isChecked));
+//                                                            String data =  new JSONArray().put(obj).toString();
+//                                                            sendBaseHttpData(data,pk,dk);
+//
+//                                                        } catch (Exception e) {
+//                                                            e.printStackTrace();
+//                                                        }
+//                                                    }
+//                                                });
+//                                                switch_button.toggle();
+//                                            }
+//                                            else if(subType.equals("RW"))
+//                                            {
+//                                                if(type.equals(ModelStyleConstant.INT)|| type.equals(ModelStyleConstant.FLOAT)||type.equals(ModelStyleConstant.DOUBLE))
+//                                                {
+//                                                    cachePosition = position;
+//                                                    String step = null;
+//                                                    String code =  item.getResourceCode();
+//                                                    for( ModelBasic mb :modelBasics)
+//                                                    {
+//                                                        if(code.equals(mb.getCode()))
+//                                                        {
+//                                                            NumSpecs numSpecs = (NumSpecs) mb.getSpecs().get(0);
+//                                                            step = "min:"+numSpecs.getMin()+" max:"+numSpecs.getMax()+" step:"+numSpecs.getStep();
+//
+//                                                            createSendDialog(numSpecs,step,item);
+//                                                        }
+//                                                    }
+//                                                }
+//                                                else if(type.equals(ModelStyleConstant.ENUM))
+//                                                {
+//                                                    cachePosition = position;
+//                                                    String code =  item.getResourceCode();
+//                                                    for( ModelBasic mb :modelBasics)
+//                                                    {
+//                                                        if(code.equals(mb.getCode()))
+//                                                        {
+//                                                            List<BooleanSpecs> specs = mb.getSpecs();
+//                                                            createSendEnumDialog(specs,item);
+//                                                        }
+//                                                    }
+//                                                }
+//                                                else if(type.equals(ModelStyleConstant.DATE)||type.equals(ModelStyleConstant.TEXT))
+//                                                {
+//                                                    cachePosition = position;
+//                                                    String code =  item.getResourceCode();
+//                                                    for( ModelBasic mb :modelBasics)
+//                                                    {
+//                                                        if(code.equals(mb.getCode()))
+//                                                        {
+//                                                            if(type.equals(ModelStyleConstant.TEXT))
+//                                                            {
+//                                                                TextSpecs ts = (TextSpecs) mb.getSpecs().get(0);
+//                                                                createDateOrTextDialog(ts,item);
+//                                                            }
+//                                                            else
+//                                                            {
+//                                                                createDateOrTextDialog(null,item);
+//                                                            }
+//                                                        }
+//                                                    }
+//                                                }
+//                                                else if(type.equals(ModelStyleConstant.STRUCT))
+//                                                {
+//                                                    cachePosition = position;
+//                                                    String code =  item.getResourceCode();
+//                                                    for( ModelBasic mb :modelBasics)
+//                                                    {
+//                                                        if(code.equals(mb.getCode()))
+//                                                        {
+//                                                            List<ModelBasic> specs=  mb.getSpecs();
+//                                                            createSendStructDialog(specs,item);
+//                                                        }
+//                                                    }
+//                                                }
+//                                                else if(type.equals(ModelStyleConstant.ARRAY))
+//                                                {
+//                                                    cachePosition = position;
+//                                                    String code =  item.getResourceCode();
+//                                                    for( ModelBasic mb :modelBasics)
+//                                                    {
+//                                                        if(code.equals(mb.getCode()))
+//                                                        {
+//                                                            Object obj =  mb.getSpecs().get(0);
+//                                                            if(obj instanceof ArraySpecs )
+//                                                            {
+//                                                                ArraySpecs as = (ArraySpecs) obj;
+//                                                                createSendSimpleArrayDialog(as,item);
+//                                                            }
+//                                                            else if(obj instanceof ArrayStructSpecs)
+//                                                            {
+//                                                                ArrayStructSpecs arrayStructSpecs = (ArrayStructSpecs) obj;
+//                                                                createSendArrayContainStructDialog(arrayStructSpecs,item);
+//                                                            }
+//                                                        }
+//                                                    }
+//                                                }
+//
+//                                            }
+//
+//                                        }
+//                                    }
+//                                });
 
                             }
                         } catch (Exception e) {
@@ -923,22 +1000,17 @@ public class DeviceControlActivity  extends BaseActivity {
                         WebSocketServiceLocater.getService(IWebSocketService.class).writeWebSocketArrayOrStructBaseData(item.getAbId(),
                                 item.getName(),mListChild,ModelStyleConstant.STRUCT,dk,pk);
                     }
-                    else
-                    {
+                    else {
                         // * "[{\"key\":[{\"key1\":\"value1\"},{\"key2\":\"value2\"}]}]"
                         try {
                             JSONObject obj =   new JSONObject();
                             JSONArray childArray = new JSONArray();
-                            for(ModelBasic mb : specs)
-                            {
-                                if(mb.getDataType().equals(ModelStyleConstant.BOOL))
-                                {
+                            for(ModelBasic mb : specs) {
+                                if(mb.getDataType().equals(ModelStyleConstant.BOOL)) {
                                     JSONObject child1 =   new JSONObject();
                                     child1.put(mb.getCode(),"true");
                                     childArray.put(child1);
-                                }
-                                else if(mb.getDataType().equals(ModelStyleConstant.INT))
-                                {
+                                } else if(mb.getDataType().equals(ModelStyleConstant.INT)) {
                                     JSONObject child1 =   new JSONObject();
                                     child1.put(mb.getCode(),88);
                                     childArray.put(child1);
