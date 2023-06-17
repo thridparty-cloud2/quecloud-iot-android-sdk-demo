@@ -25,7 +25,7 @@ public class SelectLoginActivity extends BaseActivity {
     protected void initData() {
 
     }
-    @OnClick({R.id.iv_back,R.id.bt_login1,R.id.bt_login2})
+    @OnClick({R.id.iv_back,R.id.bt_login1,R.id.bt_login2,R.id.bt_login3})
     public void onViewClick(View view) {
         Intent intent = null;
         switch (view.getId()) {
@@ -47,6 +47,13 @@ public class SelectLoginActivity extends BaseActivity {
                 startActivity(intent);
                 finish();
 
+                break;
+
+            case R.id.bt_login3:
+
+                intent = new Intent(activity, AuthCodeLoginActivity.class);
+                startActivity(intent);
+                finish();
                 break;
 
         }

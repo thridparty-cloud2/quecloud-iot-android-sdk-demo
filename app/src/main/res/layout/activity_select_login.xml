@@ -65,6 +65,20 @@
         android:layout_height="50dp"/>
 
 
+    <Button
+        android:id="@+id/bt_login3"
+        android:layout_width="match_parent"
+        android:text="三方authcode 登录"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/white_bg"
+        android:textColor="@color/new_lan"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:layout_height="50dp"/>
+
+
 
 
 
