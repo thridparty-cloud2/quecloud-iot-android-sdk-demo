@@ -1,41 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/my_white"
-    android:orientation="vertical"
     android:fitsSystemWindows="true"
-    android:layout_height="match_parent">
+    android:orientation="vertical">
+
 
     <RelativeLayout
-           android:layout_width="match_parent"
-           android:layout_height="50dp">
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
 
-          <ImageView
-              android:id="@+id/iv_back"
-              android:layout_width="wrap_content"
-              android:layout_marginLeft="20dp"
-              android:layout_centerVertical="true"
-              android:background="@mipmap/backarrow"
-              android:layout_height="wrap_content"/>
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:background="@mipmap/backarrow" />
 
-              <TextView
-                      android:id="@+id/title"
-                       android:layout_centerInParent="true"
-                      android:layout_width="wrap_content"
-                      android:text="登录"
-                      android:textColor="@color/main1"
-                      android:textSize="18sp"
-                      android:gravity="center"
-                      android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="登录"
+            android:textColor="@color/main1"
+            android:textSize="18sp" />
 
         <View
-            android:background="#e5e5e5"
             android:layout_width="match_parent"
-            android:layout_alignParentBottom="true"
             android:layout_height="0.5dp"
-            />
+            android:layout_alignParentBottom="true"
+            android:background="#e5e5e5" />
 
-       </RelativeLayout>
+    </RelativeLayout>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/edit_countryCode"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="@dimen/dp_48"
+        android:layout_marginTop="50dp"
+        android:hint="please enter country code"
+        android:textColorHint="@color/W3" />
 
 
     <RelativeLayout
@@ -43,9 +52,8 @@
         android:layout_width="match_parent"
         android:layout_height="54dp"
         android:layout_marginLeft="48dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginRight="48dp"
-        >
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="48dp">
 
         <EditText
             android:id="@+id/edit_phone"
@@ -61,12 +69,12 @@
             android:textColorHint="@color/main3"
             android:textCursorDrawable="@null"
             android:textSize="16sp" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/gray_line"
-            />
+            android:background="@color/gray_line" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -75,8 +83,7 @@
         android:layout_height="54dp"
         android:layout_marginLeft="48dp"
         android:layout_marginTop="20dp"
-        android:layout_marginRight="48dp"
-        >
+        android:layout_marginRight="48dp">
 
         <EditText
             android:id="@+id/edit_pass"
@@ -92,12 +99,12 @@
             android:textColorHint="@color/main3"
             android:textCursorDrawable="@null"
             android:textSize="16sp" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/gray_line"
-            />
+            android:background="@color/gray_line" />
     </RelativeLayout>
 
 
@@ -105,11 +112,10 @@
         android:id="@+id/rl_three"
         android:layout_width="match_parent"
         android:layout_height="54dp"
-        android:visibility="gone"
         android:layout_marginLeft="48dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="48dp"
-        >
+        android:visibility="gone">
 
         <EditText
             android:id="@+id/edit_yanzheng"
@@ -149,43 +155,42 @@
     </RelativeLayout>
 
 
-       <Button
-               android:id="@+id/bt_style"
-               android:layout_width="wrap_content"
-               android:text="验证码登录"
-               android:textColor="@color/new_lan"
-             android:background="@drawable/white_bg"
-               android:textSize="16sp"
-               android:gravity="center"
-               android:layout_margin="20dp"
-               android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/bt_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:background="@drawable/white_bg"
+        android:gravity="center"
+        android:text="验证码登录"
+        android:textColor="@color/new_lan"
+        android:textSize="16sp" />
 
 
-        <Button
-                android:id="@+id/bt_login"
-                android:layout_width="match_parent"
-                android:text="登录"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                 android:background="@drawable/white_bg"
-                android:textColor="@color/new_lan"
-                android:textSize="18sp"
-                android:gravity="center"
-                android:layout_height="50dp"/>
+    <Button
+        android:id="@+id/bt_login"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/white_bg"
+        android:gravity="center"
+        android:text="登录"
+        android:textColor="@color/new_lan"
+        android:textSize="18sp" />
 
 
-       <TextView
-               android:id="@+id/tv_register"
-              android:layout_marginTop="50dp"
-              android:layout_gravity="center_horizontal"
-               android:layout_width="wrap_content"
-               android:text="没有注册,立即注册?"
-               android:textColor="@color/new_lan"
-               android:textSize="18sp"
-               android:gravity="center"
-               android:layout_height="wrap_content"/>
-
+    <TextView
+        android:id="@+id/tv_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:text="没有注册,立即注册?"
+        android:textColor="@color/new_lan"
+        android:textSize="18sp" />
 
 
 </LinearLayout>

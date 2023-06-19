@@ -1,4 +1,6 @@
 package com.quectel.app.demo;
+
+import android.app.Activity;
 import android.app.Application;
 
 import com.hm.lifecycle.api.ApplicationLifecycleManager;
@@ -10,13 +12,14 @@ import com.quectel.app.quecnetwork.QuecNetWorkManager;
 import com.quectel.app.quecnetwork.logservice.ILogService;
 import com.quectel.app.quecnetwork.utils.LogService;
 import com.quectel.app.usersdk.utils.UserServiceFactory;
+import com.quectel.basic.common.base.QuecBaseApp;
 import com.quectel.basic.quecmmkv.MmkvManager;
 import com.quectel.sdk.iot.QuecCloudServiceType;
 import com.quectel.sdk.iot.QuecIotAppSdk;
 import com.quectel.sdk.smart.config.api.QuecSmartConfigServiceManager;
 
 
-public class App extends Application {
+public class App extends QuecBaseApp {
 
     String userDomain = "";
     String domainSecret = "";
@@ -39,12 +42,22 @@ public class App extends Application {
         QuecSmartConfigServiceManager.getInstance().init(this);
         UserModulePreferences.init(this);
         QuecNetWorkManager.getInstance().init(this);
-        QuecIotAppSdk.getInstance().startWithUserDomain("userdomain","userSecrete", QuecCloudServiceType.QuecCloudServiceTypeChina);
+        QuecIotAppSdk.getInstance().startWithUserDomain(BuildConfig.userDomain, BuildConfig.userScrete, QuecCloudServiceType.QuecCloudServiceTypeChina);
 
         //开始日志记录功能
 //        LogService.get(ILogService.class).startLog(this);
         //异常本地捕获
-       // CrashHandler.getInstance().init(this);
+        // CrashHandler.getInstance().init(this);
+
+    }
+
+    @Override
+    protected void onActivityStarted(Activity activity) {
+
+    }
+
+    @Override
+    protected void onActivityStopped(Activity activity) {
 
     }
 
