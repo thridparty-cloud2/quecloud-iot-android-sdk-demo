@@ -156,6 +156,7 @@ public class DistributionNetworkActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        QuecSmartConfigServiceManager.getInstance().cancelConfigDevices();
         BleServiceLocater.getService(IBleService.class).release();
     }
 
