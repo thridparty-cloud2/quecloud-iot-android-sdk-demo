@@ -62,7 +62,12 @@ class Repo() {
                     }
 
                     override fun onFail(failResult: QuecResult<String?>) {
-                        resultCallback.onSuccess(failResult)
+                        if (null == failResult.msg) {
+                            Log.e("loginAuth fail", failResult.data.toString());
+                        } else {
+                            Log.e("loginAuth fail", failResult.msg);
+                        }
+                        resultCallback.onFail(failResult)
                     }
                 })
     }
