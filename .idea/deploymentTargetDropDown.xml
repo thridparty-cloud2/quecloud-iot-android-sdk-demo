@@ -5,6 +5,12 @@
       <entry key="app">
         <State />
       </entry>
+      <entry key="quecloud-iot-android-sdk-demo [app:assembleDebug]">
+        <State />
+      </entry>
+      <entry key="quecloud-iot-android-sdk-demo [app:assembleRelease]">
+        <State />
+      </entry>
     </value>
   </component>
 </project>

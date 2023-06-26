@@ -33,8 +33,10 @@ import com.quectel.app.device.bean.BooleanSpecs;
 import com.quectel.app.device.bean.BusinessValue;
 import com.quectel.app.device.bean.ModelBasic;
 import com.quectel.app.device.bean.NumSpecs;
+import com.quectel.app.device.bean.QuecProductTSLPropertyModel;
 import com.quectel.app.device.bean.TSLProfile;
 import com.quectel.app.device.bean.TextSpecs;
+import com.quectel.app.device.callback.IDeviceTSLModelCallback;
 import com.quectel.app.device.constant.ModelStyleConstant;
 import com.quectel.app.device.deviceservice.IDevService;
 
@@ -103,8 +105,8 @@ public class DeviceControlActivity  extends BaseActivity {
         isOnline = intent.getBooleanExtra("online",false);
 
 //        queryModelTSL();
-        getProductTSL(pk);
-        queryBusinessAttributes();
+//        getProductTSL(pk);
+//        queryBusinessAttributes();
 
         // websocket 登录  在 EventType.EVENT_TYPE_LOGIN_SUCCESS 回调中 登录成功 然后订阅设备
         if(isOnline)
@@ -270,122 +272,30 @@ public class DeviceControlActivity  extends BaseActivity {
 //            unregisterReceiver(mReceiver);
 //        }
     }
-    List<ModelBasic> modelBasics = new ArrayList<>();
 
+    public void getProductTSLByCache(String pk,String dk){
+        IDevService devService = DeviceServiceFactory.getInstance().getService(IDevService.class);
 
-        public void getProductTSL(String pk) {
-            DeviceServiceFactory.getInstance().getService(IDevService.class).queryProductTSL(pk, new IHttpCallBack() {
-                @Override
-                public void onSuccess(String s) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(s);
-                        int code = jsonObject.getInt("code");
-                        if (code == QuecResult.SUCCESS_CODE) {
-                            JSONObject data = jsonObject.getJSONObject("data");
-                            JSONArray jsonArray = data.getJSONArray("properties");
-                            QuecThreadUtil.RunSubThread(() -> {
-                                List<ModelBasic> list = getFilter(jsonArray);
-                                if (!list.isEmpty()) {
-//                                    modelBasicLiveData.postValue(list);
-                                    modelBasics.addAll(list);
-                                }
-                            });
-                        } else {
+        devService.getProductTSLValueWithProductKey(pk, dk, "", "", new ArrayList<String>(), new ArrayList<String>(), new IDeviceTSLModelCallback() {
+            @Override
+            public void onResultCallback(List<QuecProductTSLPropertyModel<?>> list) {
 
-                        }
-                    } catch (Throwable e) {
-                        QLog.e(e.getLocalizedMessage());
-                    }
-                }
-
-                @Override
-                public void onFail(Throwable throwable) {
-
-                }
-            });
-        }
-
-    private List<ModelBasic> getFilter(JSONArray jsonArray) {
-        List<ModelBasic> modelBasics = new ArrayList<>();
-        try {
-            List<ModelBasic> list = ObjectModelParse.buildModelListContent(jsonArray);
-            for (ModelBasic model : list) {
-                ModelBasic modelBasic = null;
-                modelBasic = getCustomFilter(model);
-                if (modelBasic != null) {
-                    modelBasics.add(modelBasic);
-                }
             }
 
-        } catch (JSONException e) {
-            QLog.e(e.getLocalizedMessage());
-        }
-        return modelBasics;
-    }
+            @Override
+            public void onFail(Throwable throwable) {
 
-    private ModelBasic getCustomFilter(ModelBasic model) {
-        if (TextUtils.equals(model.getSubType(), TSLConfig.TSL_SUBTYPE_RW)
-                || Objects.equals(model.getSubType(), TSLConfig.TSL_SUBTYPE_W)) {
-            if (TextUtils.equals(model.getDataType(), TSLConfig.TSL_ATTR_DATA_TYPE_ARRAY)) {
-                if (TextUtils.isEmpty(model.getCode())) {
-                    return null;
-                }
-                if (model.getSpecs() == null || model.getSpecs().get(0) == null) {
-                    return null;
-                }
-                ArraySpecs numSpecs = (ArraySpecs) model.getSpecs().get(0);
-                if (TSLConfig.TSL_ATTR_DATA_TYPE_TEXT.equals(numSpecs.getDataType())
-                        || TSLConfig.TSL_ATTR_DATA_TYPE_STRUCT.equals(numSpecs.getDataType())) {
-                    return null;
-                }
-            } else if (TextUtils.equals(model.getDataType(), TSLConfig.TSL_ATTR_DATA_TYPE_STRUCT)
-                    || TextUtils.equals(model.getDataType(), TSLConfig.TSL_ATTR_DATA_TYPE_DATE)) {
-                return null;
             }
-        } else {
-            return null;
-        }
-        return model;
+        });
     }
 
-    private void queryModelTSL()
-    {
-        DeviceServiceFactory.getInstance().getService(IDevService.class).queryProductTSL(pk,
-                new IHttpCallBack() {
-                    @Override
-                    public void onSuccess(String result) {
-                        System.out.println("queryProductTSL--:" + result);
-                        try {
-                            JSONObject mainObj = new JSONObject(result);
-                            int code =  mainObj.getInt("code");
-                            if(code==200)
-                            {
-                                JSONObject obj = mainObj.getJSONObject("data");
-                                String profileContent =  obj.getString("profile");
-                                TSLProfile tslProfile = new Gson().fromJson(profileContent, TSLProfile.class);
-                                System.out.println("tslProfile-:"+tslProfile);
-                                JSONArray jsonArray = obj.getJSONArray("properties");
-                                modelBasics = ObjectModelParse.buildModelListContent(jsonArray);
-                                if(modelBasics!=null&&modelBasics.size()>0)
-                                {
-                                    System.out.println("modelBasics--:"+modelBasics.size());
-                                }
-
-                            }
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
 
 
-                    }
-                    @Override
-                    public void onFail(Throwable e) {
-                        e.printStackTrace();
-                    }
-                }
-        );
-    }
+
+
+
+
+
 
     List<BusinessValue> readList = new ArrayList<BusinessValue>();
     List<BusinessValue> readWriteList = new ArrayList<BusinessValue>();
@@ -397,309 +307,6 @@ public class DeviceControlActivity  extends BaseActivity {
     HashMap<Integer,View> cacheMap = new HashMap<Integer,View>();
 
     HashMap<Integer,BusinessValue> numberCacheMap = new HashMap<Integer,BusinessValue>();
-    private void queryBusinessAttributes()
-    {
-        //要查询的属性标识符集合
-        List<String> codeList = new ArrayList<String>();
-        //标识符集合
-        codeList.add("temperature");
-        codeList.add("state");
-        //查询类型集合
-        //1 查询设备基础属性 2 查询物模型属性  3 查询定位信息
-        List<String> typeList = new ArrayList<String>();
-        typeList.add("1");
-//        typeList.add("2");
-//        typeList.add("3");
-
-        //传 null 查询所有属性和类型
-       // DeviceServiceFactory.getInstance().getService(IDevService.class).queryBusinessAttributes(codeList,pk,dk,typeList,
-        DeviceServiceFactory.getInstance().getService(IDevService.class).queryBusinessAttributes(null,pk,dk,null,"","",
-                new IHttpCallBack() {
-                    @Override
-                    public void onSuccess(String result) {
-                        System.out.println("queryBusinessAttributes--:" + result);
-
-                        try {
-                            JSONObject mainObj = new JSONObject(result);
-                            int code =  mainObj.getInt("code");
-                            if(code==200)
-                            {
-                                readList.clear();
-                                readWriteList.clear();
-                                contentList.clear();
-                                JSONObject obj = mainObj.getJSONObject("data");
-                                JSONArray array =  obj.getJSONArray("customizeTslInfo");
-                                Type type =new TypeToken<List<BusinessValue>>() {}.getType();
-                                List<BusinessValue> childList = new Gson().fromJson(array.toString(), type);
-                                System.out.println("childList--:"+childList.size());
-
-                                for(BusinessValue bv: childList)
-                                {
-                                    if("R".equals(bv.getSubType()))
-                                    {
-                                        readList.add(bv);
-                                    }
-                                    else if("RW".equals(bv.getSubType()))
-                                    {
-                                        readWriteList.add(bv);
-                                    }
-                                }
-//                                contentList.addAll(readList);
-//                                contentList.addAll(readWriteList);
-//                                mRecyclerView.setLayoutManager(new LinearLayoutManager(activity));
-//                                mRecyclerView.addItemDecoration(new BottomItemDecorationSystem(activity));
-//
-//                                mAdapter = new DeviceModelAdapter(activity, contentList);
-
-
-//                                mAdapter.setOnItemClickListener(new OnItemClickListener() {
-//                                    @Override
-//                                    public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-//                                        System.out.println("position--:"+position);
-//                                        if(isOnline)
-//                                        {
-//                                            BusinessValue item = mAdapter.getData().get(position);
-//                                            String type = item.getDataType();
-//                                            String subType = item.getSubType();
-//                                            if(type.equals(ModelStyleConstant.BOOL)&&subType.equals("RW"))
-//                                            {
-//                                                cachePosition = position;
-//                                                cacheMap.put(position,view);
-//                                                SwitchButton switch_button =  view.findViewById(R.id.switch_button);
-//                                                switch_button.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
-//                                                    @Override
-//                                                    public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-//
-//                                                        System.out.println("isChecked--:"+isChecked);
-//                                                         booleanData = new KValue(item.getAbId(),item.getName(), item.getDataType(),String.valueOf(isChecked));
-//                                                        sendWebSocketBasicData(booleanData,dk,pk);
-//
-//                                                    }
-//                                                });
-//                                                switch_button.toggle();
-//                                            }
-//                                            else if(subType.equals("RW"))
-//                                            {
-//                                                if(type.equals(ModelStyleConstant.INT)|| type.equals(ModelStyleConstant.FLOAT)||type.equals(ModelStyleConstant.DOUBLE))
-//                                                {
-//                                                    cachePosition = position;
-//                                                    String step = null;
-//                                                     String code =  item.getResourceCode();
-//                                                        for( ModelBasic mb :modelBasics)
-//                                                        {
-//                                                            if(code.equals(mb.getCode()))
-//                                                            {
-//                                                                NumSpecs numSpecs = (NumSpecs) mb.getSpecs().get(0);
-//                                                                step = "min:"+numSpecs.getMin()+" max:"+numSpecs.getMax()+" step:"+numSpecs.getStep();
-//
-//                                                                createSendDialog(numSpecs,step,item);
-//                                                            }
-//                                                        }
-//                                                }
-//                                                else if(type.equals(ModelStyleConstant.ENUM))
-//                                                {
-//                                                    cachePosition = position;
-//                                                    String code =  item.getResourceCode();
-//                                                    for( ModelBasic mb :modelBasics)
-//                                                    {
-//                                                        if(code.equals(mb.getCode()))
-//                                                        {
-//                                                            List<BooleanSpecs> specs = mb.getSpecs();
-//                                                            createSendEnumDialog(specs,item);
-//                                                        }
-//                                                    }
-//                                                }
-//                                                else if(type.equals(ModelStyleConstant.DATE)||type.equals(ModelStyleConstant.TEXT))
-//                                                {
-//                                                    cachePosition = position;
-//                                                    String code =  item.getResourceCode();
-//                                                    for( ModelBasic mb :modelBasics)
-//                                                    {
-//                                                        if(code.equals(mb.getCode()))
-//                                                        {
-//                                                           if(type.equals(ModelStyleConstant.TEXT))
-//                                                           {
-//                                                                TextSpecs ts = (TextSpecs) mb.getSpecs().get(0);
-//                                                                createDateOrTextDialog(ts,item);
-//                                                           }
-//                                                           else
-//                                                           {
-//                                                               createDateOrTextDialog(null,item);
-//                                                           }
-//                                                        }
-//                                                    }
-//                                                }
-//                                                else if(type.equals(ModelStyleConstant.STRUCT))
-//                                                {
-//                                                    cachePosition = position;
-//                                                    String code =  item.getResourceCode();
-//                                                    for( ModelBasic mb :modelBasics)
-//                                                    {
-//                                                        if(code.equals(mb.getCode()))
-//                                                        {
-//                                                            List<ModelBasic> specs=  mb.getSpecs();
-//                                                            createSendStructDialog(specs,item);
-//                                                        }
-//                                                    }
-//                                                }
-//                                                else if(type.equals(ModelStyleConstant.ARRAY))
-//                                                {
-//                                                    cachePosition = position;
-//                                                    String code =  item.getResourceCode();
-//                                                    for( ModelBasic mb :modelBasics)
-//                                                    {
-//                                                        if(code.equals(mb.getCode()))
-//                                                        {
-//                                                             Object obj =  mb.getSpecs().get(0);
-//                                                             if(obj instanceof ArraySpecs )
-//                                                             {
-//                                                                 ArraySpecs as = (ArraySpecs) obj;
-//                                                                 createSendSimpleArrayDialog(as,item);
-//                                                             }
-//                                                             else if(obj instanceof ArrayStructSpecs)
-//                                                             {
-//                                                                 ArrayStructSpecs arrayStructSpecs = (ArrayStructSpecs) obj;
-//                                                                 createSendArrayContainStructDialog(arrayStructSpecs,item);
-//                                                             }
-//                                                        }
-//                                                    }
-//                                                }
-//
-//                                            }
-//                                        }
-//                                        else
-//                                        {
-//                                          //  ToastUtils.showShort(activity,"设备离线");
-//                                            BusinessValue item = mAdapter.getData().get(position);
-//                                            String type = item.getDataType();
-//                                            String subType = item.getSubType();
-//                                            if(type.equals(ModelStyleConstant.BOOL)&&subType.equals("RW"))
-//                                            {
-//                                                cachePosition = position;
-//                                                cacheMap.put(position,view);
-//                                                SwitchButton switch_button =  view.findViewById(R.id.switch_button);
-//                                                switch_button.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
-//                                                    @Override
-//                                                    public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-//                                                        try {
-//                                                            JSONObject obj =   new JSONObject();
-//                                                            obj.put(item.getResourceCode(),String.valueOf(isChecked));
-//                                                            String data =  new JSONArray().put(obj).toString();
-//                                                            sendBaseHttpData(data,pk,dk);
-//
-//                                                        } catch (Exception e) {
-//                                                            e.printStackTrace();
-//                                                        }
-//                                                    }
-//                                                });
-//                                                switch_button.toggle();
-//                                            }
-//                                            else if(subType.equals("RW"))
-//                                            {
-//                                                if(type.equals(ModelStyleConstant.INT)|| type.equals(ModelStyleConstant.FLOAT)||type.equals(ModelStyleConstant.DOUBLE))
-//                                                {
-//                                                    cachePosition = position;
-//                                                    String step = null;
-//                                                    String code =  item.getResourceCode();
-//                                                    for( ModelBasic mb :modelBasics)
-//                                                    {
-//                                                        if(code.equals(mb.getCode()))
-//                                                        {
-//                                                            NumSpecs numSpecs = (NumSpecs) mb.getSpecs().get(0);
-//                                                            step = "min:"+numSpecs.getMin()+" max:"+numSpecs.getMax()+" step:"+numSpecs.getStep();
-//
-//                                                            createSendDialog(numSpecs,step,item);
-//                                                        }
-//                                                    }
-//                                                }
-//                                                else if(type.equals(ModelStyleConstant.ENUM))
-//                                                {
-//                                                    cachePosition = position;
-//                                                    String code =  item.getResourceCode();
-//                                                    for( ModelBasic mb :modelBasics)
-//                                                    {
-//                                                        if(code.equals(mb.getCode()))
-//                                                        {
-//                                                            List<BooleanSpecs> specs = mb.getSpecs();
-//                                                            createSendEnumDialog(specs,item);
-//                                                        }
-//                                                    }
-//                                                }
-//                                                else if(type.equals(ModelStyleConstant.DATE)||type.equals(ModelStyleConstant.TEXT))
-//                                                {
-//                                                    cachePosition = position;
-//                                                    String code =  item.getResourceCode();
-//                                                    for( ModelBasic mb :modelBasics)
-//                                                    {
-//                                                        if(code.equals(mb.getCode()))
-//                                                        {
-//                                                            if(type.equals(ModelStyleConstant.TEXT))
-//                                                            {
-//                                                                TextSpecs ts = (TextSpecs) mb.getSpecs().get(0);
-//                                                                createDateOrTextDialog(ts,item);
-//                                                            }
-//                                                            else
-//                                                            {
-//                                                                createDateOrTextDialog(null,item);
-//                                                            }
-//                                                        }
-//                                                    }
-//                                                }
-//                                                else if(type.equals(ModelStyleConstant.STRUCT))
-//                                                {
-//                                                    cachePosition = position;
-//                                                    String code =  item.getResourceCode();
-//                                                    for( ModelBasic mb :modelBasics)
-//                                                    {
-//                                                        if(code.equals(mb.getCode()))
-//                                                        {
-//                                                            List<ModelBasic> specs=  mb.getSpecs();
-//                                                            createSendStructDialog(specs,item);
-//                                                        }
-//                                                    }
-//                                                }
-//                                                else if(type.equals(ModelStyleConstant.ARRAY))
-//                                                {
-//                                                    cachePosition = position;
-//                                                    String code =  item.getResourceCode();
-//                                                    for( ModelBasic mb :modelBasics)
-//                                                    {
-//                                                        if(code.equals(mb.getCode()))
-//                                                        {
-//                                                            Object obj =  mb.getSpecs().get(0);
-//                                                            if(obj instanceof ArraySpecs )
-//                                                            {
-//                                                                ArraySpecs as = (ArraySpecs) obj;
-//                                                                createSendSimpleArrayDialog(as,item);
-//                                                            }
-//                                                            else if(obj instanceof ArrayStructSpecs)
-//                                                            {
-//                                                                ArrayStructSpecs arrayStructSpecs = (ArrayStructSpecs) obj;
-//                                                                createSendArrayContainStructDialog(arrayStructSpecs,item);
-//                                                            }
-//                                                        }
-//                                                    }
-//                                                }
-//
-//                                            }
-//
-//                                        }
-//                                    }
-//                                });
-
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    @Override
-                    public void onFail(Throwable e) {
-                        e.printStackTrace();
-                    }
-                }
-        );
-
-    }
 
     private void sendWebSocketBasicData(KValue data,String dk,String pk)
     {

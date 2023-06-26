@@ -47,6 +47,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.http.RequestParams;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
@@ -68,7 +69,7 @@ import io.reactivex.functions.Consumer;
 
 public class DeviceFragment extends BaseMainFragment {
 
-  //  EditText edit_device_name;
+    //  EditText edit_device_name;
     public static synchronized DeviceFragment newInstance() {
         DeviceFragment frag = new DeviceFragment();
 
@@ -122,10 +123,9 @@ public class DeviceFragment extends BaseMainFragment {
 
     }
 
-    private void queryDevice()
-    {
+    private void queryDevice() {
         startLoading();
-        DeviceServiceFactory.getInstance().getService(IDevService.class).queryUserDeviceList("",1,50,
+        DeviceServiceFactory.getInstance().getService(IDevService.class).queryUserDeviceList("", 1, 50,
                 new IHttpCallBack() {
                     @Override
                     public void onSuccess(String result) {
@@ -133,18 +133,14 @@ public class DeviceFragment extends BaseMainFragment {
                         finishLoading();
                         UserDeviceList userDeviceList = new Gson().fromJson(result, UserDeviceList.class);
                         List<UserDeviceList.DataBean.ListBean> mList = userDeviceList.getData().getList();
-                        System.out.println("mList--:"+mList.size());
+                        System.out.println("mList--:" + mList.size());
 
-                        if(mList!=null&&mList.size()>0)
-                        {
-                            if(mAdapter==null)
-                            {
+                        if (mList != null && mList.size() > 0) {
+                            if (mAdapter == null) {
                                 mAdapter = new DeviceAdapter(getActivity(), mList);
                                 mAdapter.setAnimationEnable(true);
                                 mRecyclerView.setAdapter(mAdapter);
-                            }
-                            else
-                            {
+                            } else {
                                 List<UserDeviceList.DataBean.ListBean> list = mAdapter.getData();
                                 list.clear();
                                 list.addAll(mList);
@@ -155,24 +151,24 @@ public class DeviceFragment extends BaseMainFragment {
                                 @Override
                                 public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
                                     UserDeviceList.DataBean.ListBean lanVO = mAdapter.getData().get(position);
-//                                    createSelectDialog(lanVO.getProductKey(),lanVO.getDeviceKey(),lanVO.getShareCode(),lanVO.getDeviceStatus());
-//                                    Intent intent = new Intent(getActivity(),DeviceControlActivity.class);
-//                                    intent.putExtra("pk",lanVO.getProductKey());
-//                                    intent.putExtra("dk",lanVO.getDeviceKey());
-//                                    if(DeviceConfig.OFFLINE.equals(lanVO.getDeviceStatus())) {
-//                                        intent.putExtra("online",false);
-//                                    } else {
-//                                        intent.putExtra("online",true);
-//                                    }
-//                                    startActivity(intent);
+                                    createSelectDialog(lanVO.getProductKey(), lanVO.getDeviceKey(), lanVO.getShareCode(), lanVO.getDeviceStatus());
+                                    Intent intent = new Intent(getActivity(), DeviceControlActivity.class);
+                                    intent.putExtra("pk", lanVO.getProductKey());
+                                    intent.putExtra("dk", lanVO.getDeviceKey());
+                                    if (DeviceConfig.OFFLINE.equals(lanVO.getDeviceStatus())) {
+                                        intent.putExtra("online", false);
+                                    } else {
+                                        intent.putExtra("online", true);
+                                    }
+                                    startActivity(intent);
                                 }
                             });
-
 
 
                         }
 
                     }
+
                     @Override
                     public void onFail(Throwable e) {
                         mPtrFrameLayout.refreshComplete();
@@ -183,11 +179,13 @@ public class DeviceFragment extends BaseMainFragment {
     }
 
     private static final int PAGE_SIZE = 10;
-    int  page = 0;
+    int page = 0;
+
     private void refreshData() {
         queryDevice();
 
     }
+
     @OnClick({R.id.iv_add})
     public void buttonClick(View view) {
         Intent intent = null;
@@ -196,7 +194,7 @@ public class DeviceFragment extends BaseMainFragment {
                 System.out.println("iv_add");
                 View dialogView = getLayoutInflater().inflate(R.layout.bottom_pop_device_layout, null);
                 PayBottomDialog myDialog = new PayBottomDialog(getActivity(), dialogView, new int[]{R.id.bt_cancel,
-                        R.id.bt_sn_bind,R.id.bt_unbind,R.id.bt_receive_share,R.id.bt_wifi});
+                        R.id.bt_sn_bind, R.id.bt_unbind, R.id.bt_receive_share, R.id.bt_wifi});
                 myDialog.bottmShow();
                 myDialog.setOnBottomItemClickListener(new PayBottomDialog.OnBottomItemClickListener() {
                     @Override
@@ -238,8 +236,7 @@ public class DeviceFragment extends BaseMainFragment {
 
     }
 
-    private void createReceiveShare()
-    {
+    private void createReceiveShare() {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.receiver_accept_shareinformation_dialog, null);
         final Dialog mDialog = new Dialog(getActivity(), R.style.dialogTM);
@@ -262,26 +259,26 @@ public class DeviceFragment extends BaseMainFragment {
             public void onClick(View view) {
                 mDialog.dismiss();
                 String code = MyUtils.getEditTextContent(edit_share_code);
-                if(TextUtils.isEmpty(code))
-                {
+                if (TextUtils.isEmpty(code)) {
                     return;
                 }
                 startLoading();
-                DeviceServiceFactory.getInstance().getService(IDevService.class).acceptShareDevice("",code,
+                DeviceServiceFactory.getInstance().getService(IDevService.class).acceptShareDevice("", code,
                         new IHttpCallBack() {
                             @Override
                             public void onSuccess(String result) {
                                 finishLoading();
                                 try {
-                                    JSONObject  obj = new JSONObject(result);
+                                    JSONObject obj = new JSONObject(result);
                                     if (obj.getInt("code") == 200) {
-                                        ToastUtils.showShort(getActivity(),"操作成功");
+                                        ToastUtils.showShort(getActivity(), "操作成功");
                                         queryDevice();
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             }
+
                             @Override
                             public void onFail(Throwable e) {
                                 e.printStackTrace();
@@ -294,8 +291,7 @@ public class DeviceFragment extends BaseMainFragment {
         mDialog.show();
     }
 
-    private void receiverCancelShare()
-    {
+    private void receiverCancelShare() {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.receiver_cancel_share_dialog, null);
         final Dialog mDialog = new Dialog(getActivity(), R.style.dialogTM);
@@ -317,8 +313,7 @@ public class DeviceFragment extends BaseMainFragment {
             public void onClick(View view) {
                 mDialog.dismiss();
                 String code = MyUtils.getEditTextContent(edit_code);
-                if(TextUtils.isEmpty(code))
-                {
+                if (TextUtils.isEmpty(code)) {
                     return;
                 }
                 startLoading();
@@ -328,19 +323,18 @@ public class DeviceFragment extends BaseMainFragment {
                             public void onSuccess(String result) {
                                 finishLoading();
                                 try {
-                                    JSONObject  obj = new JSONObject(result);
+                                    JSONObject obj = new JSONObject(result);
                                     if (obj.getInt("code") == 200) {
-                                        ToastUtils.showShort(getActivity(),"操作成功");
+                                        ToastUtils.showShort(getActivity(), "操作成功");
                                         queryDevice();
-                                    }
-                                    else
-                                    {
-                                        ToastUtils.showShort(getActivity(),obj.getString("msg"));
+                                    } else {
+                                        ToastUtils.showShort(getActivity(), obj.getString("msg"));
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             }
+
                             @Override
                             public void onFail(Throwable e) {
                                 e.printStackTrace();
@@ -354,8 +348,7 @@ public class DeviceFragment extends BaseMainFragment {
     }
 
 
-    private void ownerCancelShare()
-    {
+    private void ownerCancelShare() {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.owner_cancel_share_dialog, null);
         final Dialog mDialog = new Dialog(getActivity(), R.style.dialogTM);
@@ -377,8 +370,7 @@ public class DeviceFragment extends BaseMainFragment {
             public void onClick(View view) {
                 mDialog.dismiss();
                 String code = MyUtils.getEditTextContent(edit_code);
-                if(TextUtils.isEmpty(code))
-                {
+                if (TextUtils.isEmpty(code)) {
                     return;
                 }
                 startLoading();
@@ -388,18 +380,17 @@ public class DeviceFragment extends BaseMainFragment {
                             public void onSuccess(String result) {
                                 finishLoading();
                                 try {
-                                    JSONObject  obj = new JSONObject(result);
+                                    JSONObject obj = new JSONObject(result);
                                     if (obj.getInt("code") == 200) {
-                                        ToastUtils.showShort(getActivity(),"操作成功");
-                                    }
-                                    else
-                                    {
-                                        ToastUtils.showShort(getActivity(),obj.getString("msg"));
+                                        ToastUtils.showShort(getActivity(), "操作成功");
+                                    } else {
+                                        ToastUtils.showShort(getActivity(), obj.getString("msg"));
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             }
+
                             @Override
                             public void onFail(Throwable e) {
                                 e.printStackTrace();
@@ -412,8 +403,7 @@ public class DeviceFragment extends BaseMainFragment {
         mDialog.show();
     }
 
-    private void createBindDialog()
-    {
+    private void createBindDialog() {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.bind_device_dialog, null);
         final Dialog mDialog = new Dialog(getActivity(), R.style.dialogTM);
@@ -434,33 +424,30 @@ public class DeviceFragment extends BaseMainFragment {
         bt_sure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               String pk =  MyUtils.getEditTextContent(edit_pk);
-               String sn =  MyUtils.getEditTextContent(edit_sn);
-                if(TextUtils.isEmpty(pk))
-                {
-                    ToastUtils.showShort(getActivity(),"pk输入不能为空");
+                String pk = MyUtils.getEditTextContent(edit_pk);
+                String sn = MyUtils.getEditTextContent(edit_sn);
+                if (TextUtils.isEmpty(pk)) {
+                    ToastUtils.showShort(getActivity(), "pk输入不能为空");
                     return;
                 }
-                if(TextUtils.isEmpty(sn))
-                {
-                    ToastUtils.showShort(getActivity(),"sn输入不能为空");
+                if (TextUtils.isEmpty(sn)) {
+                    ToastUtils.showShort(getActivity(), "sn输入不能为空");
                     return;
                 }
                 String deviceName = "";
-                String name =  MyUtils.getEditTextContent(edit_device_name);
-                if(!TextUtils.isEmpty(name))
-                {
+                String name = MyUtils.getEditTextContent(edit_device_name);
+                if (!TextUtils.isEmpty(name)) {
                     deviceName = name;
                 }
 
                 mDialog.dismiss();
-                DeviceServiceFactory.getInstance().getService(IDevService.class).bindDeviceSn(pk,sn,deviceName,
+                DeviceServiceFactory.getInstance().getService(IDevService.class).bindDeviceSn(pk, sn, deviceName,
                         new IHttpCallBack() {
                             @Override
                             public void onSuccess(String result) {
                                 //{"code":200,"msg":"","data":{"pk":"p111ti","dk":"888866669999001","moduleType":null}}
                                 try {
-                                    JSONObject  obj = new JSONObject(result);
+                                    JSONObject obj = new JSONObject(result);
                                     if (obj.getInt("code") == 200) {
                                         queryDevice();
                                     }
@@ -470,6 +457,7 @@ public class DeviceFragment extends BaseMainFragment {
                                 }
 
                             }
+
                             @Override
                             public void onFail(Throwable e) {
                                 e.printStackTrace();
@@ -478,15 +466,13 @@ public class DeviceFragment extends BaseMainFragment {
                 );
 
 
-
             }
         });
 
         mDialog.show();
     }
 
-    private void createSelectDialog(String pk,String dk,String shareCode,String deviceStatus)
-    {
+    private void createSelectDialog(String pk, String dk, String shareCode, String deviceStatus) {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.device_select_dialog, null);
         final Dialog mDialog = new Dialog(getActivity(), R.style.dialogTM);
@@ -511,8 +497,9 @@ public class DeviceFragment extends BaseMainFragment {
                     @Override
                     public void onSuccess(String result) {
                         finishLoading();
-                        ToastUtils.showShort(getActivity(),result);
+                        ToastUtils.showShort(getActivity(), result);
                     }
+
                     @Override
                     public void onFail(Throwable e) {
 
@@ -525,16 +512,13 @@ public class DeviceFragment extends BaseMainFragment {
             @Override
             public void onClick(View view) {
                 mDialog.dismiss();
-                Intent intent = new Intent(getActivity(),DeviceControlActivity.class);
-                intent.putExtra("pk",pk);
-                intent.putExtra("dk",dk);
-                if(deviceStatus.equals(DeviceConfig.OFFLINE))
-                {
-                    intent.putExtra("online",false);
-                }
-                else
-                {
-                    intent.putExtra("online",true);
+                Intent intent = new Intent(getActivity(), DeviceControlActivity.class);
+                intent.putExtra("pk", pk);
+                intent.putExtra("dk", dk);
+                if (deviceStatus.equals(DeviceConfig.OFFLINE)) {
+                    intent.putExtra("online", false);
+                } else {
+                    intent.putExtra("online", true);
                 }
                 startActivity(intent);
 
@@ -574,35 +558,35 @@ public class DeviceFragment extends BaseMainFragment {
                     @Override
                     public void onSuccess(String result) {
                         try {
-                            JSONObject  obj = new JSONObject(result);
+                            JSONObject obj = new JSONObject(result);
                             if (obj.getInt("code") == 200) {
-                                JSONObject  obj2 = obj.getJSONObject("data");
-                                JSONObject  obj3 = (JSONObject) obj2.getJSONArray("components").get(0);
-                                 String  componentNo =  obj3.getString("componentNo");
-                                DeviceServiceFactory.getInstance().getService(IDevService.class).reportUpgradeStatus(pk,dk,componentNo,10,
+                                JSONObject obj2 = obj.getJSONObject("data");
+                                JSONObject obj3 = (JSONObject) obj2.getJSONArray("components").get(0);
+                                String componentNo = obj3.getString("componentNo");
+                                DeviceServiceFactory.getInstance().getService(IDevService.class).reportUpgradeStatus(pk, dk, componentNo, 10,
                                         new IHttpCallBack() {
                                             @Override
                                             public void onSuccess(String result) {
-                                               finishLoading();
-                                                ToastUtils.showShort(getActivity(),result);
+                                                finishLoading();
+                                                ToastUtils.showShort(getActivity(), result);
                                             }
+
                                             @Override
                                             public void onFail(Throwable e) {
                                                 e.printStackTrace();
                                             }
                                         }
                                 );
-                            }
-                            else
-                            {
+                            } else {
                                 finishLoading();
-                                ToastUtils.showShort(getActivity(),obj.getString("msg"));
+                                ToastUtils.showShort(getActivity(), obj.getString("msg"));
                             }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
+
                     @Override
                     public void onFail(Throwable e) {
                     }
@@ -619,10 +603,11 @@ public class DeviceFragment extends BaseMainFragment {
                 DeviceServiceFactory.getInstance().getService(IDevService.class).getDeviceShareUserList(pk, dk, new IHttpCallBack() {
                     @Override
                     public void onSuccess(String result) {
-                       // System.out.println("result-getDeviceShareUserList-:"+result);
+                        // System.out.println("result-getDeviceShareUserList-:"+result);
                         finishLoading();
-                        ToastUtils.showShort(getActivity(),result);
+                        ToastUtils.showShort(getActivity(), result);
                     }
+
                     @Override
                     public void onFail(Throwable e) {
 
@@ -637,7 +622,7 @@ public class DeviceFragment extends BaseMainFragment {
             @Override
             public void onClick(View view) {
                 mDialog.dismiss();
-                updateDeviceNameDialog(pk,dk,shareCode);
+                updateDeviceNameDialog(pk, dk, shareCode);
             }
         });
 
@@ -645,7 +630,7 @@ public class DeviceFragment extends BaseMainFragment {
             @Override
             public void onClick(View view) {
                 mDialog.dismiss();
-                generateShareInfor(pk,dk);
+                generateShareInfor(pk, dk);
 
             }
         });
@@ -655,42 +640,40 @@ public class DeviceFragment extends BaseMainFragment {
             public void onClick(View view) {
                 mDialog.dismiss();
                 startLoading();
-               if(TextUtils.isEmpty(shareCode))
-               {
-                   DeviceServiceFactory.getInstance().getService(IDevService.class).queryDeviceInfo(pk, dk, "", new IHttpCallBack() {
-                       @Override
-                       public void onSuccess(String result) {
-                           finishLoading();
-                           ToastUtils.showShort(getActivity(),result);
-                       }
-                       @Override
-                       public void onFail(Throwable e) {
+                if (TextUtils.isEmpty(shareCode)) {
+                    DeviceServiceFactory.getInstance().getService(IDevService.class).queryDeviceInfo(pk, dk, "", new IHttpCallBack() {
+                        @Override
+                        public void onSuccess(String result) {
+                            finishLoading();
+                            ToastUtils.showShort(getActivity(), result);
+                        }
 
-                       }
-                   });
-               }
-               else
-               {
-                   DeviceServiceFactory.getInstance().getService(IDevService.class).queryDeviceInfo(pk, "", shareCode, new IHttpCallBack() {
-                       @Override
-                       public void onSuccess(String result) {
-                           finishLoading();
-                           ToastUtils.showShort(getActivity(),result);
-                       }
-                       @Override
-                       public void onFail(Throwable e) {
+                        @Override
+                        public void onFail(Throwable e) {
+
+                        }
+                    });
+                } else {
+                    DeviceServiceFactory.getInstance().getService(IDevService.class).queryDeviceInfo(pk, "", shareCode, new IHttpCallBack() {
+                        @Override
+                        public void onSuccess(String result) {
+                            finishLoading();
+                            ToastUtils.showShort(getActivity(), result);
+                        }
+
+                        @Override
+                        public void onFail(Throwable e) {
 
 
-                       }
-                   });
-               }
+                        }
+                    });
+                }
             }
         });
         mDialog.show();
     }
 
-    private void generateShareInfor(String pk,String dk)
-    {
+    private void generateShareInfor(String pk, String dk) {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.sharer_generate_information_dialog, null);
         final Dialog mDialog = new Dialog(getActivity(), R.style.dialogTM);
@@ -705,11 +688,11 @@ public class DeviceFragment extends BaseMainFragment {
         bt_generate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int time = 1*24*60*60*1000;
-                long useTime =   new Date().getTime();
+                int time = 1 * 24 * 60 * 60 * 1000;
+                long useTime = new Date().getTime();
                 useTime = useTime + time;
-                   startLoading();
-                DeviceServiceFactory.getInstance().getService(IDevService.class).shareDeviceInfo(useTime,pk,dk,0,0,
+                startLoading();
+                DeviceServiceFactory.getInstance().getService(IDevService.class).shareDeviceInfo(useTime, pk, dk, 0, 0,
                         new IHttpCallBack() {
                             @Override
                             public void onSuccess(String result) {
@@ -717,9 +700,9 @@ public class DeviceFragment extends BaseMainFragment {
                                 //{"code":200,"msg":"","data":"share_dv_C18222055e793c4ee4581b18d3bfcd1a50ada"}
                                 System.out.println("shareDeviceInfo--:" + result);
                                 try {
-                                    JSONObject  obj = new JSONObject(result);
+                                    JSONObject obj = new JSONObject(result);
                                     if (obj.getInt("code") == 200) {
-                                       String infor =   obj.getString("data");
+                                        String infor = obj.getString("data");
                                         tv_share_infor.setText(infor);
                                     }
 
@@ -728,6 +711,7 @@ public class DeviceFragment extends BaseMainFragment {
                                 }
 
                             }
+
                             @Override
                             public void onFail(Throwable e) {
                                 e.printStackTrace();
@@ -742,8 +726,8 @@ public class DeviceFragment extends BaseMainFragment {
         bt_copy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MyUtils.copyContentToClipboard(getActivity(),tv_share_infor.getText().toString().trim());
-                ToastUtils.showShort(getActivity(),"复制成功");
+                MyUtils.copyContentToClipboard(getActivity(), tv_share_infor.getText().toString().trim());
+                ToastUtils.showShort(getActivity(), "复制成功");
             }
         });
 
@@ -758,8 +742,7 @@ public class DeviceFragment extends BaseMainFragment {
 
     }
 
-    private void createUnBindDialog()
-    {
+    private void createUnBindDialog() {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.unbind_device_dialog, null);
         final Dialog mDialog = new Dialog(getActivity(), R.style.dialogTM);
@@ -779,26 +762,24 @@ public class DeviceFragment extends BaseMainFragment {
         bt_sure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String pk =  MyUtils.getEditTextContent(edit_pk);
-                String dk =  MyUtils.getEditTextContent(edit_dk);
-                if(TextUtils.isEmpty(pk))
-                {
-                    ToastUtils.showShort(getActivity(),"pk输入不能为空");
+                String pk = MyUtils.getEditTextContent(edit_pk);
+                String dk = MyUtils.getEditTextContent(edit_dk);
+                if (TextUtils.isEmpty(pk)) {
+                    ToastUtils.showShort(getActivity(), "pk输入不能为空");
                     return;
                 }
-                if(TextUtils.isEmpty(dk))
-                {
-                    ToastUtils.showShort(getActivity(),"dk输入不能为空");
+                if (TextUtils.isEmpty(dk)) {
+                    ToastUtils.showShort(getActivity(), "dk输入不能为空");
                     return;
                 }
 
                 mDialog.dismiss();
-                DeviceServiceFactory.getInstance().getService(IDevService.class).unBindDevice(pk,dk,
+                DeviceServiceFactory.getInstance().getService(IDevService.class).unBindDevice(pk, dk,
                         new IHttpCallBack() {
                             @Override
                             public void onSuccess(String result) {
                                 try {
-                                    JSONObject  obj = new JSONObject(result);
+                                    JSONObject obj = new JSONObject(result);
                                     if (obj.getInt("code") == 200) {
                                         queryDevice();
                                     }
@@ -808,6 +789,7 @@ public class DeviceFragment extends BaseMainFragment {
                                 }
 
                             }
+
                             @Override
                             public void onFail(Throwable e) {
                                 e.printStackTrace();
@@ -822,8 +804,7 @@ public class DeviceFragment extends BaseMainFragment {
     }
 
 
-    private void updateDeviceNameDialog(String pk,String dk,String shareCode)
-    {
+    private void updateDeviceNameDialog(String pk, String dk, String shareCode) {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.update_device_name_dialog, null);
         final Dialog mDialog = new Dialog(getActivity(), R.style.dialogTM);
@@ -842,24 +823,22 @@ public class DeviceFragment extends BaseMainFragment {
         bt_sure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String deviceName =  MyUtils.getEditTextContent(edit_name);
-                if(TextUtils.isEmpty(deviceName))
-                {
-                    ToastUtils.showShort(getActivity(),"deviceName输入不能为空");
+                String deviceName = MyUtils.getEditTextContent(edit_name);
+                if (TextUtils.isEmpty(deviceName)) {
+                    ToastUtils.showShort(getActivity(), "deviceName输入不能为空");
                     return;
                 }
 
                 mDialog.dismiss();
                 startLoading();
 
-                if(TextUtils.isEmpty(shareCode))
-                {
-                    DeviceServiceFactory.getInstance().getService(IDevService.class).changeDeviceInfo(deviceName,pk,dk,
+                if (TextUtils.isEmpty(shareCode)) {
+                    DeviceServiceFactory.getInstance().getService(IDevService.class).changeDeviceInfo(deviceName, pk, dk,
                             new IHttpCallBack() {
                                 @Override
                                 public void onSuccess(String result) {
                                     try {
-                                        JSONObject  obj = new JSONObject(result);
+                                        JSONObject obj = new JSONObject(result);
                                         if (obj.getInt("code") == 200) {
                                             queryDevice();
                                         }
@@ -869,21 +848,20 @@ public class DeviceFragment extends BaseMainFragment {
                                     }
 
                                 }
+
                                 @Override
                                 public void onFail(Throwable e) {
                                     e.printStackTrace();
                                 }
                             }
                     );
-                }
-                else
-                {
-                    DeviceServiceFactory.getInstance().getService(IDevService.class).changeShareDeviceName(deviceName,shareCode,
+                } else {
+                    DeviceServiceFactory.getInstance().getService(IDevService.class).changeShareDeviceName(deviceName, shareCode,
                             new IHttpCallBack() {
                                 @Override
                                 public void onSuccess(String result) {
                                     try {
-                                        JSONObject  obj = new JSONObject(result);
+                                        JSONObject obj = new JSONObject(result);
                                         if (obj.getInt("code") == 200) {
                                             queryDevice();
                                         }
@@ -893,6 +871,7 @@ public class DeviceFragment extends BaseMainFragment {
                                     }
 
                                 }
+
                                 @Override
                                 public void onFail(Throwable e) {
                                     e.printStackTrace();
@@ -907,18 +886,19 @@ public class DeviceFragment extends BaseMainFragment {
         mDialog.show();
     }
 
-    String pk="p111ti";
+    String pk = "p111ti";
     String sn = "869537055280516";
     String dk = "869537055280516";
-    private void shareDevice(long time)
-    {
-        DeviceServiceFactory.getInstance().getService(IDevService.class).shareDeviceInfo(time,pk,dk,0,0,
+
+    private void shareDevice(long time) {
+        DeviceServiceFactory.getInstance().getService(IDevService.class).shareDeviceInfo(time, pk, dk, 0, 0,
                 new IHttpCallBack() {
                     @Override
                     public void onSuccess(String result) {
-                         //{"code":200,"msg":"","data":"share_dv_C18222055e793c4ee4581b18d3bfcd1a50ada"}
+                        //{"code":200,"msg":"","data":"share_dv_C18222055e793c4ee4581b18d3bfcd1a50ada"}
                         System.out.println("shareDeviceInfo--:" + result);
                     }
+
                     @Override
                     public void onFail(Throwable e) {
                         e.printStackTrace();

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -76,6 +77,10 @@ public class DistributionNetworkActivity extends BaseActivity {
     private WifiDataBottomDialog wifiDataBottomDialog;
 
 
+    private String ssid;
+
+    private String pwd;
+
     @Override
     protected int getContentLayout() {
         return R.layout.activity_wifi_network;
@@ -92,15 +97,15 @@ public class DistributionNetworkActivity extends BaseActivity {
         initView();
     }
 
-    private void initPermission(){
-        if(!PermissionUtil.hasLocation(DistributionNetworkActivity.this)){
+    private void initPermission() {
+        if (!PermissionUtil.hasLocation(DistributionNetworkActivity.this)) {
             Intent intent = new Intent();
             intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
 
-        if(PermissionUtil.checkPermission(DistributionNetworkActivity.this)){
+        if (PermissionUtil.checkPermission(DistributionNetworkActivity.this)) {
 
         }
 
@@ -112,7 +117,7 @@ public class DistributionNetworkActivity extends BaseActivity {
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
 
-                ToastUtils.showShort(activity,"请先授予应用的 蓝牙权限");
+                ToastUtils.showShort(activity, "请先授予应用的 蓝牙权限");
                 return;
             }
             startActivityForResult(intent, 1);
@@ -120,17 +125,16 @@ public class DistributionNetworkActivity extends BaseActivity {
     }
 
 
-
-    private void initView(){
+    private void initView() {
         adapter = new SmartConfigDeviceAdapter();
         adapter.setListener(new SmartConfigDeviceAdapter.OnStartConfigListener() {
             @Override
             public void onStartConfig(int position, SmartConfigDevice device) {
-                device.setBindResult(100);
-                adapter.notifyItemChanged(position);
-                List<DeviceBean> deviceBeans = new ArrayList<>();
-                deviceBeans.add(device.getDeviceBean());
-                QuecSmartConfigServiceManager.getInstance().startConfigDevices(deviceBeans,"QUEC_WIFI_TEST","12332112");
+
+//                List<DeviceBean> deviceBeans = new ArrayList<>();
+//                deviceBeans.add(device.getDeviceBean());
+                showDialog(device, position);
+                // QuecSmartConfigServiceManager.getInstance().startConfigDevices(deviceBeans, "QUEC_WIFI_TEST", "12332112");
             }
         });
         recycler.setLayoutManager(new LinearLayoutManager(this));
@@ -139,8 +143,8 @@ public class DistributionNetworkActivity extends BaseActivity {
             @Override
             public void onUpdateConfigResultCallback(DeviceBean deviceBean, QuecResult quecResult) {
                 QLog.i(QuecGsonUtil.INSTANCE.gsonString(quecResult));
-                for(int i =0;i<adapter.getData().size();i++){
-                    if(deviceBean.getMac().equals(adapter.getData().get(i).getDeviceBean().getMac())){
+                for (int i = 0; i < adapter.getData().size(); i++) {
+                    if (deviceBean.getMac().equals(adapter.getData().get(i).getDeviceBean().getMac())) {
                         adapter.getData().get(i).setBindResult(quecResult.getCode());
                         adapter.getData().get(i).setMessage(quecResult.getMessage());
                         adapter.notifyItemChanged(i);
@@ -148,6 +152,37 @@ public class DistributionNetworkActivity extends BaseActivity {
                 }
             }
 
+        });
+
+    }
+
+    private void showDialog(SmartConfigDevice deviceBean, int pos) {
+        if (wifiDataBottomDialog == null) {
+            wifiDataBottomDialog = new WifiDataBottomDialog(this);
+        }
+        wifiDataBottomDialog.show();
+        wifiDataBottomDialog.setSSidAndPwd(ssid, pwd);
+        wifiDataBottomDialog.setOnConfirmClickListener(new WifiDataBottomDialog.OnConfirmClickListener() {
+            @Override
+            public void onConfirm(String ssid, String pwd, int position) {
+                if (ssid.isEmpty()) {
+                    Toast.makeText(activity, "ssid is empty", Toast.LENGTH_SHORT).show();
+                    wifiDataBottomDialog.dismiss();
+                    return;
+                }
+                if (pwd.isEmpty()) {
+                    wifiDataBottomDialog.dismiss();
+                    Toast.makeText(activity, "pwd is empty", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                deviceBean.setBindResult(100);
+                adapter.notifyItemChanged(pos);
+                List<DeviceBean> deviceBeans = new ArrayList<>();
+                deviceBeans.add(deviceBean.getDeviceBean());
+                QuecSmartConfigServiceManager.getInstance().startConfigDevices(deviceBeans, ssid, pwd);
+
+                wifiDataBottomDialog.dismiss();
+            }
         });
 
     }
@@ -161,7 +196,8 @@ public class DistributionNetworkActivity extends BaseActivity {
     }
 
     private Disposable disposableFirst = null;
-    @OnClick({R.id.iv_back,R.id.bt_scan})
+
+    @OnClick({R.id.iv_back, R.id.bt_scan})
     public void buttonClick(View view) {
         Intent intent = null;
         switch (view.getId()) {
@@ -171,17 +207,17 @@ public class DistributionNetworkActivity extends BaseActivity {
 
             case R.id.bt_scan:
 
-                if(MyUtils.isFastClick()){
+                if (MyUtils.isFastClick()) {
                     return;
                 }
 
-                if("开始扫描".equals(bt_scan.getText().toString())){
+                if ("开始扫描".equals(bt_scan.getText().toString())) {
                     bt_scan.setText("停止扫描");
                     getDevice();
                     return;
                 }
 
-                if("停止扫描".equals(bt_scan.getText().toString())){
+                if ("停止扫描".equals(bt_scan.getText().toString())) {
                     bt_scan.setText("开始扫描");
                     BleServiceLocater.getService(IBleService.class).stopScan();
                     return;
@@ -192,12 +228,12 @@ public class DistributionNetworkActivity extends BaseActivity {
 
     }
 
-    private void getDevice(){
+    private void getDevice() {
 
-        BleServiceLocater.getService(IBleService.class).startScan("","", new IDeviceScanCallback() {
+        BleServiceLocater.getService(IBleService.class).startScan("", "", new IDeviceScanCallback() {
             @Override
             public void onScan(DeviceBean deviceBean) {
-                if(getData(adapter.getData(),deviceBean)!=null){
+                if (getData(adapter.getData(), deviceBean) != null) {
                     SmartConfigDevice device = new SmartConfigDevice();
                     device.setDeviceBean(deviceBean);
                     adapter.addData(device);
@@ -213,31 +249,30 @@ public class DistributionNetworkActivity extends BaseActivity {
         });
     }
 
-    private DeviceBean getData(List<SmartConfigDevice> list, DeviceBean deviceBean){
+    private DeviceBean getData(List<SmartConfigDevice> list, DeviceBean deviceBean) {
 
-        if(list == null|| list.size()==0){
+        if (list == null || list.size() == 0) {
 
             return deviceBean;
         }
-        for(int  i=0 ;i<list.size();i++){
-            if(deviceBean.getMac().equals(list.get(i).getDeviceBean().getMac())){
+        for (int i = 0; i < list.size(); i++) {
+            if (deviceBean.getMac().equals(list.get(i).getDeviceBean().getMac())) {
                 return null;
             }
         }
-        return  deviceBean;
+        return deviceBean;
     }
 
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (disposableFirst != null ) {
+        if (disposableFirst != null) {
             disposableFirst.dispose();
             disposableFirst = null;
         }
         finishLoading();
     }
-
 
 
 }

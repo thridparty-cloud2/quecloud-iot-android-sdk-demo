@@ -40,6 +40,11 @@ public class WifiDataBottomDialog extends Dialog {
         super(context, cancelable, cancelListener);
     }
 
+    public void setSSidAndPwd(String ssid, String pwd) {
+        binding.etWifiName.setText(ssid);
+        binding.etWifiPwd.setText(pwd);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,16 +100,16 @@ public class WifiDataBottomDialog extends Dialog {
         binding.btnNext.setOnClickListener(view -> {
             if (onConfirmClickListener != null) {
                 onConfirmClickListener.onConfirm(binding.etWifiName.getText().toString().trim(),
-                        binding.etWifiPwd.getText().toString(),position);
+                        binding.etWifiPwd.getText().toString(), position);
             }
         });
 
     }
 
 
-
     /**
-     *  获取点击 添加 或者重试的位置
+     * 获取点击 添加 或者重试的位置
+     *
      * @param position
      */
     public void setPosition(int position) {
@@ -112,9 +117,8 @@ public class WifiDataBottomDialog extends Dialog {
     }
 
 
-
     public interface OnConfirmClickListener {
-        void onConfirm(String ssid, String pwd,int position);
+        void onConfirm(String ssid, String pwd, int position);
     }
 
 }
