@@ -202,6 +202,7 @@ public class DistributionNetworkActivity extends BaseActivity {
         Intent intent = null;
         switch (view.getId()) {
             case R.id.iv_back:
+                QuecSmartConfigServiceManager.getInstance().cancelConfigDevices();
                 finish();
                 break;
 
@@ -274,5 +275,9 @@ public class DistributionNetworkActivity extends BaseActivity {
         finishLoading();
     }
 
-
+    @Override
+    public void onBackPressedSupport() {
+        super.onBackPressedSupport();
+        QuecSmartConfigServiceManager.getInstance().cancelConfigDevices();
+    }
 }

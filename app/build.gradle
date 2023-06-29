@@ -16,8 +16,8 @@ android {
         Properties properties = new Properties()
         properties.load(project.rootProject.file('local.properties').newDataInputStream())
         print("-----------value-----" + properties.userDomain)
-        buildConfigField("String","userDomain","\""+"${properties.userDomain}"+"\"")
-        buildConfigField("String","userScrete","\""+"${properties.userSecret}"+"\"")
+        buildConfigField("String", "userDomain", "\"" + "${properties.userDomain}" + "\"")
+        buildConfigField("String", "userScrete", "\"" + "${properties.userSecret}" + "\"")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -79,15 +79,13 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-
-
-    implementation "com.quectel.app.sdk:quec-iot-sdk:1.9.0-beta.4"
-
-
+    implementation("com.quectel.app.sdk:quec-iot-sdk:1.9.0-beta.5") {
+        exclude group: "com.quectel.app.service", module: "quec-websocket-service"
+    }
     implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
     implementation 'com.jakewharton:butterknife:10.2.3'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
     implementation 'com.github.zcweng:switch-button:0.0.3@aar'
-
-
+    implementation "com.quectel.app.service:quec-websocket-service:2.5.0.008-SNAPSHOT"
+    implementation "com.quectel.app.sdk:quec-iot-channel-kit:2.6.5.001-SNAPSHOT"
 }

@@ -48,6 +48,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.http.RequestParams;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
@@ -153,6 +154,7 @@ public class DeviceFragment extends BaseMainFragment {
                                     UserDeviceList.DataBean.ListBean lanVO = mAdapter.getData().get(position);
                                     createSelectDialog(lanVO.getProductKey(), lanVO.getDeviceKey(), lanVO.getShareCode(), lanVO.getDeviceStatus());
                                     Intent intent = new Intent(getActivity(), DeviceControlActivity.class);
+                                    intent.putExtra("device", (Serializable) lanVO);
                                     intent.putExtra("pk", lanVO.getProductKey());
                                     intent.putExtra("dk", lanVO.getDeviceKey());
                                     if (DeviceConfig.OFFLINE.equals(lanVO.getDeviceStatus())) {

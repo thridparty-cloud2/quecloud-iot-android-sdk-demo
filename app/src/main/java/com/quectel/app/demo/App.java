@@ -8,10 +8,12 @@ import com.quectel.app.blesdk.utils.QuecBleServiceManager;
 import com.quectel.app.common.tools.utils.UserModulePreferences;
 import com.quectel.app.demo.utils.CrashHandler;
 
+import com.quectel.app.device.utils.QuecDeviceServiceManager;
 import com.quectel.app.quecnetwork.QuecNetWorkManager;
 import com.quectel.app.quecnetwork.logservice.ILogService;
 import com.quectel.app.quecnetwork.utils.LogService;
 import com.quectel.app.usersdk.utils.UserServiceFactory;
+import com.quectel.app.websocket.utils.DeviceModulePreferences;
 import com.quectel.basic.common.base.QuecBaseApp;
 import com.quectel.basic.quecmmkv.MmkvManager;
 import com.quectel.sdk.iot.QuecCloudServiceType;
@@ -43,12 +45,12 @@ public class App extends QuecBaseApp {
         UserModulePreferences.init(this);
         QuecNetWorkManager.getInstance().init(this);
         QuecIotAppSdk.getInstance().startWithUserDomain(BuildConfig.userDomain, BuildConfig.userScrete, QuecCloudServiceType.QuecCloudServiceTypeChina);
-
+        DeviceModulePreferences.init(this);
         //开始日志记录功能
 //        LogService.get(ILogService.class).startLog(this);
         //异常本地捕获
         // CrashHandler.getInstance().init(this);
-
+        QuecDeviceServiceManager.getInstance().a = this;
     }
 
     @Override
