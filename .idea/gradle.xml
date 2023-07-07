@@ -8,8 +8,10 @@
         <option name="gradleJvm" value="zulu-15" />
         <option name="modules">
           <set>
+            <option value="$PROJECT_DIR$/../../deprecate/QuecWebsocketChannel/QuecWebsocketLibrary" />
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/../../project/QuecIotChannelKit/QuecIotChannelKit" />
           </set>
         </option>
       </GradleProjectSettings>

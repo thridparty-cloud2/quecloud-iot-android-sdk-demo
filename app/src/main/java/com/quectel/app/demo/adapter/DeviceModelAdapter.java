@@ -20,59 +20,48 @@ import java.util.List;
 public class DeviceModelAdapter extends BaseQuickAdapter<BusinessValue, BaseViewHolder> {
 
     private Context mContext;
-    private  SimpleDateFormat sDataFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private SimpleDateFormat sDataFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     public DeviceModelAdapter(Context context, List data) {
         super(R.layout.model_item_layout, data);
-        this.mContext  = context;
+        this.mContext = context;
     }
+
     @Override
     protected void convert(BaseViewHolder helper, final BusinessValue item) {
-        helper.setText(R.id.tv_style, "类型:"+ item.getDataType()+" 读写类型:"+item.getSubType());
+        helper.setText(R.id.tv_style, "类型:" + item.getDataType() + " 读写类型:" + item.getSubType());
 
-        SwitchButton switch_button =   helper.getView(R.id.switch_button);
-        TextView tv_value =   helper.getView(R.id.tv_value);
-        TextView tv_name =   helper.getView(R.id.tv_name);
+        SwitchButton switch_button = helper.getView(R.id.switch_button);
+        TextView tv_value = helper.getView(R.id.tv_value);
+        TextView tv_name = helper.getView(R.id.tv_name);
         tv_value.setText(item.getResourceValce());
         tv_name.setText(item.getName());
-        if(item.getDataType().equals(ModelStyleConstant.BOOL))
-        {
+        if (item.getDataType().equals(ModelStyleConstant.BOOL)) {
             switch_button.setVisibility(View.VISIBLE);
             tv_value.setVisibility(View.GONE);
-            if(Boolean.parseBoolean(item.getResourceValce()))
-            {
+            if (Boolean.parseBoolean(item.getResourceValce())) {
                 switch_button.setChecked(true);
-            }
-            else
-            {
+            } else {
                 switch_button.setChecked(false);
             }
 
-            if(item.getSubType().equals("R"))
-            {
+            if (item.getSubType().equals("R")) {
                 switch_button.setEnabled(false);
-            }
-            else
-            {
+            } else {
                 switch_button.setEnabled(true);
 
             }
 
-        }
-        else
-        {
+        } else {
             switch_button.setVisibility(View.GONE);
             tv_value.setVisibility(View.VISIBLE);
         }
 
-        if(item.getDataType().equals(ModelStyleConstant.DATE))
-        {
-            try
-            {
+        if (item.getDataType().equals(ModelStyleConstant.DATE)) {
+            try {
                 Date time = new Date(Long.parseLong(item.getResourceValce()));
-                tv_value.setText( sDataFormat.format(time));
-            }
-            catch(Exception e)
-            {
+                tv_value.setText(sDataFormat.format(time));
+            } catch (Exception e) {
                 tv_value.setText("");
                 e.printStackTrace();
             }

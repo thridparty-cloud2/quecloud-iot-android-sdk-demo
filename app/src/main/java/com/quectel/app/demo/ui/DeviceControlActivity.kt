@@ -10,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,6 +32,7 @@ import com.quectel.app.device.bean.ArraySpecs
 import com.quectel.app.device.bean.ArrayStructSpecs
 import com.quectel.app.device.bean.BatchControlDevice
 import com.quectel.app.device.bean.BooleanSpecs
+import com.quectel.app.device.bean.BusinessSpecTypeValue
 import com.quectel.app.device.bean.BusinessValue
 import com.quectel.app.device.bean.ModelBasic
 import com.quectel.app.device.bean.NumSpecs
@@ -46,7 +49,9 @@ import com.quectel.app.websocket.utils.WebSocketServiceLocater
 import com.quectel.app.websocket.websocket.cmd.KValue
 import com.quectel.basic.common.entity.QuecDeviceModel
 import com.quectel.basic.common.utils.QuecGsonUtil
+import com.quectel.basic.common.utils.QuecThreadUtil
 import com.quectel.sdk.iot.channel.kit.constaint.QuecIotChannelType
+import com.quectel.sdk.iot.channel.kit.constaint.QuecIotDataSendMode
 import com.quectel.sdk.iot.channel.kit.model.QuecIotDataPointsModel
 import com.quectel.sdk.iot.channel.kit.model.QuecIotDataPointsModel.DataModel.QuecIotDataPointDataType
 import com.suke.widget.SwitchButton
@@ -77,7 +82,9 @@ class DeviceControlActivity() : BaseActivity() {
         QuecIotDataPointDataType.TEXT to QuecIotDataPointDataType.TEXT
     )
 
-    var isOnline = false
+    var mode: QuecIotDataSendMode = QuecIotDataSendMode.QuecIotDataSendModeAuto;
+
+    var isOnline = true
     var readList: MutableList<BusinessValue?> = ArrayList()
     var readWriteList: MutableList<BusinessValue?> = ArrayList()
     var contentList: MutableList<BusinessValue?> = ArrayList()
@@ -88,6 +95,7 @@ class DeviceControlActivity() : BaseActivity() {
     var numberCacheMap = HashMap<Int, BusinessValue>()
 
     var device: ListBean? = null
+    lateinit var radio: RadioGroup
 
     override fun getContentLayout(): Int {
         return R.layout.activity_device_control
@@ -97,30 +105,41 @@ class DeviceControlActivity() : BaseActivity() {
         MyUtils.addStatusBarView(this, R.color.gray_bg)
     }
 
+    lateinit var recyclerView: RecyclerView
+
+    lateinit var tvConnect: TextView;
+    var pkDkModle: QuecDeviceModel = QuecDeviceModel();
     var deviceControlManager: DeviceControlManager? = null
 
-    val onConnectCallback = { it: Boolean ->
+    val onConnectCallback = { it: Boolean, type: QuecIotChannelType ->
+        QuecThreadUtil.RunMainThread {
+            tvConnect.text = "isConnect $it type ${type.`val`}"
+        }
+        Toast.makeText(activity, "isConnect $it type ${type.`val`}", Toast.LENGTH_SHORT).show()
 
-        Toast.makeText(activity, "isConnect $it", Toast.LENGTH_SHORT).show()
     }
 
     val onDataCallback = { channelId: String,
                            type: QuecIotChannelType,
                            module: QuecIotDataPointsModel<*> ->
         Log.e("onDataCallback", QuecGsonUtil.gsonString(module))
-        val jsonObject = module.rawData
+        val jsonObject = if (module.rawData == null) module.dps else module.rawData
         Toast.makeText(activity, "onDataCallback ${jsonObject.toString()}", Toast.LENGTH_SHORT)
             .show()
+
     }
 
     val onDisconnect = { channelId: String, type: QuecIotChannelType ->
-        Toast.makeText(activity, "onDisConnect $channelId", Toast.LENGTH_SHORT).show()
+        QuecThreadUtil.RunMainThread {
+            tvConnect.text = "onDisConnect $channelId ${type.`val`}"
+        }
+        Toast.makeText(activity, "onDisConnect $channelId ${type.`val`}", Toast.LENGTH_SHORT).show()
     }
 
-    lateinit var recyclerView: RecyclerView
+
     override fun initData() {
         recyclerView = findViewById(R.id.mList);
-
+        tvConnect = findViewById(R.id.tv_connect)
         mReceiver = NetStatusReceiver()
         val filter = IntentFilter()
         filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION)
@@ -133,10 +152,11 @@ class DeviceControlActivity() : BaseActivity() {
         device = intent.getSerializableExtra("device") as ListBean;
         isOnline = intent.getBooleanExtra("online", false)
         queryModelTSL()
-        queryBusinessAttributes()
-        if (isOnline) {
-            WebSocketServiceLocater.getService(IWebSocketService::class.java).login()
-        }
+//          queryBusinessAttributes()
+//        if (isOnline) {
+//            WebSocketServiceLocater.getService(IWebSocketService::class.java).login()
+//        }
+        WebSocketServiceLocater.getService(IWebSocketService::class.java).login()
 
         val channelId: String = pk + "_" + dk
         deviceControlManager =
@@ -150,11 +170,38 @@ class DeviceControlActivity() : BaseActivity() {
         val pkDkModle: QuecDeviceModel = QuecDeviceModel();
         pkDkModle.pk = pk;
         pkDkModle.dk = dk;
+        pkDkModle.capabilitiesBitmask = device?.capabilitiesBitmask!!
         pkDkModle.onlineStatus = 1
+        pkDkModle.bindingkey = device?.authKey
 
         deviceControlManager?.startChannel(pkDkModle)
 
         initAdapter()
+
+        radio = findViewById(R.id.radioGroup)
+        radio.setOnCheckedChangeListener(object : RadioGroup.OnCheckedChangeListener {
+            override fun onCheckedChanged(group: RadioGroup?, checkedId: Int) {
+                when (checkedId) {
+                    R.id.radio_auto -> {
+                        mode = QuecIotDataSendMode.QuecIotDataSendModeAuto
+                    }
+
+                    R.id.radio_wifi -> {
+                        mode = QuecIotDataSendMode.QuecIotDataSendModeWifi
+                    }
+
+                    R.id.radio_ble -> {
+                        mode = QuecIotDataSendMode.QuecIotDataSendModeBLE
+                    }
+
+                    R.id.radio_ws -> {
+                        mode = QuecIotDataSendMode.QuecIotDataSendModeWS
+                    }
+                }
+                deviceControlManager?.startChannel(pkDkModle, mode)
+            }
+
+        })
 
     }
 
@@ -174,7 +221,7 @@ class DeviceControlActivity() : BaseActivity() {
                 val item = mAdapter!!.data[position]
                 val type = item.dataType
                 val subType = item.subType
-                if (type == ModelStyleConstant.BOOL && subType == "RW") {
+                if (type == ModelStyleConstant.BOOL && subType.contains("W")) {
                     cachePosition = position
                     cacheMap[position] = view
                     val switch_button =
@@ -189,7 +236,7 @@ class DeviceControlActivity() : BaseActivity() {
                     }
 
                     switch_button.toggle()
-                } else if (subType == "RW") {
+                } else if (subType.contains("W")) {
                     if (type == ModelStyleConstant.INT || type == ModelStyleConstant.FLOAT || type == ModelStyleConstant.DOUBLE) {
                         cachePosition = position
                         var step: String? = null
@@ -448,13 +495,14 @@ class DeviceControlActivity() : BaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        WebSocketServiceLocater.getService(IWebSocketService::class.java).disconnect()
+//        WebSocketServiceLocater.getService(IWebSocketService::class.java).disconnect()
         if (mReceiver != null) {
             unregisterReceiver(mReceiver)
         }
+        deviceControlManager?.disConnect(pkDkModle)
     }
 
-    var modelBasics: List<ModelBasic<*>>? = null
+    var modelBasics: List<ModelBasic<Any>>? = null
     private fun queryModelTSL() {
         DeviceServiceFactory.getInstance().getService(IDevService::class.java).queryProductTSL(pk,
             object : IHttpCallBack {
@@ -473,6 +521,12 @@ class DeviceControlActivity() : BaseActivity() {
                             if (modelBasics != null && modelBasics!!.size > 0) {
                                 println("modelBasics--:" + modelBasics!!.size)
                             }
+                            val list = covertBussinevalue(modelBasics);
+                            val writeList = list.filter { !it.subType.equals("R") }
+                            contentList.clear()
+                            contentList.addAll(writeList)
+
+                            mAdapter?.notifyDataSetChanged()
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -490,8 +544,8 @@ class DeviceControlActivity() : BaseActivity() {
         //要查询的属性标识符集合
         val codeList: MutableList<String> = ArrayList()
         //标识符集合
-        codeList.add("temperature")
-        codeList.add("state")
+//        codeList.add("temperature")
+//        codeList.add("state")
         //查询类型集合
         //1 查询设备基础属性 2 查询物模型属性  3 查询定位信息
         val typeList: MutableList<String> = ArrayList()
@@ -502,7 +556,8 @@ class DeviceControlActivity() : BaseActivity() {
         //传 null 查询所有属性和类型
         // DeviceServiceFactory.getInstance().getService(IDevService.class).queryBusinessAttributes(codeList,pk,dk,typeList,
         DeviceServiceFactory.getInstance().getService(IDevService::class.java)
-            .queryBusinessAttributes(null, pk, dk, null, "", "",
+            .queryBusinessAttributes(
+                emptyList(), pk, dk, null, "", "",
                 object : IHttpCallBack {
                     override fun onSuccess(result: String) {
                         println("queryBusinessAttributes--:$result")
@@ -526,8 +581,8 @@ class DeviceControlActivity() : BaseActivity() {
                                         readWriteList.add(bv)
                                     }
                                 }
-                                contentList.addAll(readList)
-                                contentList.addAll(readWriteList)
+//                                contentList.addAll(readList)
+//                                contentList.addAll(readWriteList)
                                 mAdapter?.notifyDataSetChanged()
                             }
                         } catch (e: Exception) {
@@ -1133,5 +1188,21 @@ class DeviceControlActivity() : BaseActivity() {
 
     companion object {
         const val DEVICE_ONLINE = 1
+    }
+
+
+    fun covertBussinevalue(mudelBasics: List<ModelBasic<Any>>?): List<BusinessValue> {
+        val list: MutableList<BusinessValue> = mutableListOf();
+        mudelBasics?.forEach {
+            val bsvalue = BusinessValue();
+            bsvalue.abId = it.id;
+            bsvalue.name = it.name;
+            bsvalue.subType = it.subType;
+            bsvalue.dataType = it.dataType;
+            bsvalue.resourceCode = it.code;
+            list.add(bsvalue)
+        }
+        return list
+
     }
 }

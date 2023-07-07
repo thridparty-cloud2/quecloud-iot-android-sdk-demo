@@ -1,8 +1,8 @@
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        maven { url 'https://maven.aliyun.com/repository/public'}
-        maven { url 'https://maven.aliyun.com/repository/central'}
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
         maven { url 'https://developer.huawei.com/repo/' }
@@ -21,4 +21,10 @@ dependencyResolutionManagement {
 
 rootProject.name = "AndroidSDKDemo"
 include ':app'
+
+include ':QuecWebSocket'
+project(':QuecWebSocket').projectDir = new File(rootProject.projectDir, '../../deprecate/QuecWebsocketChannel/QuecWebsocketLibrary')
+
+include ':QuecIotChannelKit'
+project(':QuecIotChannelKit').projectDir = new File(rootProject.projectDir, '../../project/QuecIotChannelKit/QuecIotChannelKit')
 

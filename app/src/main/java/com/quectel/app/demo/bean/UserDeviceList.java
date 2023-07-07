@@ -1,9 +1,12 @@
 package com.quectel.app.demo.bean;
 
+import com.quectel.app.demo.R;
+import com.quectel.basic.common.entity.QuecDeviceModel;
+
 import java.io.Serializable;
 import java.util.List;
 
-public class UserDeviceList implements Serializable  {
+public class UserDeviceList implements Serializable {
 
     private int code;
     private String msg;
@@ -224,6 +227,19 @@ public class UserDeviceList implements Serializable  {
             private String signalStrength;
             private String lastOfflineTime;
 
+            private int capabilitiesBitmask;
+
+            public String getBindingCode() {
+                return bindingCode;
+            }
+
+            public void setBindingCode(String bindingCode) {
+                this.bindingCode = bindingCode;
+            }
+
+            private String bindingCode;
+
+
             public int getStatus() {
                 return status;
             }
@@ -422,6 +438,14 @@ public class UserDeviceList implements Serializable  {
 
             public void setVerified(int verified) {
                 this.verified = verified;
+            }
+
+            public int getCapabilitiesBitmask() {
+                return capabilitiesBitmask;
+            }
+
+            public void setCapabilitiesBitmask(int capabilitiesBitmask) {
+                this.capabilitiesBitmask = capabilitiesBitmask;
             }
         }
     }
