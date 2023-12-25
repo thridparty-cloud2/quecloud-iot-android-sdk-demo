@@ -23,8 +23,8 @@ import com.quectel.sdk.smart.config.api.QuecSmartConfigServiceManager;
 
 public class App extends QuecBaseApp {
 
-    String userDomain = "";
-    String domainSecret = "";
+    String userDomain = "U.SP.8589934603";
+    String domainSecret = "pUTp5goB1bLinprRQMmK3EPiiuPiGrJtKUNptWRXVmP";
 
     @Override
     public void onCreate() {
@@ -44,7 +44,7 @@ public class App extends QuecBaseApp {
         QuecSmartConfigServiceManager.getInstance().init(this);
         UserModulePreferences.init(this);
         QuecNetWorkManager.getInstance().init(this);
-        QuecIotAppSdk.getInstance().startWithUserDomain(BuildConfig.userDomain, BuildConfig.userScrete, QuecCloudServiceType.QuecCloudServiceTypeChina);
+        QuecIotAppSdk.getInstance().startWithUserDomain(userDomain, domainSecret, QuecCloudServiceType.QuecCloudServiceTypeNorthAmerica);
         DeviceModulePreferences.init(this);
         //开始日志记录功能
 //        LogService.get(ILogService.class).startLog(this);

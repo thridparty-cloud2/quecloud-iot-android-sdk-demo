@@ -28,6 +28,7 @@ import com.quectel.app.demo.bean.LanVO;
 import com.quectel.app.demo.bean.UserInfor;
 import com.quectel.app.demo.fragmentbase.BaseMainFragment;
 
+import com.quectel.app.demo.ui.LoginActivity;
 import com.quectel.app.demo.ui.ResetPasswordByEmailActivity;
 import com.quectel.app.demo.ui.ResetPasswordByPhoneActivity;
 
@@ -37,6 +38,7 @@ import com.quectel.app.demo.ui.UpdateUserPhoneActivity;
 import com.quectel.app.demo.utils.DensityUtils;
 import com.quectel.app.demo.utils.MyUtils;
 import com.quectel.app.demo.utils.ToastUtils;
+import com.quectel.app.device.iot.IotChannelController;
 import com.quectel.app.quecnetwork.httpservice.IHttpCallBack;
 import com.quectel.app.usersdk.userservice.IUserService;
 import com.quectel.app.usersdk.utils.UserServiceFactory;
@@ -476,16 +478,22 @@ public class MineFragment extends BaseMainFragment {
                                     @Override
                                     public void onSuccess(String result) {
                                         UserInfor userInfor = new Gson().fromJson(result, UserInfor.class);
-                                        if(userInfor.getCode()==200)
-                                        {
-                                            UserServiceFactory.getInstance().getService(IUserService.class).clearToken();
-                                            getActivity().finish();
-
-                                        }
+//                                        if(userInfor.getCode()==200)
+//                                        {
+//                                            UserServiceFactory.getInstance().getService(IUserService.class).clearToken();
+//                                            getActivity().finish();
+//                                        }
+                                        UserServiceFactory.getInstance().getService(IUserService.class).clearToken();
+                                        IotChannelController.getInstance().closeChannelAll();
+                                        Intent intent1 = new Intent(getActivity(), LoginActivity.class);
+                                        startActivity(intent1);
                                     }
                                     @Override
                                     public void onFail(Throwable e) {
-
+                                        UserServiceFactory.getInstance().getService(IUserService.class).clearToken();
+                                        IotChannelController.getInstance().closeChannelAll();
+                                        Intent intent1 = new Intent(getActivity(), LoginActivity.class);
+                                        startActivity(intent1);
                                     }
                                 });
                             }

@@ -133,6 +133,7 @@ public class DeviceFragment extends BaseMainFragment {
                         mPtrFrameLayout.refreshComplete();
                         finishLoading();
                         UserDeviceList userDeviceList = new Gson().fromJson(result, UserDeviceList.class);
+                        if(userDeviceList==null|| userDeviceList.getData()==null )return;
                         List<UserDeviceList.DataBean.ListBean> mList = userDeviceList.getData().getList();
                         System.out.println("mList--:" + mList.size());
 
@@ -152,7 +153,7 @@ public class DeviceFragment extends BaseMainFragment {
                                 @Override
                                 public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
                                     UserDeviceList.DataBean.ListBean lanVO = mAdapter.getData().get(position);
-                                    createSelectDialog(lanVO.getProductKey(), lanVO.getDeviceKey(), lanVO.getShareCode(), lanVO.getDeviceStatus());
+                                    createSelectDialog(lanVO,lanVO.getProductKey(), lanVO.getDeviceKey(), lanVO.getShareCode(), lanVO.getDeviceStatus());
                                     Intent intent = new Intent(getActivity(), DeviceControlActivity.class);
                                     intent.putExtra("device", (Serializable) lanVO);
                                     intent.putExtra("pk", lanVO.getProductKey());
@@ -474,7 +475,7 @@ public class DeviceFragment extends BaseMainFragment {
         mDialog.show();
     }
 
-    private void createSelectDialog(String pk, String dk, String shareCode, String deviceStatus) {
+    private void createSelectDialog(UserDeviceList.DataBean.ListBean lanVO,String pk, String dk, String shareCode, String deviceStatus) {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.device_select_dialog, null);
         final Dialog mDialog = new Dialog(getActivity(), R.style.dialogTM);
@@ -517,6 +518,7 @@ public class DeviceFragment extends BaseMainFragment {
                 Intent intent = new Intent(getActivity(), DeviceControlActivity.class);
                 intent.putExtra("pk", pk);
                 intent.putExtra("dk", dk);
+                intent.putExtra("device", (Serializable) lanVO);
                 if (deviceStatus.equals(DeviceConfig.OFFLINE)) {
                     intent.putExtra("online", false);
                 } else {

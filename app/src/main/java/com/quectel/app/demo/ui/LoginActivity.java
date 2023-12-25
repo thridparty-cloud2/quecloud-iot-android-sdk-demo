@@ -8,17 +8,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatEditText;
 
 import com.quectel.app.demo.R;
 import com.quectel.app.demo.base.BaseActivity;
+import com.quectel.app.demo.dialog.ServiceTypeDialog;
 import com.quectel.app.demo.utils.MyUtils;
 import com.quectel.app.demo.utils.ToastUtils;
+import com.quectel.app.device.iot.IotChannelController;
 import com.quectel.app.quecnetwork.httpservice.IHttpCallBack;
 import com.quectel.app.quecnetwork.httpservice.IResponseCallBack;
 import com.quectel.app.usersdk.userservice.IUserService;
 import com.quectel.app.usersdk.utils.UserServiceFactory;
+import com.quectel.sdk.iot.QuecCloudServiceType;
 import com.quectel.sdk.iot.QuecIotAppSdk;
 
 import org.json.JSONException;
@@ -28,6 +32,23 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class LoginActivity extends BaseActivity {
+    public static final int QuecCloudServiceTypeChina =0;
+    public static final int QuecCloudServiceTypeEurope =1;
+    public static final int QuecCloudServiceTypeNorthAmerica =2;
+
+    private int serviceType = QuecCloudServiceTypeNorthAmerica;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(serviceType==QuecCloudServiceTypeChina){
+            tvChangeServiceType.setText("数据中心-国内");
+        }else if(serviceType==QuecCloudServiceTypeEurope){
+            tvChangeServiceType.setText("数据中心-欧洲");
+        }else if(serviceType==QuecCloudServiceTypeNorthAmerica){
+            tvChangeServiceType.setText("数据中心-北美");
+        }
+    }
 
     @Override
     protected int getContentLayout() {
@@ -64,6 +85,10 @@ public class LoginActivity extends BaseActivity {
 
     @BindView(R.id.edit_countryCode)
     AppCompatEditText editCode;
+
+    @BindView(R.id.tvChangeServiceType)
+    TextView tvChangeServiceType;
+
 
     Handler handler;
     int countNum = 0;
@@ -131,10 +156,40 @@ public class LoginActivity extends BaseActivity {
     };
 
 
-    @OnClick({R.id.iv_back, R.id.bt_login, R.id.tv_register, R.id.bt_style, R.id.bt_getCode})
+    @OnClick({R.id.iv_back, R.id.bt_login, R.id.tv_register, R.id.bt_style, R.id.bt_getCode,R.id.tvChangeServiceType,R.id.btEmailLogin})
     public void onViewClick(View view) {
         Intent intent = null;
         switch (view.getId()) {
+            case R.id.btEmailLogin:
+                intent = new Intent(activity, EmailLoginActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.tvChangeServiceType:
+                ServiceTypeDialog dialog = new ServiceTypeDialog(this);
+                dialog.setOnConfirmClickListener(new ServiceTypeDialog.OnConfirmClickListener() {
+                    @Override
+                    public void onConfirm(QuecCloudServiceType type) {
+                        switch (type){
+                            case QuecCloudServiceTypeChina:
+                                QuecIotAppSdk.getInstance().startWithUserDomain("C.DM.5903.1", "EufftRJSuWuVY7c6txzGifV9bJcfXHAFa7hXY5doXSn7", QuecCloudServiceType.QuecCloudServiceTypeChina);
+                                tvChangeServiceType.setText("数据中心-国内");
+                                serviceType=0;
+                                break;
+                            case QuecCloudServiceTypeEurope:
+                                QuecIotAppSdk.getInstance().startWithUserDomain("E.SP.4294967410", "3aRNUwWahjyANa7WfBK2wCCkxCexB6nXxKJwXxfePvzf", QuecCloudServiceType.QuecCloudServiceTypeEurope);
+                                tvChangeServiceType.setText("数据中心-欧洲");
+                                serviceType=1;
+                                break;
+                            case QuecCloudServiceTypeNorthAmerica:
+                                QuecIotAppSdk.getInstance().startWithUserDomain("U.SP.8589934603", "pUTp5goB1bLinprRQMmK3EPiiuPiGrJtKUNptWRXVmP", QuecCloudServiceType.QuecCloudServiceTypeNorthAmerica);
+                                tvChangeServiceType.setText("数据中心-北美");
+                                serviceType=2;
+                                break;
+                        }
+                    }
+                });
+                dialog.show();
+                break;
             case R.id.bt_getCode:
                 if (System.currentTimeMillis() - mExitTime > INTERVAL) {
                     String phoneContent = MyUtils.getEditTextContent(edit_phone);

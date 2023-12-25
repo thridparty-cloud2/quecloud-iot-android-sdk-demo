@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="登录"
+            android:text="密码登录"
             android:textColor="@color/main1"
             android:textSize="18sp" />
 
@@ -37,14 +37,26 @@
 
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/tvChangeServiceType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="数据中心-北美"
+        android:textColor="@color/new_lan"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="@dimen/dp_20"
+        />
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/edit_countryCode"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginHorizontal="@dimen/dp_48"
-        android:layout_marginTop="50dp"
-        android:hint="please enter country code"
-        android:textColorHint="@color/W3" />
+        android:layout_marginTop="20dp"
+        android:hint="请输入国家码"
+        android:gravity="center_vertical"
+        android:textColorHint="@color/W3"
+
+        />
 
 
     <RelativeLayout
@@ -155,16 +167,31 @@
     </RelativeLayout>
 
 
-    <Button
-        android:id="@+id/bt_style"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:background="@drawable/white_bg"
-        android:gravity="center"
-        android:text="验证码登录"
-        android:textColor="@color/new_lan"
-        android:textSize="16sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/bt_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@drawable/white_bg"
+            android:gravity="center"
+            android:text="验证码登录"
+            android:textColor="@color/new_lan"
+            android:textSize="16sp" />
+        <Button
+            android:id="@+id/btEmailLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@drawable/white_bg"
+            android:gravity="center"
+            android:text="邮箱登录"
+            android:textColor="@color/new_lan"
+            android:textSize="16sp" />
+    </LinearLayout>
+
 
 
     <Button

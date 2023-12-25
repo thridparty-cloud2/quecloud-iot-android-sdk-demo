@@ -59,8 +59,10 @@ public class DeviceModelAdapter extends BaseQuickAdapter<BusinessValue, BaseView
 
         if (item.getDataType().equals(ModelStyleConstant.DATE)) {
             try {
-                Date time = new Date(Long.parseLong(item.getResourceValce()));
-                tv_value.setText(sDataFormat.format(time));
+                if(item.getResourceValce()!=null){
+                    Date time = new Date(Long.parseLong(item.getResourceValce()));
+                    tv_value.setText(sDataFormat.format(time));
+                }
             } catch (Exception e) {
                 tv_value.setText("");
                 e.printStackTrace();

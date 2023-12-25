@@ -5,15 +5,11 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
+import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
@@ -50,6 +46,7 @@ import com.quectel.app.websocket.websocket.cmd.KValue
 import com.quectel.basic.common.entity.QuecDeviceModel
 import com.quectel.basic.common.utils.QuecGsonUtil
 import com.quectel.basic.common.utils.QuecThreadUtil
+import com.quectel.basic.common.utils.QuecToastUtil
 import com.quectel.sdk.iot.channel.kit.constaint.QuecIotChannelType
 import com.quectel.sdk.iot.channel.kit.constaint.QuecIotDataSendMode
 import com.quectel.sdk.iot.channel.kit.model.QuecIotDataPointsModel
@@ -108,6 +105,9 @@ class DeviceControlActivity() : BaseActivity() {
     lateinit var recyclerView: RecyclerView
 
     lateinit var tvConnect: TextView;
+
+    lateinit var ivBack: ImageView
+
     var pkDkModle: QuecDeviceModel = QuecDeviceModel();
     var deviceControlManager: DeviceControlManager? = null
 
@@ -138,6 +138,11 @@ class DeviceControlActivity() : BaseActivity() {
 
 
     override fun initData() {
+
+        ivBack =  findViewById(R.id.iv_back)
+        ivBack.setOnClickListener{
+            finish()
+        }
         recyclerView = findViewById(R.id.mList);
         tvConnect = findViewById(R.id.tv_connect)
         mReceiver = NetStatusReceiver()
@@ -622,11 +627,15 @@ class DeviceControlActivity() : BaseActivity() {
         bt_sure.setOnClickListener {
             mDialog.dismiss()
             if (isOnline) {
-                //websocket 下发
-                //val data = KValue(item.abId, item.name, item.dataType, item.resourceValce)
-                sendDps(item, item.resourceCode)
+                val value = MyUtils.getEditTextContent(edit_content)
+                item.resourceValce = value
+                sendDps(item, value)
                 contentList[cachePosition] = item
                 mAdapter!!.notifyDataSetChanged()
+
+//                sendDps(item, item.resourceCode)
+//                contentList[cachePosition] = item
+//                mAdapter!!.notifyDataSetChanged()
             } else {
                 //http下发
                 try {
@@ -640,11 +649,24 @@ class DeviceControlActivity() : BaseActivity() {
             }
         }
         bt_sub.setOnClickListener {
+            item.resourceValce =edit_content.text.toString()
+            if(TextUtils.isEmpty(item.resourceValce)){
+               QuecToastUtil.showL("请输入值")
+                return@setOnClickListener
+            }
+            if(item.resourceValce.toInt()<=0){
+                return@setOnClickListener
+            }
             val result = AddOperate.sub(item.resourceValce, numSpecs.step)
             item.resourceValce = result
             edit_content.setText(result)
         }
         bt_add.setOnClickListener {
+            item.resourceValce =edit_content.text.toString()
+            if(TextUtils.isEmpty(item.resourceValce)){
+                QuecToastUtil.showL("请输入值")
+                return@setOnClickListener
+            }
             val result = AddOperate.add(item.resourceValce, numSpecs.step)
             item.resourceValce = result
             edit_content.setText(result)
@@ -721,9 +743,11 @@ class DeviceControlActivity() : BaseActivity() {
         bt_sure.setOnClickListener {
             mDialog.dismiss()
             if (isOnline) {
-                val enumValue = MyUtils.getEditTextContent(edit_value)
-                sendDps(item, enumValue);
-                item.resourceValce = enumValue
+                val value = MyUtils.getEditTextContent(edit_value)
+
+                item.resourceValce = value
+
+                sendDps(item, value)
                 contentList[cachePosition] = item
                 mAdapter!!.notifyDataSetChanged()
             } else {
@@ -1175,6 +1199,7 @@ class DeviceControlActivity() : BaseActivity() {
         dp.dataType = map[item.dataType.uppercase()]
         dp.value = value
         deviceControlManager?.writeDps(mutableListOf(dp))
+        Log.i("sendDps","dp.code="+dp.code+",dp.id="+dp.id+",dp.dataType="+dp.dataType+",dp.value="+dp.value)
     }
 
     fun setDp(item: BusinessValue, value: Any): QuecIotDataPointsModel.DataModel<Any> {
