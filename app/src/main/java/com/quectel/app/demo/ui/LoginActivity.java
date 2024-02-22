@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -171,17 +172,17 @@ public class LoginActivity extends BaseActivity {
                     public void onConfirm(QuecCloudServiceType type) {
                         switch (type){
                             case QuecCloudServiceTypeChina:
-                                QuecIotAppSdk.getInstance().startWithUserDomain("C.DM.5903.1", "EufftRJSuWuVY7c6txzGifV9bJcfXHAFa7hXY5doXSn7", QuecCloudServiceType.QuecCloudServiceTypeChina);
+                                QuecIotAppSdk.getInstance().startWithUserDomain(getApplication(),"C.DM.5903.1", "EufftRJSuWuVY7c6txzGifV9bJcfXHAFa7hXY5doXSn7", QuecCloudServiceType.QuecCloudServiceTypeChina);
                                 tvChangeServiceType.setText("数据中心-国内");
                                 serviceType=0;
                                 break;
                             case QuecCloudServiceTypeEurope:
-                                QuecIotAppSdk.getInstance().startWithUserDomain("E.SP.4294967410", "3aRNUwWahjyANa7WfBK2wCCkxCexB6nXxKJwXxfePvzf", QuecCloudServiceType.QuecCloudServiceTypeEurope);
+                                QuecIotAppSdk.getInstance().startWithUserDomain(LoginActivity.this.getApplication(),"E.SP.4294967410", "3aRNUwWahjyANa7WfBK2wCCkxCexB6nXxKJwXxfePvzf", QuecCloudServiceType.QuecCloudServiceTypeEurope);
                                 tvChangeServiceType.setText("数据中心-欧洲");
                                 serviceType=1;
                                 break;
                             case QuecCloudServiceTypeNorthAmerica:
-                                QuecIotAppSdk.getInstance().startWithUserDomain("U.SP.8589934603", "pUTp5goB1bLinprRQMmK3EPiiuPiGrJtKUNptWRXVmP", QuecCloudServiceType.QuecCloudServiceTypeNorthAmerica);
+                                QuecIotAppSdk.getInstance().startWithUserDomain(LoginActivity.this.getApplication(),"U.SP.8589934603", "pUTp5goB1bLinprRQMmK3EPiiuPiGrJtKUNptWRXVmP", QuecCloudServiceType.QuecCloudServiceTypeNorthAmerica);
                                 tvChangeServiceType.setText("数据中心-北美");
                                 serviceType=2;
                                 break;
@@ -293,7 +294,7 @@ public class LoginActivity extends BaseActivity {
                             phone, pass, resolveCode, new IResponseCallBack() {
                                 @Override
                                 public void onSuccess() {
-                                    System.out.println("--onSuccess-phoneLogin-");
+                                    Log.i("renbao","--onSuccess-phoneLogin-");
                                     ToastUtils.showShort(activity, "登录成功");
                                     edit_phone.setText("");
                                     setCountryCode(countryCode);

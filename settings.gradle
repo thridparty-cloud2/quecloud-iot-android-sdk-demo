@@ -32,5 +32,5 @@ include ':app'
 
 
 
-//include ':QuecIotSdk'
-//project(':QuecIotSdk').projectDir = new File(rootProject.projectDir, '../QuecIotSdk/QuecIotSdk')
+include ':QuecIotSdk'
+project(':QuecIotSdk').projectDir = new File(rootProject.projectDir, '../QuecIotSdk/QuecIotSdk')
