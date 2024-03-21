@@ -13,6 +13,7 @@ import com.quectel.app.demo.base.BaseActivity;
 import com.quectel.app.demo.utils.MyUtils;
 import com.quectel.app.demo.utils.ToastUtils;
 import com.quectel.app.quecnetwork.httpservice.IHttpCallBack;
+import com.quectel.app.usersdk.constant.UserConstant;
 import com.quectel.app.usersdk.userservice.IUserService;
 import com.quectel.app.usersdk.utils.UserServiceFactory;
 
@@ -67,8 +68,8 @@ public class EmailRegisterActivity extends BaseActivity {
 
                     startLoading();
                     //发送邮箱验证码
-                    UserServiceFactory.getInstance().getService(IUserService.class).sendEmailRegisterCode(
-                            mail,new IHttpCallBack(){
+                    UserServiceFactory.getInstance().getService(IUserService.class).sendV2EmailCode(
+                            mail, UserConstant.TYPE_SEND_EMAIL_REGISTER,new IHttpCallBack(){
                                 @Override
                                 public void onSuccess(String result) {
                                    finishLoading();

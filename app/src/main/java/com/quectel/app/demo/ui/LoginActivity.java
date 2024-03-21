@@ -1,5 +1,6 @@
 package com.quectel.app.demo.ui;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
@@ -8,46 +9,54 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatEditText;
 
+import com.google.gson.Gson;
 import com.quectel.app.demo.R;
 import com.quectel.app.demo.base.BaseActivity;
+import com.quectel.app.demo.constant.CloudConfig;
+import com.quectel.app.demo.dialog.ServiceTypeCustomDialog;
 import com.quectel.app.demo.dialog.ServiceTypeDialog;
 import com.quectel.app.demo.utils.MyUtils;
+import com.quectel.app.demo.utils.SPUtils;
 import com.quectel.app.demo.utils.ToastUtils;
-import com.quectel.app.device.iot.IotChannelController;
 import com.quectel.app.quecnetwork.httpservice.IHttpCallBack;
 import com.quectel.app.quecnetwork.httpservice.IResponseCallBack;
+import com.quectel.app.usersdk.constant.UserConstant;
 import com.quectel.app.usersdk.userservice.IUserService;
 import com.quectel.app.usersdk.utils.UserServiceFactory;
 import com.quectel.sdk.iot.QuecCloudServiceType;
 import com.quectel.sdk.iot.QuecIotAppSdk;
+import com.quectel.sdk.iot.bean.QuecPublicConfigBean;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.functions.Consumer;
 
 public class LoginActivity extends BaseActivity {
     public static final int QuecCloudServiceTypeChina =0;
     public static final int QuecCloudServiceTypeEurope =1;
     public static final int QuecCloudServiceTypeNorthAmerica =2;
 
-    private int serviceType = QuecCloudServiceTypeNorthAmerica;
+    private int serviceType = QuecCloudServiceTypeChina;
 
     @Override
     protected void onResume() {
         super.onResume();
         if(serviceType==QuecCloudServiceTypeChina){
-            tvChangeServiceType.setText("数据中心-国内");
+            rbChangeServiceTypeQuec.setText("数据中心-国内");
         }else if(serviceType==QuecCloudServiceTypeEurope){
-            tvChangeServiceType.setText("数据中心-欧洲");
+            rbChangeServiceTypeQuec.setText("数据中心-欧洲");
         }else if(serviceType==QuecCloudServiceTypeNorthAmerica){
-            tvChangeServiceType.setText("数据中心-北美");
+            rbChangeServiceTypeQuec.setText("数据中心-北美");
         }
     }
 
@@ -87,8 +96,14 @@ public class LoginActivity extends BaseActivity {
     @BindView(R.id.edit_countryCode)
     AppCompatEditText editCode;
 
-    @BindView(R.id.tvChangeServiceType)
-    TextView tvChangeServiceType;
+    @BindView(R.id.rbChangeServiceTypeQuec)
+    RadioButton rbChangeServiceTypeQuec;
+
+    @BindView(R.id.rbChangeServiceTypeCustom)
+    RadioButton rbChangeServiceTypeCustom;
+
+    @BindView(R.id.tvConfigText)
+    TextView tvConfigText;
 
 
     Handler handler;
@@ -114,29 +129,30 @@ public class LoginActivity extends BaseActivity {
             }
         };
 
-//        RxPermissions rxPermissions = new RxPermissions(this);
-//        rxPermissions
-//                .request(
-//                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-//                        Manifest.permission.READ_EXTERNAL_STORAGE
-//                )
-//                .subscribe(new Consumer<Boolean>() {
-//                               @Override
-//                               public void accept(Boolean grant) throws Exception {
-//                                   if(grant)
-//                                   {
-//
-//                                   }
-//                                   else
-//                                   {
-//                                      // ToastUtils.showLong(activity,"权限禁止拍照相册可能无法使用");
-//
-//                                   }
-//
-//                               }
-//                           }
-//
-//                );
+        RxPermissions rxPermissions = new RxPermissions(this);
+        rxPermissions
+                .request(
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.MANAGE_EXTERNAL_STORAGE
+                )
+                .subscribe(new Consumer<Boolean>() {
+                               @Override
+                               public void accept(Boolean grant) throws Exception {
+                                   if(grant)
+                                   {
+
+                                   }
+                                   else
+                                   {
+                                      // ToastUtils.showLong(activity,"权限禁止拍照相册可能无法使用");
+
+                                   }
+
+                               }
+                           }
+
+                );
 
 
     }
@@ -157,7 +173,7 @@ public class LoginActivity extends BaseActivity {
     };
 
 
-    @OnClick({R.id.iv_back, R.id.bt_login, R.id.tv_register, R.id.bt_style, R.id.bt_getCode,R.id.tvChangeServiceType,R.id.btEmailLogin})
+    @OnClick({R.id.iv_back, R.id.bt_login, R.id.tv_register, R.id.bt_style, R.id.bt_getCode,R.id.rbChangeServiceTypeQuec,R.id.rbChangeServiceTypeCustom,R.id.btEmailLogin})
     public void onViewClick(View view) {
         Intent intent = null;
         switch (view.getId()) {
@@ -165,7 +181,10 @@ public class LoginActivity extends BaseActivity {
                 intent = new Intent(activity, EmailLoginActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.tvChangeServiceType:
+            case R.id.rbChangeServiceTypeQuec:
+                rbChangeServiceTypeCustom.setTextColor(R.color.gray_btn);
+                rbChangeServiceTypeQuec.setTextColor(R.color.new_lan);
+                tvConfigText.setVisibility(View.GONE);
                 ServiceTypeDialog dialog = new ServiceTypeDialog(this);
                 dialog.setOnConfirmClickListener(new ServiceTypeDialog.OnConfirmClickListener() {
                     @Override
@@ -173,23 +192,51 @@ public class LoginActivity extends BaseActivity {
                         switch (type){
                             case QuecCloudServiceTypeChina:
                                 QuecIotAppSdk.getInstance().startWithUserDomain(getApplication(),"C.DM.5903.1", "EufftRJSuWuVY7c6txzGifV9bJcfXHAFa7hXY5doXSn7", QuecCloudServiceType.QuecCloudServiceTypeChina);
-                                tvChangeServiceType.setText("数据中心-国内");
+                                rbChangeServiceTypeQuec.setText("数据中心-国内");
                                 serviceType=0;
+                                SPUtils.putBoolean(getMyActivity(), CloudConfig.IS_CUSTOM_CLOUD, false);
+                                SPUtils.putInt(getMyActivity(), CloudConfig.QUEC_ClOUD_SERVICE_TYPE, serviceType);
+                                SPUtils.putString(getMyActivity(), CloudConfig.QUEC_USER_DOMAIN, "C.DM.5903.1");
+                                SPUtils.putString(getMyActivity(), CloudConfig.QUEC_DOMAIN_SECRET, "EufftRJSuWuVY7c6txzGifV9bJcfXHAFa7hXY5doXSn7");
                                 break;
                             case QuecCloudServiceTypeEurope:
                                 QuecIotAppSdk.getInstance().startWithUserDomain(LoginActivity.this.getApplication(),"E.SP.4294967410", "3aRNUwWahjyANa7WfBK2wCCkxCexB6nXxKJwXxfePvzf", QuecCloudServiceType.QuecCloudServiceTypeEurope);
-                                tvChangeServiceType.setText("数据中心-欧洲");
+                                rbChangeServiceTypeQuec.setText("数据中心-欧洲");
                                 serviceType=1;
+                                SPUtils.putBoolean(getMyActivity(), CloudConfig.IS_CUSTOM_CLOUD, false);
+                                SPUtils.putInt(getMyActivity(), CloudConfig.QUEC_ClOUD_SERVICE_TYPE, serviceType);
+                                SPUtils.putString(getMyActivity(), CloudConfig.QUEC_USER_DOMAIN, "E.SP.4294967410");
+                                SPUtils.putString(getMyActivity(), CloudConfig.QUEC_DOMAIN_SECRET, "3aRNUwWahjyANa7WfBK2wCCkxCexB6nXxKJwXxfePvzf");
                                 break;
                             case QuecCloudServiceTypeNorthAmerica:
                                 QuecIotAppSdk.getInstance().startWithUserDomain(LoginActivity.this.getApplication(),"U.SP.8589934603", "pUTp5goB1bLinprRQMmK3EPiiuPiGrJtKUNptWRXVmP", QuecCloudServiceType.QuecCloudServiceTypeNorthAmerica);
-                                tvChangeServiceType.setText("数据中心-北美");
+                                rbChangeServiceTypeQuec.setText("数据中心-北美");
                                 serviceType=2;
+                                SPUtils.putBoolean(getMyActivity(), CloudConfig.IS_CUSTOM_CLOUD, false);
+                                SPUtils.putInt(getMyActivity(), CloudConfig.QUEC_ClOUD_SERVICE_TYPE, serviceType);
+                                SPUtils.putString(getMyActivity(), CloudConfig.QUEC_USER_DOMAIN, "U.SP.8589934603");
+                                SPUtils.putString(getMyActivity(), CloudConfig.QUEC_DOMAIN_SECRET, "pUTp5goB1bLinprRQMmK3EPiiuPiGrJtKUNptWRXVmP");
                                 break;
                         }
                     }
                 });
                 dialog.show();
+                break;
+            case R.id.rbChangeServiceTypeCustom:
+                rbChangeServiceTypeCustom.setTextColor(R.color.new_lan);
+                rbChangeServiceTypeQuec.setTextColor(R.color.gray_btn);
+                tvConfigText.setVisibility(View.VISIBLE);
+                ServiceTypeCustomDialog customDialog = new ServiceTypeCustomDialog(this);
+                customDialog.setOnConfirmClickListener(new ServiceTypeCustomDialog.OnServiceTypeCustomConfirmClickListener() {
+                    @Override
+                    public void onServiceTypeCustomConfirm(QuecPublicConfigBean bean) {
+                        tvConfigText.setText(bean.toString());
+                        QuecIotAppSdk.getInstance().startWithQuecPublicConfigBean(getApplication(), bean);
+                        SPUtils.putBoolean(getMyActivity(), CloudConfig.IS_CUSTOM_CLOUD, true);
+                        SPUtils.putString(getMyActivity(), CloudConfig.PUBLIC_CONFIG_BEAN, new Gson().toJson( bean));
+                    }
+                });
+                customDialog.show();
                 break;
             case R.id.bt_getCode:
                 if (System.currentTimeMillis() - mExitTime > INTERVAL) {
@@ -207,8 +254,8 @@ public class LoginActivity extends BaseActivity {
                         resolveCode = countryCode;
                     }
 
-                    UserServiceFactory.getInstance().getService(IUserService.class).sendPhoneSmsCode(
-                            resolveCode, phoneContent, 3, "", "", new IHttpCallBack() {
+                    UserServiceFactory.getInstance().getService(IUserService.class).sendV2PhoneSmsCode(
+                            resolveCode, phoneContent, UserConstant.TYPE_SMS_CODE_LOGIN, new IHttpCallBack() {
                                 @Override
                                 public void onSuccess(String result) {
                                     System.out.println("sendPhoneSmsCode onSuccess-:" + result);
@@ -297,7 +344,10 @@ public class LoginActivity extends BaseActivity {
                                     Log.i("renbao","--onSuccess-phoneLogin-");
                                     ToastUtils.showShort(activity, "登录成功");
                                     edit_phone.setText("");
-                                    setCountryCode(countryCode);
+                                    //私有云不用设置国际码，QuecPublicConfigBean已经包含了mcc
+                                    if (!SPUtils.getBoolean(getMyActivity(), CloudConfig.IS_CUSTOM_CLOUD, false)){
+                                        setCountryCode(countryCode);
+                                    }
                                     startActivity(new Intent(activity, HomeActivity.class));
 
                                     finish();
@@ -337,7 +387,10 @@ public class LoginActivity extends BaseActivity {
                                     System.out.println("login success Sms");
                                     ToastUtils.showShort(activity, "登录成功");
                                     edit_phone.setText("");
-                                    setCountryCode(countryCode);
+                                    //私有云不用设置国际码，QuecPublicConfigBean已经包含了mcc
+                                    if (!SPUtils.getBoolean(getMyActivity(), CloudConfig.IS_CUSTOM_CLOUD, false)){
+                                        setCountryCode(countryCode);
+                                    }
                                     startActivity(new Intent(activity, HomeActivity.class));
                                     finish();
                                 }

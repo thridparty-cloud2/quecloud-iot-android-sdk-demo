@@ -1,8 +1,6 @@
 package com.quectel.app.demo.ui;
 
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +12,7 @@ import com.quectel.app.demo.base.BaseActivity;
 import com.quectel.app.demo.utils.MyUtils;
 import com.quectel.app.demo.utils.ToastUtils;
 import com.quectel.app.quecnetwork.httpservice.IHttpCallBack;
+import com.quectel.app.usersdk.constant.UserConstant;
 import com.quectel.app.usersdk.userservice.IUserService;
 import com.quectel.app.usersdk.utils.UserServiceFactory;
 
@@ -70,7 +69,7 @@ public class ResetPasswordByEmailActivity extends BaseActivity {
                     }
 
                     startLoading();
-                    UserServiceFactory.getInstance().getService(IUserService.class).sendEmailRepwdCode(email,new IHttpCallBack() {
+                    UserServiceFactory.getInstance().getService(IUserService.class).sendV2EmailCode(email, UserConstant.TYPE_SEND_EMAIL_RESET_PASSWORD,new IHttpCallBack() {
                                 @Override
                                 public void onSuccess(String result) {
                                     //{"code":200,"msg":"","data":null}

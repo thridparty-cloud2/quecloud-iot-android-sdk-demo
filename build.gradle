@@ -18,6 +18,10 @@ buildscript {
             allowInsecureProtocol = true
         }
 
+        maven { url 'https://developer.huawei.com/repo/' }
+        maven { url 'https://maven.aliyun.com/repository/releases' }
+        maven { url "https://www.jitpack.io"}
+
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"

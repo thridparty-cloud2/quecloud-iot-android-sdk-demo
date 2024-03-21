@@ -21,16 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "AndroidSDKDemo"
 include ':app'
-
-
-
-//include ':QuecWebSocket'
-//project(':QuecWebSocket').projectDir = new File(rootProject.projectDir, '../../deprecate/QuecWebsocketChannel/QuecWebsocketLibrary')
-//
-//include ':QuecIotChannelKit'
-//project(':QuecIotChannelKit').projectDir = new File(rootProject.projectDir, '../../project/QuecIotChannelKit/QuecIotChannelKit')
-
-
-
-include ':QuecIotSdk'
-project(':QuecIotSdk').projectDir = new File(rootProject.projectDir, '../QuecIotSdk/QuecIotSdk')

@@ -13,6 +13,7 @@ import com.quectel.app.demo.utils.MyUtils;
 import com.quectel.app.demo.utils.ToastUtils;
 import com.quectel.app.quecnetwork.httpservice.IHttpCallBack;
 import com.quectel.app.quecnetwork.httpservice.IResponseCallBack;
+import com.quectel.app.usersdk.constant.UserConstant;
 import com.quectel.app.usersdk.userservice.IUserService;
 import com.quectel.app.usersdk.utils.UserServiceFactory;
 
@@ -64,8 +65,8 @@ public class UpdateUserPhoneActivity extends BaseActivity {
                     }
                     startLoading();
 
-                                UserServiceFactory.getInstance().getService(IUserService.class).sendPhoneSmsCode(
-                        "86",newPhone,1,"","",new IHttpCallBack(){
+                                UserServiceFactory.getInstance().getService(IUserService.class).sendV2PhoneSmsCode(
+                        "86",newPhone, UserConstant.TYPE_SMS_CODE_REGISTER,new IHttpCallBack(){
                             @Override
                             public void onSuccess(String result) {
                                 finishLoading();
@@ -86,8 +87,8 @@ public class UpdateUserPhoneActivity extends BaseActivity {
                 }
                 startLoading();
 
-                UserServiceFactory.getInstance().getService(IUserService.class).sendPhoneSmsCode(
-                        "86",oldPhone,1,"","",new IHttpCallBack(){
+                UserServiceFactory.getInstance().getService(IUserService.class).sendV2PhoneSmsCode(
+                        "86",oldPhone,UserConstant.TYPE_SMS_CODE_LOGOFF, new IHttpCallBack(){
                             @Override
                             public void onSuccess(String result) {
                                 finishLoading();

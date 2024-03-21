@@ -54,16 +54,16 @@
     <Button
         android:id="@+id/bt_login2"
         android:layout_width="match_parent"
-        android:text="邮箱密码登录"
-        android:layout_marginTop="30dp"
+        android:layout_height="50dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/white_bg"
+        android:gravity="center"
+        android:text="邮箱密码登录"
         android:textColor="@color/new_lan"
         android:textSize="18sp"
-        android:gravity="center"
-        android:layout_height="50dp"/>
-
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/bt_login3"

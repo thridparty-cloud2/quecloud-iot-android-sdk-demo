@@ -90,18 +90,25 @@ dependencies {
     implementation 'com.github.zcweng:switch-button:0.0.3@aar'
     implementation 'com.android.support:multidex:1.0.3'
 
+    //必选引入的三方库
+    implementation "com.polidea.rxandroidble2:rxandroidble:1.12.1"
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.19'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation  'com.jakewharton.rx2:replaying-share:2.2.0'
+    implementation "com.neovisionaries:nv-websocket-client:2.14"
+
+
     //sdk核心库
-    implementation 'com.quectel.app.sdk:quec-iot-sdk:1.10.0-open.2-SNAPSHOT'
+    implementation 'com.quectel.app.sdk:quec-iot-sdk:1.11.0-beta.1-SNAPSHOT'
 }
-//allprojects {
-//    configurations.all {
-//        resolutionStrategy {
-//            cacheChangingModulesFor 0, 'seconds'
-//            //强制指定的版本
-//            force "com.quectel.app.sdk:quec-device-service:2.8.0.008"
-//            force "com.quectel.app.sdk:quec-iot-channel-kit:2.8.0.003"
-//            force "com.quectel.app.sdk:quec-iot-channel-kit-api:2.8.0.003"
-//        }
-//    }
-//}
+
+allprojects {
+    configurations.all {
+        resolutionStrategy {
+            cacheChangingModulesFor 0, 'seconds'
+            //强制指定的版本
+
+        }
+    }
+}
 

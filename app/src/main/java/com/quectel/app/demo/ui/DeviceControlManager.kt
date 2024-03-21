@@ -5,11 +5,12 @@ import android.content.Context
 import android.util.Log
 import com.quectel.app.device.iot.IotChannelController
 import com.quectel.basic.common.entity.QuecDeviceModel
+import com.quectel.basic.common.entity.QuecResult
+import com.quectel.sdk.iot.channel.kit.callback.IotResultCallback
 import com.quectel.sdk.iot.channel.kit.chanel.IQuecChannelManager
 import com.quectel.sdk.iot.channel.kit.constaint.QuecIotChannelType
 import com.quectel.sdk.iot.channel.kit.constaint.QuecIotDataSendMode
 import com.quectel.sdk.iot.channel.kit.model.QuecIotDataPointsModel
-import com.quectel.sdk.iot.channel.kit.util.DataModelConvertUtil
 
 class DeviceControlManager(
     val context: Context,
@@ -65,7 +66,10 @@ class DeviceControlManager(
 
 
     fun disConnect(pkDkModel: QuecDeviceModel) {
-        IotChannelController.getInstance().closeChannel(pkDkModel.dk + "_" + pkDkModel.pk)
+        IotChannelController.getInstance().closeChannel(pkDkModel.dk + "_" + pkDkModel.pk,
+            QuecIotChannelType.QuecIotChannelTypeWifi.`val`)
+        IotChannelController.getInstance().closeChannel(pkDkModel.dk + "_" + pkDkModel.pk,
+            QuecIotChannelType.QuecIotChannelTypeBLE.`val`)
     }
 
     public fun startChannel(pkDkModel: QuecDeviceModel, mode: QuecIotDataSendMode) {
@@ -79,7 +83,16 @@ class DeviceControlManager(
 
     fun writeDps(dataPointsModel: MutableList<QuecIotDataPointsModel.DataModel<Any>>) {
 
-        IotChannelController.getInstance().writeDps(channelId, dataPointsModel);
+        IotChannelController.getInstance().writeDps(channelId, dataPointsModel, null, object : IotResultCallback{
+            override fun onFail(result: QuecResult<Unit>) {
+                Log.e("DeviceControlManager", "send data failed")
+            }
+
+            override fun onSuccess() {
+                Log.e("DeviceControlManager", "send data success")
+            }
+
+        });
 
     }
 

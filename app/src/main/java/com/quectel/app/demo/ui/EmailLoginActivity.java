@@ -9,7 +9,9 @@ import androidx.appcompat.widget.AppCompatEditText;
 
 import com.quectel.app.demo.R;
 import com.quectel.app.demo.base.BaseActivity;
+import com.quectel.app.demo.constant.CloudConfig;
 import com.quectel.app.demo.utils.MyUtils;
+import com.quectel.app.demo.utils.SPUtils;
 import com.quectel.app.demo.utils.ToastUtils;
 import com.quectel.app.quecnetwork.httpservice.IResponseCallBack;
 import com.quectel.app.usersdk.userservice.IUserService;
@@ -80,7 +82,10 @@ public class EmailLoginActivity extends BaseActivity {
                                 ToastUtils.showShort(activity, "登录成功");
                                 edit_email.setText("");
                                 String countryCode = MyUtils.getEditTextContent(editCode);
-                                setCountryCode(countryCode);
+                                //私有云不用设置国际码，QuecPublicConfigBean已经包含了mcc
+                                if (!SPUtils.getBoolean(getMyActivity(), CloudConfig.IS_CUSTOM_CLOUD, false)){
+                                    setCountryCode(countryCode);
+                                }
                                 startActivity(new Intent(activity, HomeActivity.class));
                                 finish();
                             }

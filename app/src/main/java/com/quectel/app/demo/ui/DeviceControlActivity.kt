@@ -12,7 +12,6 @@ import android.view.View
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
 import butterknife.OnClick
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -28,17 +27,20 @@ import com.quectel.app.device.bean.ArraySpecs
 import com.quectel.app.device.bean.ArrayStructSpecs
 import com.quectel.app.device.bean.BatchControlDevice
 import com.quectel.app.device.bean.BooleanSpecs
-import com.quectel.app.device.bean.BusinessSpecTypeValue
 import com.quectel.app.device.bean.BusinessValue
 import com.quectel.app.device.bean.ModelBasic
 import com.quectel.app.device.bean.NumSpecs
+import com.quectel.app.device.bean.TSLEvent
 import com.quectel.app.device.bean.TSLProfile
+import com.quectel.app.device.bean.TSLService
 import com.quectel.app.device.bean.TextSpecs
+import com.quectel.app.device.callback.IDeviceTSLCallBack
 import com.quectel.app.device.constant.ModelStyleConstant
 import com.quectel.app.device.deviceservice.IDevService
 import com.quectel.app.device.receiver.NetStatusReceiver
 import com.quectel.app.device.utils.DeviceServiceFactory
 import com.quectel.app.device.utils.ObjectModelParse
+import com.quectel.app.device.utils.ProductObjectModelCache
 import com.quectel.app.quecnetwork.httpservice.IHttpCallBack
 import com.quectel.app.websocket.deviceservice.IWebSocketService
 import com.quectel.app.websocket.utils.WebSocketServiceLocater
@@ -51,11 +53,13 @@ import com.quectel.sdk.iot.channel.kit.constaint.QuecIotChannelType
 import com.quectel.sdk.iot.channel.kit.constaint.QuecIotDataSendMode
 import com.quectel.sdk.iot.channel.kit.model.QuecIotDataPointsModel
 import com.quectel.sdk.iot.channel.kit.model.QuecIotDataPointsModel.DataModel.QuecIotDataPointDataType
+import com.quectel.sdk.mqtt.channel.api.QuecMqttChannelManagerService
 import com.suke.widget.SwitchButton
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.Date
+
 
 class DeviceControlActivity() : BaseActivity() {
 
@@ -161,7 +165,9 @@ class DeviceControlActivity() : BaseActivity() {
 //        if (isOnline) {
 //            WebSocketServiceLocater.getService(IWebSocketService::class.java).login()
 //        }
-        WebSocketServiceLocater.getService(IWebSocketService::class.java).login()
+//        WebSocketServiceLocater.getService(IWebSocketService::class.java).login()
+//
+//        QuecMqttChannelManagerService.getInstance().connect();
 
         val channelId: String = pk + "_" + dk
         deviceControlManager =
@@ -509,7 +515,7 @@ class DeviceControlActivity() : BaseActivity() {
 
     var modelBasics: List<ModelBasic<Any>>? = null
     private fun queryModelTSL() {
-        DeviceServiceFactory.getInstance().getService(IDevService::class.java).queryProductTSL(pk,
+        DeviceServiceFactory.getInstance().getService(IDevService::class.java).queryProductTSLWithCache(this, pk,
             object : IHttpCallBack {
                 override fun onSuccess(result: String) {
                     println("queryProductTSL--:$result")
@@ -517,6 +523,8 @@ class DeviceControlActivity() : BaseActivity() {
                         val mainObj = JSONObject(result)
                         val code = mainObj.getInt("code")
                         if (code == 200) {
+                            pk?.let { saveTSLToMap(it) };
+
                             val obj = mainObj.getJSONObject("data")
                             val profileContent = obj.getString("profile")
                             val tslProfile = Gson().fromJson(profileContent, TSLProfile::class.java)
@@ -544,6 +552,28 @@ class DeviceControlActivity() : BaseActivity() {
             }
         )
     }
+
+    private fun saveTSLToMap(pk: String) {
+        (DeviceServiceFactory.getInstance()
+            .getService(IDevService::class.java) as IDevService).getProductTSLWithCache(
+            pk,
+            object : IDeviceTSLCallBack {
+                override fun onSuccess(
+                    modelBasicList: List<ModelBasic<*>?>?,
+                    tslEventList: List<TSLEvent>,
+                    tslServiceList: List<TSLService>
+                ) {
+                    ProductObjectModelCache.getInstance().saveStructData(pk, modelBasicList)
+                    ProductObjectModelCache.getInstance().saveEventData(pk, tslEventList)
+                    ProductObjectModelCache.getInstance().saveServiceData(pk, tslServiceList)
+                }
+
+                override fun onFail(e: Throwable) {
+                    e.printStackTrace()
+                }
+            })
+    }
+
 
     private fun queryBusinessAttributes() {
         //要查询的属性标识符集合
@@ -602,10 +632,10 @@ class DeviceControlActivity() : BaseActivity() {
             )
     }
 
-    private fun sendWebSocketBasicData(data: KValue, dk: String?, pk: String?) {
-        WebSocketServiceLocater.getService(IWebSocketService::class.java)
-            .writeWebSocketBaseData(data, dk, pk)
-    }
+//    private fun sendWebSocketBasicData(data: KValue, dk: String?, pk: String?) {
+//        WebSocketServiceLocater.getService(IWebSocketService::class.java)
+//            .writeWebSocketBaseData(data, dk, pk)
+//    }
 
     private fun createSendDialog(numSpecs: NumSpecs, step: String, item: BusinessValue) {
         numberCacheMap[cachePosition] = item

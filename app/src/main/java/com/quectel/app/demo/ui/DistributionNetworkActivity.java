@@ -2,64 +2,46 @@ package com.quectel.app.demo.ui;
 
 
 import android.Manifest;
-import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
-
 import android.content.pm.PackageManager;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemChildClickListener;
-import com.quectel.app.blesdk.ble.DeviceBean;
-import com.quectel.app.blesdk.ble.QuecError;
 import com.quectel.app.blesdk.ble.ScanDevice;
 import com.quectel.app.blesdk.bleservice.IBleService;
-
-import com.quectel.app.blesdk.bleservice.IDeviceScanCallback;
 import com.quectel.app.blesdk.bleservice.IScanCallBack;
 import com.quectel.app.blesdk.utils.BleServiceLocater;
-
+import com.quectel.app.blesdk.utils.ManufacturerAnalysisUtils;
 import com.quectel.app.demo.R;
-
-import com.quectel.app.demo.adapter.ScanResultAdapter;
 import com.quectel.app.demo.adapter.SmartConfigDeviceAdapter;
 import com.quectel.app.demo.base.BaseActivity;
-
 import com.quectel.app.demo.bean.SmartConfigDevice;
 import com.quectel.app.demo.dialog.WifiDataBottomDialog;
 import com.quectel.app.demo.utils.MyUtils;
 import com.quectel.app.demo.utils.PermissionUtil;
 import com.quectel.app.demo.utils.ToastUtils;
-import com.quectel.app.demo.widget.BottomItemDecorationSystem;
 import com.quectel.basic.common.utils.QuecGsonUtil;
-import com.quectel.basic.common.utils.QuecToastUtil;
 import com.quectel.basic.queclog.QLog;
 import com.quectel.sdk.smart.config.api.QuecSmartConfigServiceManager;
+import com.quectel.sdk.smart.config.api.bean.DeviceBean;
 import com.quectel.sdk.smart.config.api.bean.QuecResult;
 import com.quectel.sdk.smart.config.api.callback.QuecSmartConfigListener;
 
-
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
 import io.reactivex.disposables.Disposable;
+import okhttp3.internal.http2.Http2Reader;
 
 
 //wifi配网
@@ -80,6 +62,8 @@ public class DistributionNetworkActivity extends BaseActivity {
     private String ssid;
 
     private String pwd;
+
+    private List<ScanDevice> bleScanDeviceList = new ArrayList<>();
 
     @Override
     protected int getContentLayout() {
@@ -231,22 +215,35 @@ public class DistributionNetworkActivity extends BaseActivity {
 
     private void getDevice() {
 
-        BleServiceLocater.getService(IBleService.class).startScan("", "", new IDeviceScanCallback() {
+        bleScanDeviceList.clear();
+        BleServiceLocater.getService(IBleService.class).scan("", "", new IScanCallBack() {
             @Override
-            public void onScan(DeviceBean deviceBean) {
-                if (getData(adapter.getData(), deviceBean) != null) {
-                    SmartConfigDevice device = new SmartConfigDevice();
-                    device.setDeviceBean(deviceBean);
-                    adapter.addData(device);
+            public void onScan(ScanDevice scanDevice) {
+
+                //过滤没有名称的蓝牙设备
+                if (TextUtils.isEmpty(scanDevice.getName())) return;
+
+                //蓝牙设备是否已经扫描过
+                for (ScanDevice device: bleScanDeviceList) {
+                     if (TextUtils.equals(device.getMac(), scanDevice.getMac())){
+                         return;
+                     }
                 }
 
+                bleScanDeviceList.add(scanDevice);
+
+                SmartConfigDevice device = new SmartConfigDevice();
+                DeviceBean deviceBean = new DeviceBean();
+                deviceBean.setName(scanDevice.getName());
+                deviceBean.setMac(scanDevice.getMac());
+                device.setDeviceBean(deviceBean);
+                adapter.addData(device);
             }
 
             @Override
-            public void onFail(QuecError quecError) {
+            public void onFail(Throwable throwable) {
 
             }
-
         });
     }
 

@@ -1,6 +1,6 @@
 package com.quectel.app.demo.bean;
 
-import com.quectel.app.blesdk.ble.DeviceBean;
+import com.quectel.sdk.smart.config.api.bean.DeviceBean;
 
 public class SmartConfigDevice {
 

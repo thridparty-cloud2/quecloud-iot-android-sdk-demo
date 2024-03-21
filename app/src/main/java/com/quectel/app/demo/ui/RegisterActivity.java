@@ -12,6 +12,7 @@ import com.quectel.app.demo.base.BaseActivity;
 import com.quectel.app.demo.utils.MyUtils;
 import com.quectel.app.demo.utils.ToastUtils;
 import com.quectel.app.quecnetwork.httpservice.IHttpCallBack;
+import com.quectel.app.usersdk.constant.UserConstant;
 import com.quectel.app.usersdk.userservice.IUserService;
 import com.quectel.app.usersdk.utils.UserServiceFactory;
 
@@ -103,8 +104,8 @@ public class RegisterActivity extends BaseActivity {
                         return;
                     }
 
-                    UserServiceFactory.getInstance().getService(IUserService.class).sendPhoneSmsCode(
-                            "86",phoneContent,1,"","",new IHttpCallBack(){
+                    UserServiceFactory.getInstance().getService(IUserService.class).sendV2PhoneSmsCode(
+                            "86",phoneContent, UserConstant.TYPE_SMS_CODE_REGISTER, new IHttpCallBack(){
                                 @Override
                                 public void onSuccess(String result) {
                                     System.out.println("sendPhoneSmsCode onSuccess-:"+result);

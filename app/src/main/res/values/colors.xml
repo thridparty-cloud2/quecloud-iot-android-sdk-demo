@@ -34,4 +34,6 @@
 
     <color name="gray_other">#f7f7f7</color>
 
+    <color name="gray_btn">#999999</color>
+
 </resources>

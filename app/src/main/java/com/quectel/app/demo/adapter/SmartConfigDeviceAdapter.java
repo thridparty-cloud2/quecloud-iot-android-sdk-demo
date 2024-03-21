@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.quectel.app.blesdk.ble.DeviceBean;
 import com.quectel.app.demo.R;
 import com.quectel.app.demo.bean.SmartConfigDevice;
 
