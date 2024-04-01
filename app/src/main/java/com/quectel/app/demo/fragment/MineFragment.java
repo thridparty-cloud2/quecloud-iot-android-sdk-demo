@@ -484,7 +484,9 @@ public class MineFragment extends BaseMainFragment {
 //                                            getActivity().finish();
 //                                        }
                                         UserServiceFactory.getInstance().getService(IUserService.class).clearToken();
-                                        IotChannelController.getInstance().closeChannelAll();
+                                        new Thread(() -> {
+                                            IotChannelController.getInstance().closeChannelAll();
+                                        }).start();
                                         Intent intent1 = new Intent(getActivity(), LoginActivity.class);
                                         intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent1);
@@ -492,8 +494,11 @@ public class MineFragment extends BaseMainFragment {
                                     @Override
                                     public void onFail(Throwable e) {
                                         UserServiceFactory.getInstance().getService(IUserService.class).clearToken();
-                                        IotChannelController.getInstance().closeChannelAll();
+                                        new Thread(() -> {
+                                            IotChannelController.getInstance().closeChannelAll();
+                                        }).start();
                                         Intent intent1 = new Intent(getActivity(), LoginActivity.class);
+                                        intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent1);
                                     }
                                 });
