@@ -77,7 +77,7 @@ public class ServiceTypeCustomDialog extends Dialog {
 
         binding.btnReadJson.setOnClickListener(view -> {
             String downloadPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
-            String jsonPath = downloadPath + "/cloud_config.json";
+            String jsonPath = downloadPath + "/cloud_config.jpg";
             File file = new File(jsonPath);
             if (!file.exists()){
                 ToastUtils.showShort(context,"文件：" + jsonPath + " 不存在");

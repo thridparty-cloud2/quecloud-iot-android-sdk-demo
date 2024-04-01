@@ -249,10 +249,18 @@
             android:layout_marginBottom="@dimen/P6"
             android:background="@drawable/quec_basic_ui_login_button_background"
             android:enabled="true"
-            android:text="读取/Download/cloud_config.json文件"
+            android:text="读取/Download/cloud_config.jpg文件"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="@dimen/T4_F" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/P4"
+            android:layout_marginRight="@dimen/P4"
+            android:textSize="@dimen/dp_12"
+            android:text="cloud_config.jpg文件内容为json文本，后缀是jpg是为了兼容Android13及以上访问文件权限"/>
 
 
         <LinearLayout
