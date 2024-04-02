@@ -25,6 +25,7 @@ import com.quectel.app.demo.adapter.SmartConfigDeviceAdapter;
 import com.quectel.app.demo.base.BaseActivity;
 import com.quectel.app.demo.bean.SmartConfigDevice;
 import com.quectel.app.demo.dialog.WifiDataBottomDialog;
+import com.quectel.app.demo.utils.DeviceUtil;
 import com.quectel.app.demo.utils.MyUtils;
 import com.quectel.app.demo.utils.PermissionUtil;
 import com.quectel.app.demo.utils.ToastUtils;
@@ -117,8 +118,17 @@ public class DistributionNetworkActivity extends BaseActivity {
 
 //                List<DeviceBean> deviceBeans = new ArrayList<>();
 //                deviceBeans.add(device.getDeviceBean());
-                showDialog(device, position);
+//                showDialog(device, position);
                 // QuecSmartConfigServiceManager.getInstance().startConfigDevices(deviceBeans, "QUEC_WIFI_TEST", "12332112");
+
+                ssid = "ASUS_18";
+                pwd = "12345678";
+                SmartConfigDevice deviceBean = device;
+                deviceBean.setBindResult(100);
+                adapter.notifyItemChanged(position);
+                List<DeviceBean> deviceBeans = new ArrayList<>();
+                deviceBeans.add(deviceBean.getDeviceBean());
+                QuecSmartConfigServiceManager.getInstance().startConfigDevices(deviceBeans, ssid, pwd);
             }
         });
         recycler.setLayoutManager(new LinearLayoutManager(this));
@@ -223,19 +233,35 @@ public class DistributionNetworkActivity extends BaseActivity {
                 //过滤没有名称的蓝牙设备
                 if (TextUtils.isEmpty(scanDevice.getName())) return;
 
+                if (scanDevice.getManufacturer_specific_data() == null) {
+                    return;
+                }
+                if (scanDevice.getManufacturer_specific_data().length == 0) {
+                    return;
+                }
+                //判断设备是否已经被绑定过
+                if (DeviceUtil.isDeviceConfig(scanDevice)){
+                    QLog.i("name:" + scanDevice.getName() + " mac:" + scanDevice.getMac() + " 设备已经被绑定！");
+                    return;
+                }
+
                 //蓝牙设备是否已经扫描过
                 for (ScanDevice device: bleScanDeviceList) {
                      if (TextUtils.equals(device.getMac(), scanDevice.getMac())){
                          return;
                      }
                 }
-
                 bleScanDeviceList.add(scanDevice);
 
                 SmartConfigDevice device = new SmartConfigDevice();
                 DeviceBean deviceBean = new DeviceBean();
+                deviceBean.setDeviceType(1);
+                deviceBean.setProductKey(DeviceUtil.getPk(scanDevice));
                 deviceBean.setName(scanDevice.getName());
                 deviceBean.setMac(scanDevice.getMac());
+                deviceBean.setDeviceKey(DeviceUtil.getDK(scanDevice));
+                deviceBean.setCapabilitiesBitmask(DeviceUtil.getCapabilitiesBitmask(scanDevice));
+                deviceBean.setEndpoint(DeviceUtil.getEndPointType(scanDevice));
                 device.setDeviceBean(deviceBean);
                 adapter.addData(device);
             }
