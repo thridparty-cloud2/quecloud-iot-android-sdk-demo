@@ -5,22 +5,45 @@
 
 |功能	|功能说明	|实现版本	|DMP API Version|
 | --- | --- | --- | --- |
-|初始化sdk	| 设置用户域名等基本信息|	1.9.0	|	V2 |
-|设置国家/地区code	| 检查代码是否登录|	1.9.0	| V2|
+|初始化sdk	| 设置私有云等基本信息|	1.11.0	|	V2 |
+|初始化sdk	| 设置用户域名等基本信息|	1.11.0	|	V2 |
+|设置国家/地区code	| 检查代码是否登录|	1.11.0	| V2|
 
 
 ### 二、设计接口服务/属性
 
 #### QuecIotSdk初始化
-public void startWithUserDomain(@NonNull String userDomain, @NonNull String userDomainSecret, @NonNull QuecCloudServiceType cloudServiceType) 
+    void startWithUserDomain(Application context, @NonNull String userDomain, @NonNull String userDomainSecret, @NonNull QuecCloudServiceType cloudServiceType);
 |参数|	是否必传|说明|	
 | --- | --- | --- | 
+| context  |  是 | Application |
 | userDomain |	是|用户域| 
 | userDomainSecret |	是|用户域密钥| 
-| cloudServiceType |是| 枚举 QuecCloudServiceType,中国区/欧洲区| 
+| cloudServiceType |是| 枚举 QuecCloudServiceType,中国区/欧洲区/北美地区 | 
+
+#### QuecIotSdk初始化
+     public void startWithQuecPublicConfigBean(Application context, QuecPublicConfigBean configBean)
+  |参数|	是否必传|说明|	
+  | --- | --- | --- | 
+  | context  |  是 | Application |
+  | QuecPublicConfigBean |	是| 私有云配置实体类|
+
+
+    class QuecPublicConfigBean
+  | 属性 | 类型 |说明 |
+  | --- | --- | --- |
+  | userDomain | String | 用户域 |
+  | userDomainSecret | String | 用户域密钥 |
+  | baseUrl | String | 请求url |
+  | webSocketV2Url | String | websocket url|
+  | mcc | String | Mobile Country Code，移动国家码 ，例如中国为460|
+  | tcpAddr | String | mqtt直连地址 |
+  | pskAddr | String | mqtt psk 连接地址 |
+  | tlsAddr | String | mqtt tls 连接地址 |
+  | cerAddr | String | mqtt cer 连接地址 |
 
 #### 设置国家/地区code
-public void setCountryCode(@NonNull String countryCode) {
+    public void setCountryCode(@NonNull String countryCode) 
 |参数|	是否必传|说明|	
 | --- | --- | --- | 
 | countryCode | 是 |国际代码，默认为国内,传"+86"|
@@ -68,11 +91,21 @@ public void sendPhoneSmsCode(String internationalCode, String phone,int type, St
 
 |参数|	是否必传|说明|	
 | --- | --- | --- | 
-| phone |	是|手机号码| 
 | internationalCode |	否|国际代码，默认为国内,传"86"| 
+| phone |	是|手机号码| 
 | type |是| 1: 注册验证码, 2: 密码重置验证码, 3: 登录验证码代码 , 4:注销账号| 
 | ssid |否|短信签名,传入用自己的,不传默认""	| 
 | stid |否|短信模板，传入用自己的,不传默认""	| 
+
+#### 发送V2短信验证码
+```
+public void sendV2PhoneSmsCode(String internationalCode, String phone, int codeType, IHttpCallBack callback);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- | 
+| internationalCode |	是 | 国际代码，默认为国内,传"86"| 
+| phone |	是|手机号码| 
+| type |是| 1：密码重置, 2：登录验证码代码 3：注册验证码 4：注销账号| 
 
 
 #### 发送邮件验证码
@@ -86,6 +119,16 @@ public void sendEmailCode(String eaid, String email, String etid, int type, IHtt
 | email |	是|邮箱| 
 | etid |否| 邮件模板 不传的时候传type	| 
 | type |否|  etid不传，传type   1: 注册, 2: 密码重置, 3: 注销账号模板| 
+
+#### 发送V2邮件验证码
+```
+public void sendV2EmailCode(String email, int emailType, IHttpCallBack callback);
+
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- | 
+| email |	是|邮箱| 
+| emailType |是| 1:注册验证码 2:密码重置验证码 3:关联邮箱验证码 4:删除邮箱关联验证码| 
 
 
 #### 手机号密码注册
@@ -1126,7 +1169,195 @@ WebSocketServiceLocater.getService(IWebSocketService.class)
       */
      
 ```
+## MQTT通道SDK
 
+### 一、功能列表
+
+|功能	|功能说明	|实现版本	|微服务版本号|
+| --- | --- | --- | --- |
+|MQTT通信相关	| 扫描外设、连接外设、发送数据给外设、接受外设上传数据 |	1.0.0	| |
+
+
+### 二、设计接口/属性
+
+
+#### 判断MQTT是否已经连接
+```java
+public boolean isConnected() 
+```
+
+#### 是否自动重连
+```java
+public void setAutoReconnect(boolean isAutoReconnect)
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+|isAutoReconnect|是|ture是自动重连，false是不自动重连|
+
+#### 连接MQTT
+```java
+public void connect()
+```
+连接MQTT，默认开启自动重连。 如果不需要自动重连，可以调用setAutoReconnect(false)
+
+#### 重连MQTT
+```java
+public void reconnect() 
+```
+
+#### 订阅设备
+```java
+public void subscribe(String productKey, String deviceKey)
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+|productKey|是|设备productKey|
+|deviceKey|是|设备deviceKey|
+MQTT连接成功后，调用才生效
+
+#### 取消订阅设备
+```java
+public void unsubscribe(String productKey, String deviceKey)
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+|productKey|是|设备productKey|
+|deviceKey|是|设备deviceKey|
+
+#### 发送消息
+```java
+ public void sendMessage(QuecMqttMessageModel messageModel)
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| messageModel |是| QuecMqttMessageModel数据 |
+
+ ##### class QuecMqttMessageModel
+|成员|	类型|说明|	
+| --- | --- | --- |
+| productKey | String | 设备productKey|
+| deviceKey | String | 设备deviceKey|
+| type | String | 消息类型 READ-ATTR 物模型属性-读；WRITE-ATTR 物模型属性-写；EXE-SERV 调用物模型服务；EXE-SERV2 调用物模型服务(数据协议 > 1.8)；RAW 透传命令|
+| kv | String | 物模型下发数据|
+| msgId | long | 标识发送指令的消息ID，非必填，最大长度20。用于发送响应时对应|
+| isCache | boolean | 下发指令是否缓存|
+| cacheTime | long | 下发指令缓存时间，单位秒|
+| isCover | boolean | 下发指令是否覆盖，默认false|
+
+数据示例
+```
+透传（RAW）
+
+{
+        "isCache": true,
+        "cacheTime": 3600,
+        "dataFormat": "Text",
+        "deviceKey": "866123456789015",
+        "isCache": true,
+        "productKey": "p12345",
+        "raw": "123456",
+        "type": "RAW"
+}
+物模型属性读（READ-ATTR）
+
+{
+        "deviceKey": "1234567890",
+        "kv": "[\"power\"]",
+        "productKey": "p12345",
+        "type": "READ-ATTR"
+}
+物模型属性写（WRITE-ATTR）
+
+{
+        "deviceKey": "1234567890",
+        "kv": "[{\"power\": \"true\"}]",
+        "productKey": "p12345",
+        "type": "WRITE-ATTR"
+}
+物模型服务调用（EXE-SERV）
+
+{
+        "productKey": "p12345",
+        "deviceKey": "1234567890",
+        "type": "EXE-SERV",
+        "dataFormat": "Text",
+        "kv": "[{\"serv\": [{\"power\":\"false\"}]}]"
+}
+物模型服务调用（EXE-SERV2）
+
+{
+        "productKey": "p12345",
+        "deviceKey": "1234567890",
+        "type": "EXE-SERV2",
+        "dataFormat": "Text",
+        "kv": "[{\"serv\": [{\"power\":\"false\"}]}]"
+}
+```
+
+
+#### 发送ttlv数据
+```java
+    public void sendTtlvData(String productKey, String deviceKey, byte[] ttlvData) 
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+|productKey|是|设备productKey|
+|deviceKey|是|设备deviceKey|
+|ttlvData|是|编码后的TTLV数据|
+
+#### 设置MQTT监听的listene
+```java
+public void setListener(QuecMqttListener listener)
+```
+##### interface QuecMqttListener
+
+```java
+public interface QuecMqttListener {
+
+    /**
+     * 连接成功
+     */
+    void onConnected();
+
+    void onConnectFailed(Throwable e);
+
+    /**
+     * 连接已经断开
+     */
+    void onDisconnect();
+
+    /**
+     * 设备订阅成功
+     *
+     * @param productKey 设备pk
+     * @param deviceKey  设备dk
+     */
+    void onSubscribed(String productKey, String deviceKey);
+
+    /**
+     * 设备订阅失败
+     *
+     * @param productKey 设备pk
+     * @param deviceKey  设备dk
+     */
+    void onSubscribedFail(String productKey, String deviceKey, Throwable e);
+
+    /**
+     * 数据接收
+     *
+     * @param productKey 设备pk
+     * @param deviceKey  设备dk
+     * @param isTtlv     ture是ttlv二进制数据，false是json string数据
+     * @param data       数据
+     */
+    void onData(String productKey, String deviceKey, boolean isTtlv, byte[] data);
+}
+```
+
+#### 断开连接
+```java
+public void disconnect()
+```
 
 ## 蓝牙通道SDK
 
