@@ -118,17 +118,17 @@ public class DistributionNetworkActivity extends BaseActivity {
 
 //                List<DeviceBean> deviceBeans = new ArrayList<>();
 //                deviceBeans.add(device.getDeviceBean());
-//                showDialog(device, position);
-                // QuecSmartConfigServiceManager.getInstance().startConfigDevices(deviceBeans, "QUEC_WIFI_TEST", "12332112");
+                showDialog(device, position);
+//                 QuecSmartConfigServiceManager.getInstance().startConfigDevices(deviceBeans, "QUEC_WIFI_TEST", "12332112");
 
-                ssid = "ASUS_18";
-                pwd = "12345678";
-                SmartConfigDevice deviceBean = device;
-                deviceBean.setBindResult(100);
-                adapter.notifyItemChanged(position);
-                List<DeviceBean> deviceBeans = new ArrayList<>();
-                deviceBeans.add(deviceBean.getDeviceBean());
-                QuecSmartConfigServiceManager.getInstance().startConfigDevices(deviceBeans, ssid, pwd);
+//                ssid = "ASUS_18";
+//                pwd = "12345678";
+//                SmartConfigDevice deviceBean = device;
+//                deviceBean.setBindResult(100);
+//                adapter.notifyItemChanged(position);
+//                List<DeviceBean> deviceBeans = new ArrayList<>();
+//                deviceBeans.add(deviceBean.getDeviceBean());
+//                QuecSmartConfigServiceManager.getInstance().startConfigDevices(deviceBeans, ssid, pwd);
             }
         });
         recycler.setLayoutManager(new LinearLayoutManager(this));
@@ -185,6 +185,7 @@ public class DistributionNetworkActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        BleServiceLocater.getService(IBleService.class).stopScan();
         QuecSmartConfigServiceManager.getInstance().cancelConfigDevices();
         BleServiceLocater.getService(IBleService.class).release();
     }
@@ -226,6 +227,7 @@ public class DistributionNetworkActivity extends BaseActivity {
     private void getDevice() {
 
         bleScanDeviceList.clear();
+        adapter.getData().clear();
         BleServiceLocater.getService(IBleService.class).scan("", "", new IScanCallBack() {
             @Override
             public void onScan(ScanDevice scanDevice) {
