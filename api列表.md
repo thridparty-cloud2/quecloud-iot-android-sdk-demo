@@ -23,24 +23,24 @@
 
 #### QuecIotSdk初始化
      public void startWithQuecPublicConfigBean(Application context, QuecPublicConfigBean configBean)
-  |参数|	是否必传|说明|	
+|参数|	是否必传|说明|	
   | --- | --- | --- | 
-  | context  |  是 | Application |
-  | QuecPublicConfigBean |	是| 私有云配置实体类|
+| context  |  是 | Application |
+| QuecPublicConfigBean |	是| 私有云配置实体类|
 
-
+    
     class QuecPublicConfigBean
-  | 属性 | 类型 |说明 |
+| 属性 | 类型 |说明 |
   | --- | --- | --- |
-  | userDomain | String | 用户域 |
-  | userDomainSecret | String | 用户域密钥 |
-  | baseUrl | String | 请求url |
-  | webSocketV2Url | String | websocket url|
-  | mcc | String | Mobile Country Code，移动国家码 ，例如中国为460|
-  | tcpAddr | String | mqtt直连地址 |
-  | pskAddr | String | mqtt psk 连接地址 |
-  | tlsAddr | String | mqtt tls 连接地址 |
-  | cerAddr | String | mqtt cer 连接地址 |
+| userDomain | String | 用户域 |
+| userDomainSecret | String | 用户域密钥 |
+| baseUrl | String | 请求url |
+| webSocketV2Url | String | websocket url|
+| mcc | String | Mobile Country Code，移动国家码 ，例如中国为460|
+| tcpAddr | String | mqtt直连地址 |
+| pskAddr | String | mqtt psk 连接地址 |
+| tlsAddr | String | mqtt tls 连接地址 |
+| cerAddr | String | mqtt cer 连接地址 |
 
 #### 设置国家/地区code
     public void setCountryCode(@NonNull String countryCode) 
@@ -1060,7 +1060,185 @@ public void queryAcceptSharedDeviceGroup(String shareCode ,IHttpCallBack callbac
 | cacheTime |是| 缓存时间，单位为秒，缓存时间范围 1-7776000 秒，启用缓存时必须设置缓存时间	|
 | deviceList |是| 要控制的设备的列表list	|
 
+### IIotChannelControl设备控制
+该类主要包含设备控制相关，如设备数据下行，监听设备上行数据，底层会根据设备的能力值和当前APP以及设备的环境，自动选择合适的链路进行连接和数据传输。
 
+
+#### 获取IIotChannelControl对象
+```java
+IotChannelController.getInstance()
+```
+#### 设置通道在线状态和上下行数据监听
+```java
+IotChannelController setListener(IQuecChannelManager.IQuecCallBackListener listener);
+```
+
+#### 开启单个通道
+需要提前使用MmkvManager.getInstance().put("uid",”****”)，建议用户在登录成功的时候调用下面方法;
+```java
+UserServiceFactory.getInstance().getService(IUserService.class).queryUserInfo(
+       new IHttpCallBack() {
+           @Override
+           public void onSuccess(String result) {
+               UserInfor user = new Gson().fromJson(result, UserInfor.class);
+               if(user.getCode()==200)
+               {
+                   UserInfor.DataDTO userInfor = user.getData();
+                   MmkvManager.getInstance().put("uid", userInfor.getUid());
+               }
+           }
+
+           @Override
+           public void onFail(Throwable e) {
+               e.printStackTrace();
+           }
+       }
+);
+```
+```java
+public void startChannel(Context context, QuecDeviceModel pkDkModel, QuecIotDataSendMode channelMode);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| context |是|  context	| 
+| pkDkModel |是| 设备Model	|
+| channelMode |是| 通道类型，QuecIotDataSendModeAuto：自动选择，QuecIotDataSendModeWifi：wifi通道，QuecIotDataSendModeWS：ws通道，QuecIotDataSendModeBLE：蓝牙通道|
+
+#### 开启多个通道
+需要提前使用MmkvManager.getInstance().put("uid",”****”)，建议用户在登录成功的时候调用下面方法;
+```java
+UserServiceFactory.getInstance().getService(IUserService.class).queryUserInfo(
+       new IHttpCallBack() {
+           @Override
+           public void onSuccess(String result) {
+               UserInfor user = new Gson().fromJson(result, UserInfor.class);
+               if(user.getCode()==200)
+               {
+                   UserInfor.DataDTO userInfor = user.getData();
+                   MmkvManager.getInstance().put("uid", userInfor.getUid());
+               }
+           }
+
+           @Override
+           public void onFail(Throwable e) {
+               e.printStackTrace();
+           }
+       }
+);
+```
+```java
+public void startChannels(Context context, List<QuecDeviceModel> pkDkModels, IQuecChannelManager.IQuecCallBackListener listener);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| context |是|  context	| 
+| pkDkModels |是| 设备Model列表	|
+| listener |否| 道在线状态和上下行数据监听|
+
+#### 关闭单个通道
+```java
+public void closeChannel(String channelId, int type);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| channelId |是| channelId的值: productKey + "_" + deviceKey	| 
+| type |是| 1:关闭wifi；2：关闭WS；3：关闭蓝牙	|
+
+#### 发送数据--读指令
+```java
+public void readDps(String channelId, List<QuecIotDataPointsModel.DataModel> data, @Nullable QuecIotChannelExtraData extraData, IotResultCallback callback);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| channelId |是| channelId的值: productKey + "_" + deviceKey	| 
+| data |是| dsp数据	|
+| extraData |否| 额外的数据	|
+| callback |否| 发送结果回调	|
+
+#### 发送数据--写指令
+```java
+public void writeDps(String channelId, List<QuecIotDataPointsModel.DataModel> data, @Nullable QuecIotChannelExtraData extraData, IotResultCallback callback);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| channelId |是| channelId的值: productKey + "_" + deviceKey	| 
+| data |是| dsp数据	|
+| extraData |否| 额外的数据	|
+| callback |否| 发送结果回调	|
+
+#### 获取当前通道状态
+```java
+public int getOnlineState(String channelId);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| channelId |是| channelId的值: productKey + "_" + deviceKey	| 
+
+#### 获取蓝牙开关状态
+```java
+public int getBleState();
+```
+
+#### 关闭所有通道
+```java
+public void closeChannelAll();
+```
+
+#### 移除设备-删除通道
+```java
+public void removeDeviceChannel(String channelId);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| channelId |是| channelId的值: productKey + "_" + deviceKey	| 
+
+#### 用Http写DPS数据
+```java
+public void writeDpsByHttp(List<QuecIotDataPointsModel.DataModel<Object>> list, List<BatchControlDevice> deviceList, int type, DpsHttpExtraDataBean extraDataBean,
+                               QuecCallback<BatchControlModel> callback);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| list |是| dps数据	| 
+| deviceList |是| 设备列表	| 
+| type |是| 类型 1：透传 2：属性 3：服务	| 
+| extraDataBean |否| { dataFormat 数据类型 1：Hex 2：Text（当type为透传时，需要指定 dataFormat） cacheTime 缓存时间，单位为秒，缓存时间范围 1-7776000 秒，启用缓存时必须设置缓存时间 isCache 是否启用缓存 1：启用 2：不启用，默认不启用 isCover 是否覆盖之前发送的相同的命令 1：覆盖 2：不覆盖，默认不覆盖，启用缓存时此参数有效
+**查看接口定义 }	|
+| callback |否| 结果回调	| 
+
+#### 设置正在连接状态监听
+```java
+public void setConnectingStateListener(@NonNull QuecDeviceModel deviceModel, OnChannelConnectingStateChange change);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| deviceModel |是| 设备Model | 
+| change |是| 状态回调 |
+
+#### 移除正在连接状态监听
+```java
+public void removeConnectingStateListener(@NonNull QuecDeviceModel deviceModel, OnChannelConnectingStateChange change);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| deviceModel |是| 设备Model | 
+| change |是| 状态回调 |
+
+#### 获取正在连接状态监听
+```java
+public int getDeviceConnectingState(@NonNull QuecDeviceModel model);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| model |是| 设备Model | 
+
+#### 移除通道在线状态和上下行数据监听
+```java
+public void removeListener(IQuecChannelManager.IQuecCallBackListener listener);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| listener |是| 通道监听listener | 
 
 ### IWebSocketService服务
 #### 获取Service对象
@@ -1195,6 +1373,27 @@ public void setAutoReconnect(boolean isAutoReconnect)
 |isAutoReconnect|是|ture是自动重连，false是不自动重连|
 
 #### 连接MQTT
+需要提前使用MmkvManager.getInstance().put("uid",”****”)，建议用户在登录成功的时候调用下面方法;
+```java
+UserServiceFactory.getInstance().getService(IUserService.class).queryUserInfo(
+       new IHttpCallBack() {
+           @Override
+           public void onSuccess(String result) {
+               UserInfor user = new Gson().fromJson(result, UserInfor.class);
+               if(user.getCode()==200)
+               {
+                   UserInfor.DataDTO userInfor = user.getData();
+                   MmkvManager.getInstance().put("uid", userInfor.getUid());
+               }
+           }
+
+           @Override
+           public void onFail(Throwable e) {
+               e.printStackTrace();
+           }
+       }
+);
+```
 ```java
 public void connect()
 ```
@@ -1232,7 +1431,7 @@ public void unsubscribe(String productKey, String deviceKey)
 | --- | --- | --- |
 | messageModel |是| QuecMqttMessageModel数据 |
 
- ##### class QuecMqttMessageModel
+##### class QuecMqttMessageModel
 |成员|	类型|说明|	
 | --- | --- | --- |
 | productKey | String | 设备productKey|
@@ -1381,7 +1580,7 @@ BleServiceLocater.getService(IBleService.class)
 
 #### 扫描设备  可传入name  MAC地址过滤  不过滤传""
 ```
-   public void startScan(String name, String mac, IDeviceScanCallback iDeviceScanCallback) 
+   public void startScan(String name, String mac, IScanCallBack iScanCallBack) 
 
 ```
 
@@ -1641,7 +1840,7 @@ example:
 
 #### 开始配网
 ```java
-public void startConfigDevices(@NonNull List<DeviceBean> list, @NonNull String ssid, @NonNull String password) 
+public void startConfigDevices(@NonNull List<DeviceBean> list, @NonNull String ssid, @NonNull String password)
 
 ``` 
 |参数|	是否必传|说明|	
@@ -1655,7 +1854,7 @@ public void startConfigDevices(@NonNull List<DeviceBean> list, @NonNull String s
 #### 注册配网监听
 
 ```java
-   public void addSmartConfigListener(QuecSmartConfigListener listener) 
+   public void addSmartConfigListener(QuecSmartConfigListener listener)
 
 ```
 
