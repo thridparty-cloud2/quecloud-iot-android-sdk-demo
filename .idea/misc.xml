@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
@@ -30,21 +31,10 @@
         <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/query_device_ingroup_dialog.xml" value="0.23229166666666667" />
         <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/receiver_accept_shareinformation_dialog.xml" value="0.221875" />
         <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/receiver_cancel_share_dialog.xml" value="0.23229166666666667" />
-        <entry key="..\:/project/android/company/oem-public/sdk/quecloud-iot-android-sdk-demo/app/src/main/res/drawable/quec_login_btn_bg.xml" value="0.2435" />
-        <entry key="..\:/project/android/company/oem-public/sdk/quecloud-iot-android-sdk-demo/app/src/main/res/drawable/quec_smart_config_button_bg.xml" value="0.2435" />
-        <entry key="..\:/project/android/company/oem-public/sdk/quecloud-iot-android-sdk-demo/app/src/main/res/drawable/quec_smart_config_start.xml" value="0.2435" />
-        <entry key="..\:/project/android/company/oem-public/sdk/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_device_control.xml" value="0.240625" />
-        <entry key="..\:/project/android/company/oem-public/sdk/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_login.xml" value="0.25" />
-        <entry key="..\:/project/android/company/oem-public/sdk/quecloud-iot-android-sdk-demo/app/src/main/res/layout/quec_service_type_dialog.xml" value="0.33" />
-        <entry key="..\:/project/android/company/oem-public/sdk/quecloud-iot-android-sdk-demo/app/src/main/res/layout/quec_smart_config_view_wifi_config.xml" value="0.2984375" />
-        <entry key="..\:/project/android/company/oem-public/sdk/quecloud-iot-android-sdk-demo/app/src/main/res/layout/send_model_command_dialog.xml" value="0.234375" />
-        <entry key="..\:/project/android/company/oem-public/sdk/quecloud-iot-android-sdk-demo/app/src/main/res/layout/send_model_date_text_dialog.xml" value="0.31614583333333335" />
-        <entry key="..\:/project/android/company/oem-public/sdk/quecloud-iot-android-sdk-demo/app/src/main/res/layout/send_model_enum_dialog.xml" value="0.31614583333333335" />
-        <entry key="..\:/project/android/company/oem-public/sdk/quecloud-iot-android-sdk-demo/app/src/main/res/layout/send_model_struct_dialog.xml" value="0.31614583333333335" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

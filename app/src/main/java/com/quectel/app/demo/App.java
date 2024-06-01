@@ -13,10 +13,10 @@ import com.quectel.sdk.iot.bean.QuecPublicConfigBean;
 
 public class App extends MultiDexApplication {
 
-    String defaulUserDomain = "U.SP.8589934603";
-    String defaulDomainSecret = "pUTp5goB1bLinprRQMmK3EPiiuPiGrJtKUNptWRXVmP";
+    String defaulUserDomain = "C.DM.5903.1";
+    String defaulDomainSecret = "EufftRJSuWuVY7c6txzGifV9bJcfXHAFa7hXY5doXSn7";
 
-    int defaulQuecCloudServiceType = QuecCloudServiceType.QuecCloudServiceTypeNorthAmerica.getValue();
+    int defaulQuecCloudServiceType = QuecCloudServiceType.QuecCloudServiceTypeChina.getValue();
 
     @Override
     public void onCreate() {
@@ -39,7 +39,7 @@ public class App extends MultiDexApplication {
             String domainSecret = SPUtils.getString(this, CloudConfig.QUEC_DOMAIN_SECRET, defaulDomainSecret);
             int serviceType = SPUtils.getInt(this, CloudConfig.QUEC_ClOUD_SERVICE_TYPE, defaulQuecCloudServiceType);
 
-            QuecCloudServiceType quecCloudServiceType = QuecCloudServiceType.QuecCloudServiceTypeNorthAmerica;
+            QuecCloudServiceType quecCloudServiceType = QuecCloudServiceType.QuecCloudServiceTypeChina;
             if (serviceType == 0) {
                 quecCloudServiceType = QuecCloudServiceType.QuecCloudServiceTypeChina;
             } else if (serviceType == 1) {

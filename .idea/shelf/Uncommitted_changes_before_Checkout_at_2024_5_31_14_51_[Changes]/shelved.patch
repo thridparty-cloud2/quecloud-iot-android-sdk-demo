@@ -1,0 +1,85 @@
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><project version=\"4\">\r\n  <component name=\"DesignSurface\">\r\n    <option name=\"filePathToZoomLevelMap\">\r\n      <map>\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/drawable/white_bg.xml\" value=\"0.1775\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/accepter_change_device_ingroup_dialog.xml\" value=\"0.23229166666666667\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/accepter_change_group_name_dialog.xml\" value=\"0.23229166666666667\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_device_control.xml\" value=\"0.23229166666666667\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_email_login.xml\" value=\"0.23229166666666667\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_email_register.xml\" value=\"0.23229166666666667\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_home.xml\" value=\"0.23229166666666667\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_list_update.xml\" value=\"0.23229166666666667\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_login.xml\" value=\"0.254981884057971\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_select_login.xml\" value=\"0.23229166666666667\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_shared_group_device.xml\" value=\"0.23229166666666667\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_update_headimage.xml\" value=\"0.23229166666666667\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_update_user_phone.xml\" value=\"0.23229166666666667\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_wifi_network.xml\" value=\"0.23229166666666667\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/add_device_to_group_dialog.xml\" value=\"0.23229166666666667\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/add_group.xml\" value=\"0.23229166666666667\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/bind_device_dialog.xml\" value=\"0.23229166666666667\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/ble_scan_result_dialog.xml\" value=\"0.23229166666666667\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/bottom_pop_device_layout.xml\" value=\"0.23229166666666667\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/device_select_dialog.xml\" value=\"0.23229166666666667\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/devicegroup_select_dialog.xml\" value=\"0.23229166666666667\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/mac_dialog.xml\" value=\"0.23229166666666667\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/mine_layout.xml\" value=\"0.19791666666666666\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/model_item_layout.xml\" value=\"0.23229166666666667\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/owner_cancel_share_dialog.xml\" value=\"0.23229166666666667\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/query_device_ingroup_dialog.xml\" value=\"0.23229166666666667\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/receiver_accept_shareinformation_dialog.xml\" value=\"0.221875\" />\r\n        <entry key=\"..\\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/receiver_cancel_share_dialog.xml\" value=\"0.23229166666666667\" />\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_15\" default=\"true\" project-jdk-name=\"zulu-15\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\r\n  </component>\r\n  <component name=\"ProjectType\">\r\n    <option name=\"id\" value=\"Android\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision a2715fa6169a243d752df039010e1e4ff1a49b8e)
++++ b/.idea/misc.xml	(date 1717136952292)
+@@ -1,3 +1,4 @@
++<?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="DesignSurface">
+     <option name="filePathToZoomLevelMap">
+@@ -30,10 +31,22 @@
+         <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/query_device_ingroup_dialog.xml" value="0.23229166666666667" />
+         <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/receiver_accept_shareinformation_dialog.xml" value="0.221875" />
+         <entry key="..\:/gitdemo_0805_SDK/quecloud-iot-android-sdk-demo/app/src/main/res/layout/receiver_cancel_share_dialog.xml" value="0.23229166666666667" />
++        <entry key="..\:/project/android/company/oem-public/sdk/quecloud-iot-android-sdk-demo/app/src/main/res/drawable/quec_login_btn_bg.xml" value="0.2435" />
++        <entry key="..\:/project/android/company/oem-public/sdk/quecloud-iot-android-sdk-demo/app/src/main/res/drawable/quec_smart_config_button_bg.xml" value="0.2435" />
++        <entry key="..\:/project/android/company/oem-public/sdk/quecloud-iot-android-sdk-demo/app/src/main/res/drawable/quec_smart_config_start.xml" value="0.2435" />
++        <entry key="..\:/project/android/company/oem-public/sdk/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_auth_code_login.xml" value="0.2760416666666667" />
++        <entry key="..\:/project/android/company/oem-public/sdk/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_device_control.xml" value="0.240625" />
++        <entry key="..\:/project/android/company/oem-public/sdk/quecloud-iot-android-sdk-demo/app/src/main/res/layout/activity_login.xml" value="0.25" />
++        <entry key="..\:/project/android/company/oem-public/sdk/quecloud-iot-android-sdk-demo/app/src/main/res/layout/quec_service_type_dialog.xml" value="0.33" />
++        <entry key="..\:/project/android/company/oem-public/sdk/quecloud-iot-android-sdk-demo/app/src/main/res/layout/quec_smart_config_view_wifi_config.xml" value="0.2984375" />
++        <entry key="..\:/project/android/company/oem-public/sdk/quecloud-iot-android-sdk-demo/app/src/main/res/layout/send_model_command_dialog.xml" value="0.234375" />
++        <entry key="..\:/project/android/company/oem-public/sdk/quecloud-iot-android-sdk-demo/app/src/main/res/layout/send_model_date_text_dialog.xml" value="0.31614583333333335" />
++        <entry key="..\:/project/android/company/oem-public/sdk/quecloud-iot-android-sdk-demo/app/src/main/res/layout/send_model_enum_dialog.xml" value="0.31614583333333335" />
++        <entry key="..\:/project/android/company/oem-public/sdk/quecloud-iot-android-sdk-demo/app/src/main/res/layout/send_model_struct_dialog.xml" value="0.31614583333333335" />
+       </map>
+     </option>
+   </component>
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_15" default="true" project-jdk-name="zulu-15" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/build/classes" />
+   </component>
+   <component name="ProjectType">
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"CompilerConfiguration\">\r\n    <bytecodeTargetLevel target=\"15\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/compiler.xml b/.idea/compiler.xml
+--- a/.idea/compiler.xml	(revision a2715fa6169a243d752df039010e1e4ff1a49b8e)
++++ b/.idea/compiler.xml	(date 1717136952327)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="CompilerConfiguration">
+-    <bytecodeTargetLevel target="15" />
++    <bytecodeTargetLevel target="11" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"GradleMigrationSettings\" migrationVersion=\"1\" />\r\n  <component name=\"GradleSettings\">\r\n    <option name=\"linkedExternalProjectsSettings\">\r\n      <GradleProjectSettings>\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\r\n        <option name=\"gradleJvm\" value=\"zulu-15\" />\r\n        <option name=\"modules\">\r\n          <set>\r\n            <option value=\"$PROJECT_DIR$/../../deprecate/QuecWebsocketChannel/QuecWebsocketLibrary\" />\r\n            <option value=\"$PROJECT_DIR$\" />\r\n            <option value=\"$PROJECT_DIR$/app\" />\r\n            <option value=\"$PROJECT_DIR$/../../project/QuecIotChannelKit/QuecIotChannelKit\" />\r\n          </set>\r\n        </option>\r\n      </GradleProjectSettings>\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/gradle.xml b/.idea/gradle.xml
+--- a/.idea/gradle.xml	(revision a2715fa6169a243d752df039010e1e4ff1a49b8e)
++++ b/.idea/gradle.xml	(date 1717136952336)
+@@ -4,14 +4,14 @@
+   <component name="GradleSettings">
+     <option name="linkedExternalProjectsSettings">
+       <GradleProjectSettings>
++        <option name="testRunner" value="GRADLE" />
+         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+-        <option name="gradleJvm" value="zulu-15" />
+         <option name="modules">
+           <set>
+             <option value="$PROJECT_DIR$/../../deprecate/QuecWebsocketChannel/QuecWebsocketLibrary" />
++            <option value="$PROJECT_DIR$/../../project/QuecIotChannelKit/QuecIotChannelKit" />
+             <option value="$PROJECT_DIR$" />
+             <option value="$PROJECT_DIR$/app" />
+-            <option value="$PROJECT_DIR$/../../project/QuecIotChannelKit/QuecIotChannelKit" />
+           </set>
+         </option>
+       </GradleProjectSettings>
