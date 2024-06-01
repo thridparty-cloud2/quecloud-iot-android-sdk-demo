@@ -74,7 +74,7 @@ android {
 
 dependencies {
 
-//      api project(":QuecIotSdk")
+      api project(":QuecIotSdk")
    
 
     implementation fileTree(dir: "libs", include: ["*.jar", '*.aar'])
@@ -91,7 +91,7 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     //sdk核心库
-    implementation 'com.quectel.app.sdk:quec-iot-sdk:1.10.0-open.2-SNAPSHOT'
+//    implementation 'com.quectel.app.sdk:quec-iot-sdk:1.10.0-open.2-SNAPSHOT'
 }
 //allprojects {
 //    configurations.all {
