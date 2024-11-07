@@ -125,7 +125,7 @@ class DeviceControlActivity() : BaseActivity() {
 
     val onDataCallback = { channelId: String,
                            type: QuecIotChannelType,
-                           module: QuecIotDataPointsModel<*> ->
+                           module: QuecIotDataPointsModel ->
         Log.e("onDataCallback", QuecGsonUtil.gsonString(module))
         val jsonObject = if (module.rawData == null) module.dps else module.rawData
         Toast.makeText(activity, "onDataCallback ${jsonObject.toString()}", Toast.LENGTH_SHORT)

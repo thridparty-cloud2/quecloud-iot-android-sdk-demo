@@ -16,7 +16,7 @@ class DeviceControlManager(
     val context: Context,
     var channelId: String,
     var onConnectCallback: (connected: Boolean, type: QuecIotChannelType) -> Unit,
-    var onDataCallback: (channelId: String, type: QuecIotChannelType, module: QuecIotDataPointsModel<*>) -> Unit,
+    var onDataCallback: (channelId: String, type: QuecIotChannelType, module: QuecIotDataPointsModel) -> Unit,
     var onDisconnect: (channelId: String, type: QuecIotChannelType) -> Unit
 ) {
 
@@ -34,7 +34,7 @@ class DeviceControlManager(
         override fun onData(
             p0: String,
             p1: QuecIotChannelType,
-            p2: QuecIotDataPointsModel<*>
+            p2: QuecIotDataPointsModel
         ) {
             val activity = context as Activity
             activity.runOnUiThread {
@@ -83,16 +83,16 @@ class DeviceControlManager(
 
     fun writeDps(dataPointsModel: MutableList<QuecIotDataPointsModel.DataModel<Any>>) {
 
-        IotChannelController.getInstance().writeDps(channelId, dataPointsModel, null, object : IotResultCallback{
+        IotChannelController.getInstance().writeDps(channelId, dataPointsModel, null, null, object : IotResultCallback<Unit>{
             override fun onFail(result: QuecResult<Unit>) {
                 Log.e("DeviceControlManager", "send data failed")
             }
 
-            override fun onSuccess() {
+            override fun onSuccess(t: Unit) {
                 Log.e("DeviceControlManager", "send data success")
             }
 
-        });
+        })
 
     }
 
