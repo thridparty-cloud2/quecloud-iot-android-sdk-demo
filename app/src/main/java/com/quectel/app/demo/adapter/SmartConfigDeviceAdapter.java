@@ -26,7 +26,7 @@ public class SmartConfigDeviceAdapter extends BaseQuickAdapter<SmartConfigDevice
     @Override
     protected void convert(@NonNull BaseViewHolder baseViewHolder, SmartConfigDevice device) {
         int position = getItemPosition(device);
-        baseViewHolder.setText(R.id.tvTitle, device.getDeviceBean().getName());
+        baseViewHolder.setText(R.id.tvTitle, device.getDeviceBean().getDeviceName());
         baseViewHolder.getView(R.id.tv_start).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -1,18 +1,18 @@
 package com.quectel.app.demo.bean;
 
-import com.quectel.sdk.smart.config.api.bean.DeviceBean;
+import com.quectel.sdk.smart.config.api.bean.QuecPairDeviceBean;
 
 public class SmartConfigDevice {
 
-    private DeviceBean deviceBean;
+    private QuecPairDeviceBean deviceBean;
     private int bindResult;
     private String message;
 
-    public DeviceBean getDeviceBean() {
+    public QuecPairDeviceBean getDeviceBean() {
         return deviceBean;
     }
 
-    public void setDeviceBean(DeviceBean deviceBean) {
+    public void setDeviceBean(QuecPairDeviceBean deviceBean) {
         this.deviceBean = deviceBean;
     }
 
