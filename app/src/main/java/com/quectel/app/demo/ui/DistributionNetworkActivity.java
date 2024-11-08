@@ -30,6 +30,7 @@ import com.quectel.app.demo.utils.DeviceUtil;
 import com.quectel.app.demo.utils.MyUtils;
 import com.quectel.app.demo.utils.PermissionUtil;
 import com.quectel.app.demo.utils.ToastUtils;
+import com.quectel.app.device.iot.IotChannelController;
 import com.quectel.basic.common.utils.QuecGsonUtil;
 import com.quectel.basic.common.utils.QuecThreadUtil;
 import com.quectel.basic.queclog.QLog;
@@ -66,9 +67,9 @@ public class DistributionNetworkActivity extends BaseActivity {
     private WifiDataBottomDialog wifiDataBottomDialog;
 
 
-    private String ssid = "AUSU_18";
+    private String ssid = "";
 
-    private String pwd = "12345678";
+    private String pwd = "";
 
 
     @Override
@@ -123,26 +124,12 @@ public class DistributionNetworkActivity extends BaseActivity {
 
                 //判断是否是纯蓝牙设备
                 if (device.getDeviceBean().getBleDevice().getCapabilitiesBitmask() == 4) {
-
                     //直接配网，不需要Wifi名称和密码
-                    device.setBindResult(100);
-                    adapter.notifyItemChanged(position);
-                    List<QuecPairDeviceBean> deviceBeans = new ArrayList<>();
-                    deviceBeans.add(device.getDeviceBean());
-                    QuecDevicePairingServiceManager.INSTANCE.startPairingByDevices(deviceBeans, null, null, null);
+                    startPairing(device, position, null, null);
                 } else {
                     //弹窗输入Wifi名称和密码
                     showDialog(device, position);
                 }
-
-//                ssid = "ASUS_18";
-//                pwd = "12345678";
-//                SmartConfigDevice deviceBean = device;
-//                deviceBean.setBindResult(100);
-//                adapter.notifyItemChanged(position);
-//                List<DeviceBean> deviceBeans = new ArrayList<>();
-//                deviceBeans.add(deviceBean.getDeviceBean());
-//                QuecSmartConfigServiceManager.getInstance().startConfigDevices(deviceBeans, ssid, pwd);
             }
         });
         recycler.setLayoutManager(new LinearLayoutManager(this));
@@ -227,12 +214,7 @@ public class DistributionNetworkActivity extends BaseActivity {
                     Toast.makeText(activity, "pwd is empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                deviceBean.setBindResult(100);
-                adapter.notifyItemChanged(pos);
-                List<QuecPairDeviceBean> deviceBeans = new ArrayList<>();
-                deviceBeans.add(deviceBean.getDeviceBean());
-                QuecDevicePairingServiceManager.INSTANCE.startPairingByDevices(deviceBeans, null, ssid, pwd);
-
+                startPairing(deviceBean, pos, ssid, pwd);
                 wifiDataBottomDialog.dismiss();
             }
         });
@@ -296,5 +278,19 @@ public class DistributionNetworkActivity extends BaseActivity {
     public void onBackPressedSupport() {
         super.onBackPressedSupport();
         QuecDevicePairingServiceManager.INSTANCE.cancelAllDevicePairing();
+    }
+
+    // 开始配网
+    private void startPairing(SmartConfigDevice device, int pos, String ssid, String pwd) {
+        // 设置配网状态-正在配网中
+        device.setBindResult(100);
+        adapter.notifyItemChanged(pos);
+        //防止近场通道可能会影响配网，需要移除该通道
+        String channelId = device.getDeviceBean().getBleDevice().getProductKey() + "_" + device.getDeviceBean().getBleDevice().getDeviceKey();
+        IotChannelController.getInstance().removeDeviceChannel(channelId);
+        //开始配网
+        List<QuecPairDeviceBean> deviceBeans = new ArrayList<>();
+        deviceBeans.add(device.getDeviceBean());
+        QuecDevicePairingServiceManager.INSTANCE.startPairingByDevices(deviceBeans, null, ssid, pwd);
     }
 }

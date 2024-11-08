@@ -42,7 +42,7 @@ public class SmartConfigDeviceAdapter extends BaseQuickAdapter<SmartConfigDevice
         }else if(device.getBindResult()==300){
             baseViewHolder.getView(R.id.tv_status).setVisibility(View.VISIBLE);
             baseViewHolder.getView(R.id.tv_start).setVisibility(View.GONE);
-            baseViewHolder.setText(R.id.tv_status, "配网失败："+device.getMessage());
+            baseViewHolder.setText(R.id.tv_status, "配网失败");
         }else if(device.getBindResult()==100){
             baseViewHolder.getView(R.id.tv_status).setVisibility(View.VISIBLE);
             baseViewHolder.setText(R.id.tv_status, "绑定中…");
