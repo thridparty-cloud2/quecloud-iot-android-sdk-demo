@@ -110,6 +110,18 @@
             android:name=".ui.UpdateImageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme"></activity>
+        <activity
+            android:name=".ui.SelectOtaActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentTheme" />
+        <activity
+            android:name=".ui.CloudOtaActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentTheme" />
+
+
+
+
     </application>
 
 </manifest>

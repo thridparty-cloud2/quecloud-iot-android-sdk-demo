@@ -4,37 +4,45 @@
     android:orientation="vertical"
     android:layout_height="match_parent">
 
-       <RelativeLayout
-           android:layout_width="match_parent"
-           android:layout_height="50dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
 
-              <TextView
-                  android:id="@+id/title"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_centerInParent="true"
-                  android:gravity="center"
-                  android:text="设备列表"
-                  android:textColor="@color/main1"
-                  android:textSize="18sp" />
+        <TextView
+            android:id="@+id/tv_ota"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_12"
+            android:textColor="@color/main1"
+            android:text="OTA"/>
 
-           <ImageView
-               android:id="@+id/iv_add"
-               android:layout_width="30dp"
-               android:layout_height="30dp"
-               android:layout_alignParentRight="true"
-               android:layout_centerVertical="true"
-               android:layout_marginRight="15dp"
-               android:background="@mipmap/add_icon" />
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="设备列表"
+            android:textColor="@color/main1"
+            android:textSize="18sp" />
 
-              <View
-                  android:background="#e5e5e5"
-                  android:layout_width="match_parent"
-                  android:layout_alignParentBottom="true"
-                  android:layout_height="0.5dp"
-                  />
+        <ImageView
+            android:id="@+id/iv_add"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:background="@mipmap/add_icon" />
 
-       </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_alignParentBottom="true"
+            android:background="#e5e5e5" />
+
+    </RelativeLayout>
 
 
 

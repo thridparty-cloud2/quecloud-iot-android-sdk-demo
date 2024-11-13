@@ -32,6 +32,7 @@ import com.quectel.app.demo.constant.DeviceConfig;
 import com.quectel.app.demo.fragmentbase.BaseMainFragment;
 import com.quectel.app.demo.ui.DeviceControlActivity;
 import com.quectel.app.demo.ui.DistributionNetworkActivity;
+import com.quectel.app.demo.ui.SelectOtaActivity;
 import com.quectel.app.demo.utils.MyUtils;
 import com.quectel.app.demo.utils.ToastUtils;
 import com.quectel.app.demo.widget.BottomItemDecorationSystem;
@@ -154,16 +155,16 @@ public class DeviceFragment extends BaseMainFragment {
                                 public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
                                     UserDeviceList.DataBean.ListBean lanVO = mAdapter.getData().get(position);
                                     createSelectDialog(lanVO,lanVO.getProductKey(), lanVO.getDeviceKey(), lanVO.getShareCode(), lanVO.getDeviceStatus());
-                                    Intent intent = new Intent(getActivity(), DeviceControlActivity.class);
-                                    intent.putExtra("device", (Serializable) lanVO);
-                                    intent.putExtra("pk", lanVO.getProductKey());
-                                    intent.putExtra("dk", lanVO.getDeviceKey());
-                                    if (DeviceConfig.OFFLINE.equals(lanVO.getDeviceStatus())) {
-                                        intent.putExtra("online", false);
-                                    } else {
-                                        intent.putExtra("online", true);
-                                    }
-                                    startActivity(intent);
+//                                    Intent intent = new Intent(getActivity(), DeviceControlActivity.class);
+//                                    intent.putExtra("device", (Serializable) lanVO);
+//                                    intent.putExtra("pk", lanVO.getProductKey());
+//                                    intent.putExtra("dk", lanVO.getDeviceKey());
+//                                    if (DeviceConfig.OFFLINE.equals(lanVO.getDeviceStatus())) {
+//                                        intent.putExtra("online", false);
+//                                    } else {
+//                                        intent.putExtra("online", true);
+//                                    }
+//                                    startActivity(intent);
                                 }
                             });
 
@@ -189,10 +190,15 @@ public class DeviceFragment extends BaseMainFragment {
 
     }
 
-    @OnClick({R.id.iv_add})
+
+    @OnClick({R.id.iv_add, R.id.tv_ota})
     public void buttonClick(View view) {
         Intent intent = null;
         switch (view.getId()) {
+            case R.id.tv_ota:
+                intent = new Intent(getActivity(), SelectOtaActivity.class);
+                startActivity(intent);
+                break;
             case R.id.iv_add:
                 System.out.println("iv_add");
                 View dialogView = getLayoutInflater().inflate(R.layout.bottom_pop_device_layout, null);
