@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'com.hm.plugin.lifecycle'
 }
 
 android {
@@ -103,7 +102,7 @@ dependencies {
 
     //sdk核心库
     // api project(":QuecIotSdk")
-    implementation 'com.quectel.app.sdk:quec-iot-sdk:1.12.0-beta.7-SNAPSHOT'
+    implementation 'com.quectel.app.sdk:quec-iot-sdk:1.12.0-beta.10-SNAPSHOT'
 }
 
 allprojects {
