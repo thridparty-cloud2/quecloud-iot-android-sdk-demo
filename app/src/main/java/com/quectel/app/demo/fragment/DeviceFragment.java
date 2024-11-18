@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,7 @@ import org.xutils.http.RequestParams;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -168,7 +170,7 @@ public class DeviceFragment extends BaseMainFragment {
         String deviceKey = strArray[1];
         List<UserDeviceList.DataBean.ListBean> list = mAdapter.getData();
         for (UserDeviceList.DataBean.ListBean bean : list) {
-            if (bean.getProductKey().equals(productKey) && bean.getProductKey().equals(deviceKey)) {
+            if (bean.getProductKey().equals(productKey) && bean.getDeviceKey().equals(deviceKey)) {
                 bean.setDeviceStatus( isConnected? "在线" : "离线");
                 mAdapter.notifyDataSetChanged();
                 return;
@@ -200,7 +202,12 @@ public class DeviceFragment extends BaseMainFragment {
                                 for (UserDeviceList.DataBean.ListBean bean : mList) {
                                     QuecDeviceModel quecDeviceModel = new QuecDeviceModel(bean.getProductKey(), bean.getDeviceKey());
                                     quecDeviceModel.setCapabilitiesBitmask(bean.getCapabilitiesBitmask());
-                                    quecDeviceModel.setBindingkey(bean.getAuthKey());
+                                    String bindingCode = bean.getBindingCode();
+                                    if(!TextUtils.isEmpty(bindingCode)){
+                                        String bindingKey = Base64.encodeToString(bindingCode.getBytes(StandardCharsets.UTF_8),Base64.DEFAULT);
+                                        quecDeviceModel.setBindingkey(bindingKey);
+                                    }
+
                                     quecDeviceModels.add(quecDeviceModel);
                                 }
                                 IotChannelController.getInstance().startChannels(requireContext(), quecDeviceModels, null);
