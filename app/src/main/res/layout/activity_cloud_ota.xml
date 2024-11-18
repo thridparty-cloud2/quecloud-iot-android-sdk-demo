@@ -54,27 +54,26 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btn_query_cloud_upgrade_plan"
+                android:id="@+id/btn_query_cloud_has_device_upgrade"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="查询升级计划" />
+                android:text="查询可设备升级数" />
+
 
             <Button
                 android:id="@+id/btn_commit_cloud_upgrade"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="确认升级计划" />
-
-            <Button
-                android:id="@+id/btn_get_cloud_upgrade_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="查询升级状态" />
+                android:text="开始OTA升级" />
 
         </LinearLayout>
 
+
     </LinearLayout>
 
-
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_cloud_ota"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

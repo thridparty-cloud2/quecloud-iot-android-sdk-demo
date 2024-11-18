@@ -58,6 +58,7 @@ public class App extends MultiDexApplication {
 
 
             QuecIotAppSdk.getInstance().startWithUserDomain(this, userDomain, domainSecret, quecCloudServiceType);
+            QuecIotAppSdk.getInstance().setDebugMode(true);
 
         }
 
