@@ -39,10 +39,16 @@ import com.quectel.app.demo.widget.BottomItemDecorationSystem;
 import com.quectel.app.demo.widget.PayBottomDialog;
 import com.quectel.app.device.bean.BusinessValue;
 import com.quectel.app.device.deviceservice.IDevService;
+import com.quectel.app.device.iot.IotChannelController;
 import com.quectel.app.device.utils.DeviceServiceFactory;
 import com.quectel.app.quecnetwork.httpservice.IHttpCallBack;
 import com.quectel.app.usersdk.userservice.IUserService;
 import com.quectel.app.usersdk.utils.UserServiceFactory;
+import com.quectel.basic.common.entity.QuecDeviceModel;
+import com.quectel.basic.common.utils.QuecThreadUtil;
+import com.quectel.sdk.iot.channel.kit.chanel.IQuecChannelManager;
+import com.quectel.sdk.iot.channel.kit.constaint.QuecIotChannelType;
+import com.quectel.sdk.iot.channel.kit.model.QuecIotDataPointsModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -122,7 +128,52 @@ public class DeviceFragment extends BaseMainFragment {
             }
         });
         mPtrFrameLayout.disableWhenHorizontalMove(true);
+        initConnectListener();
+    }
 
+    private void initConnectListener(){
+        IotChannelController.getInstance().init();
+        IotChannelController.getInstance().setListener(new IQuecChannelManager.IQuecCallBackListener() {
+            @Override
+            public void onConnect(String channelId, QuecIotChannelType channelType, boolean isSuccess, String errMsg) {
+
+                QuecThreadUtil.RunMainThread(() -> {
+                    updateConnectStatus( channelId, channelType, isSuccess);
+                });
+
+            }
+
+            @Override
+            public void onData(String channelId, QuecIotChannelType channelType, QuecIotDataPointsModel dataPointsModel) {
+
+            }
+
+            @Override
+            public void onBleClose(String channelId) {
+
+            }
+
+            @Override
+            public void onDisConnect(String channelId, QuecIotChannelType channelType) {
+                QuecThreadUtil.RunMainThread(() -> {
+                    updateConnectStatus( channelId, channelType, false);
+                });
+            }
+        });
+    }
+
+    private void updateConnectStatus(String channelId, QuecIotChannelType channelType, boolean isConnected) {
+        String[] strArray = channelId.split("_");
+        String productKey = strArray[0];
+        String deviceKey = strArray[1];
+        List<UserDeviceList.DataBean.ListBean> list = mAdapter.getData();
+        for (UserDeviceList.DataBean.ListBean bean : list) {
+            if (bean.getProductKey().equals(productKey) && bean.getProductKey().equals(deviceKey)) {
+                bean.setDeviceStatus( isConnected? "在线" : "离线");
+                mAdapter.notifyDataSetChanged();
+                return;
+            }
+        }
     }
 
     private void queryDevice() {
@@ -143,6 +194,17 @@ public class DeviceFragment extends BaseMainFragment {
                                 mAdapter = new DeviceAdapter(getActivity(), mList);
                                 mAdapter.setAnimationEnable(true);
                                 mRecyclerView.setAdapter(mAdapter);
+
+                                //开启近场连接
+                                List<QuecDeviceModel> quecDeviceModels = new ArrayList<>();
+                                for (UserDeviceList.DataBean.ListBean bean : mList) {
+                                    QuecDeviceModel quecDeviceModel = new QuecDeviceModel(bean.getProductKey(), bean.getDeviceKey());
+                                    quecDeviceModel.setCapabilitiesBitmask(bean.getCapabilitiesBitmask());
+                                    quecDeviceModel.setBindingkey(bean.getAuthKey());
+                                    quecDeviceModels.add(quecDeviceModel);
+                                }
+                                IotChannelController.getInstance().startChannels(requireContext(), quecDeviceModels, null);
+
                             } else {
                                 List<UserDeviceList.DataBean.ListBean> list = mAdapter.getData();
                                 list.clear();
