@@ -140,7 +140,6 @@ public class DeviceFragment extends BaseMainFragment {
         IotChannelController.getInstance().setListener(new IQuecChannelManager.IQuecCallBackListener() {
             @Override
             public void onConnect(String channelId, QuecIotChannelType channelType, boolean isSuccess, String errMsg) {
-
                 QuecThreadUtil.RunMainThread(() -> {
                     updateConnectStatus( channelId, channelType, isSuccess);
                 });
@@ -173,7 +172,10 @@ public class DeviceFragment extends BaseMainFragment {
         List<UserDeviceList.DataBean.ListBean> list = mAdapter.getData();
         for (UserDeviceList.DataBean.ListBean bean : list) {
             if (bean.getProductKey().equals(productKey) && bean.getDeviceKey().equals(deviceKey)) {
-                bean.setDeviceStatus( isConnected? "在线" : "离线");
+                int onlineStatus = IotChannelController.getInstance().getOnlineState(channelId);
+                // 0:离线 其他:在线 1: websocket online, 2 : wifi online, 3: wifi + websocket online, 4: ble online, 5: websocket + ble online, 6: ble + wifi online , 7: wifi + ble + ws online
+                bean.setOnlineStatus(onlineStatus);
+                bean.setDeviceStatus( onlineStatus != 0 ? "在线" : "离线");
                 mAdapter.notifyDataSetChanged();
                 return;
             }
@@ -231,16 +233,6 @@ public class DeviceFragment extends BaseMainFragment {
                                 public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
                                     UserDeviceList.DataBean.ListBean lanVO = mAdapter.getData().get(position);
                                     createSelectDialog(lanVO,lanVO.getProductKey(), lanVO.getDeviceKey(), lanVO.getShareCode(), lanVO.getDeviceStatus(), lanVO.getCapabilitiesBitmask());
-//                                    Intent intent = new Intent(getActivity(), DeviceControlActivity.class);
-//                                    intent.putExtra("device", (Serializable) lanVO);
-//                                    intent.putExtra("pk", lanVO.getProductKey());
-//                                    intent.putExtra("dk", lanVO.getDeviceKey());
-//                                    if (DeviceConfig.OFFLINE.equals(lanVO.getDeviceStatus())) {
-//                                        intent.putExtra("online", false);
-//                                    } else {
-//                                        intent.putExtra("online", true);
-//                                    }
-//                                    startActivity(intent);
                                 }
                             });
 
@@ -600,16 +592,8 @@ public class DeviceFragment extends BaseMainFragment {
             public void onClick(View view) {
                 mDialog.dismiss();
                 Intent intent = new Intent(getActivity(), DeviceControlActivity.class);
-                intent.putExtra("pk", pk);
-                intent.putExtra("dk", dk);
                 intent.putExtra("device", (Serializable) lanVO);
-                if (deviceStatus.equals(DeviceConfig.OFFLINE)) {
-                    intent.putExtra("online", false);
-                } else {
-                    intent.putExtra("online", true);
-                }
                 startActivity(intent);
-
             }
         });
 

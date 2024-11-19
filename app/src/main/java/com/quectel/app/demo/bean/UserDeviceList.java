@@ -229,6 +229,9 @@ public class UserDeviceList implements Serializable {
 
             private int capabilitiesBitmask;
 
+            private int onlineStatus;
+
+
             public String getBindingCode() {
                 return bindingCode;
             }
@@ -446,6 +449,14 @@ public class UserDeviceList implements Serializable {
 
             public void setCapabilitiesBitmask(int capabilitiesBitmask) {
                 this.capabilitiesBitmask = capabilitiesBitmask;
+            }
+
+            public int getOnlineStatus() {
+                return onlineStatus;
+            }
+
+            public void setOnlineStatus(int onlineStatus) {
+                this.onlineStatus = onlineStatus;
             }
         }
     }

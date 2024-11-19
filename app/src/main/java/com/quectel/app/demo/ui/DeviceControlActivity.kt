@@ -67,8 +67,6 @@ class DeviceControlActivity() : BaseActivity() {
     var pk: String? = ""
     var dk: String? = ""
 
-    // @BindView(R.id.switch_button)
-    // SwitchButton switch_button;
     var mReceiver: NetStatusReceiver? = null
 
 
@@ -95,7 +93,7 @@ class DeviceControlActivity() : BaseActivity() {
     var cacheMap = HashMap<Int, View>()
     var numberCacheMap = HashMap<Int, BusinessValue>()
 
-    var device: ListBean? = null
+    lateinit var device: ListBean
     lateinit var radio: RadioGroup
 
     override fun getContentLayout(): Int {
@@ -143,8 +141,8 @@ class DeviceControlActivity() : BaseActivity() {
 
     override fun initData() {
 
-        ivBack =  findViewById(R.id.iv_back)
-        ivBack.setOnClickListener{
+        ivBack = findViewById(R.id.iv_back)
+        ivBack.setOnClickListener {
             finish()
         }
         recyclerView = findViewById(R.id.mList);
@@ -156,18 +154,12 @@ class DeviceControlActivity() : BaseActivity() {
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
         registerReceiver(mReceiver, filter)
         val intent = intent
-        pk = intent.getStringExtra("pk")
-        dk = intent.getStringExtra("dk")
         device = intent.getSerializableExtra("device") as ListBean;
-        isOnline = intent.getBooleanExtra("online", false)
+        pk = device.productKey
+        dk = device.deviceKey
+
+        isOnline = device.onlineStatus != 0
         queryModelTSL()
-//          queryBusinessAttributes()
-//        if (isOnline) {
-//            WebSocketServiceLocater.getService(IWebSocketService::class.java).login()
-//        }
-//        WebSocketServiceLocater.getService(IWebSocketService::class.java).login()
-//
-//        QuecMqttChannelManagerService.getInstance().connect();
 
         val channelId: String = pk + "_" + dk
         deviceControlManager =
@@ -188,6 +180,19 @@ class DeviceControlActivity() : BaseActivity() {
         deviceControlManager?.startChannel(pkDkModle)
 
         initAdapter()
+
+        //判断设备是否拥有WS能力
+        val hasWsCapabilities = pkDkModle.capabilitiesBitmask and 1 != 0
+        findViewById<View>(R.id.radio_ws).visibility =
+            if (hasWsCapabilities) View.VISIBLE else View.GONE
+        //判断设备是否拥有Wifi能力
+        val hasWifiCapabilities = pkDkModle.capabilitiesBitmask shr 1 and 1 != 0
+        findViewById<View>(R.id.radio_wifi).visibility =
+            if (hasWifiCapabilities) View.VISIBLE else View.GONE
+        //判断设备是否拥有Wifi能力
+        val hasBleCapabilities = pkDkModle.capabilitiesBitmask shr 2 and 1 != 0
+        findViewById<View>(R.id.radio_ble).visibility =
+            if (hasBleCapabilities) View.VISIBLE else View.GONE
 
         radio = findViewById(R.id.radioGroup)
         radio.setOnCheckedChangeListener(object : RadioGroup.OnCheckedChangeListener {
@@ -515,63 +520,28 @@ class DeviceControlActivity() : BaseActivity() {
 
     var modelBasics: List<ModelBasic<Any>>? = null
     private fun queryModelTSL() {
-        DeviceServiceFactory.getInstance().getService(IDevService::class.java).queryProductTSLWithCache(this, pk,
-            object : IHttpCallBack {
-                override fun onSuccess(result: String) {
-                    println("queryProductTSL--:$result")
-                    try {
-                        val mainObj = JSONObject(result)
-                        val code = mainObj.getInt("code")
-                        if (code == 200) {
-                            pk?.let { saveTSLToMap(it) };
 
-                            val obj = mainObj.getJSONObject("data")
-                            val profileContent = obj.getString("profile")
-                            val tslProfile = Gson().fromJson(profileContent, TSLProfile::class.java)
-                            println("tslProfile-:$tslProfile")
-                            val jsonArray = obj.getJSONArray("properties")
-                            modelBasics = ObjectModelParse.buildModelListContent(jsonArray)
-                            if (modelBasics != null && modelBasics!!.size > 0) {
-                                println("modelBasics--:" + modelBasics!!.size)
-                            }
-                            val list = covertBussinevalue(modelBasics);
-                            val writeList = list.filter { !it.subType.equals("R") }
-                            contentList.clear()
-                            contentList.addAll(writeList)
-
-                            mAdapter?.notifyDataSetChanged()
-                        }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
-
-                override fun onFail(e: Throwable) {
-                    e.printStackTrace()
-                }
-            }
-        )
-    }
-
-    private fun saveTSLToMap(pk: String) {
-        (DeviceServiceFactory.getInstance()
-            .getService(IDevService::class.java) as IDevService).getProductTSLWithCache(
-            pk,
-            object : IDeviceTSLCallBack {
+        //查询物模型, 如果需要同时查询物模型和属性可以使用DeviceServiceFactory.getInstance().getService(IDevService::class.java) .getProductTSLValueWithProductKey
+        DeviceServiceFactory.getInstance().getService(IDevService::class.java)
+            .getProductTSLWithCache(pk, object : IDeviceTSLCallBack {
                 override fun onSuccess(
-                    modelBasicList: List<ModelBasic<*>?>?,
-                    tslEventList: List<TSLEvent>,
-                    tslServiceList: List<TSLService>
+                    modelBasicList: MutableList<ModelBasic<Any>>?,
+                    tslEventList: MutableList<TSLEvent>?,
+                    tslServiceList: MutableList<TSLService>?
                 ) {
-                    ProductObjectModelCache.getInstance().saveStructData(pk, modelBasicList)
-                    ProductObjectModelCache.getInstance().saveEventData(pk, tslEventList)
-                    ProductObjectModelCache.getInstance().saveServiceData(pk, tslServiceList)
+                    modelBasics = modelBasicList
+                    val list = covertBussinevalue(modelBasics)
+                    val writeList = list.filter { !it.subType.equals("R") }
+                    contentList.clear()
+                    contentList.addAll(writeList)
+                    mAdapter?.notifyDataSetChanged()
                 }
 
-                override fun onFail(e: Throwable) {
-                    e.printStackTrace()
+                override fun onFail(throwable: Throwable?) {
+                    throwable?.printStackTrace()
                 }
             })
+
     }
 
 
@@ -679,12 +649,12 @@ class DeviceControlActivity() : BaseActivity() {
             }
         }
         bt_sub.setOnClickListener {
-            item.resourceValce =edit_content.text.toString()
-            if(TextUtils.isEmpty(item.resourceValce)){
-               QuecToastUtil.showL("请输入值")
+            item.resourceValce = edit_content.text.toString()
+            if (TextUtils.isEmpty(item.resourceValce)) {
+                QuecToastUtil.showL("请输入值")
                 return@setOnClickListener
             }
-            if(item.resourceValce.toInt()<=0){
+            if (item.resourceValce.toInt() <= 0) {
                 return@setOnClickListener
             }
             val result = AddOperate.sub(item.resourceValce, numSpecs.step)
@@ -692,8 +662,8 @@ class DeviceControlActivity() : BaseActivity() {
             edit_content.setText(result)
         }
         bt_add.setOnClickListener {
-            item.resourceValce =edit_content.text.toString()
-            if(TextUtils.isEmpty(item.resourceValce)){
+            item.resourceValce = edit_content.text.toString()
+            if (TextUtils.isEmpty(item.resourceValce)) {
                 QuecToastUtil.showL("请输入值")
                 return@setOnClickListener
             }
@@ -1229,7 +1199,10 @@ class DeviceControlActivity() : BaseActivity() {
         dp.dataType = map[item.dataType.uppercase()]
         dp.value = value
         deviceControlManager?.writeDps(mutableListOf(dp))
-        Log.i("sendDps","dp.code="+dp.code+",dp.id="+dp.id+",dp.dataType="+dp.dataType+",dp.value="+dp.value)
+        Log.i(
+            "sendDps",
+            "dp.code=" + dp.code + ",dp.id=" + dp.id + ",dp.dataType=" + dp.dataType + ",dp.value=" + dp.value
+        )
     }
 
     fun setDp(item: BusinessValue, value: Any): QuecIotDataPointsModel.DataModel<Any> {
