@@ -47,10 +47,6 @@ class SelectOtaActivity() : BaseActivity() {
             val intent = Intent(this, CloudOtaActivity::class.java)
             startActivity(intent)
         }
-
-        findViewById<View>(R.id.btn_ble_ota).setOnClickListener {
-           ToastUtils.showShort(this, "暂不支持")
-        }
     }
 
 
