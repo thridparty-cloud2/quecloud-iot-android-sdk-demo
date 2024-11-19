@@ -3,21 +3,25 @@ package com.quectel.app.demo.ui
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.reflect.TypeToken
 import com.quectel.app.demo.R
 import com.quectel.app.demo.adapter.DeviceOtaAdapter
 import com.quectel.app.demo.base.BaseActivity
 import com.quectel.app.demo.bean.DeviceOtaModel
 import com.quectel.app.demo.bean.DeviceUpgradeSumBean
 import com.quectel.app.demo.bean.OtaUpgradePlanModel
+import com.quectel.app.demo.bean.UpgradeDeviceResult
 import com.quectel.app.demo.utils.MyUtils
 import com.quectel.app.demo.utils.ToastUtils
 import com.quectel.app.demo.widget.BottomItemDecorationSystem
 import com.quectel.app.device.bean.UpgradeDeviceBean
 import com.quectel.app.device.bean.UpgradePlan
 import com.quectel.app.quecnetwork.httpservice.IHttpCallBack
+import com.quectel.basic.common.entity.QuecResult
 import com.quectel.basic.common.utils.QuecGsonUtil
 import com.quectel.basic.common.utils.QuecThreadUtil
 import com.quectel.basic.queclog.QLog
+import com.quectel.sdk.ota.upgrade.model.OtaUpgradeStatus
 import com.quectel.sdk.ota.upgrade.model.OtaUpgradeStatusModel
 import com.quectel.sdk.ota.upgrade.service.IQuecHttpOtaService
 import com.quectel.sdk.ota.upgrade.util.QuecHttpOtaServiceFactory
@@ -111,10 +115,21 @@ class CloudOtaActivity() : BaseActivity() {
                     IHttpCallBack {
                     override fun onSuccess(s: String?) {
                         QLog.i(TAG, "userBatchConfirmUpgradeWithList onSuccess: $s")
-                        val result = QuecGsonUtil.getResult(s, Object::class.java)
+                        val result = QuecGsonUtil.getResult(s, UpgradeDeviceResult::class.java)
                         if (result.successCode()) {
-                            //定时查询升级状态
-                            startTimer()
+
+                            //详细情况可以查看result.data.successList和result.data.failList
+                            //简单处理，有一个成功就是开启定时查询
+                            if (result.data.successList.isNotEmpty()) {
+                                //定时查询升级状态
+                                startTimer()
+                            } else {
+                                ToastUtils.showShort(
+                                    this@CloudOtaActivity,
+                                    "升级确认失败"
+                                )
+                            }
+
                         } else {
                             ToastUtils.showShort(
                                 this@CloudOtaActivity,
@@ -179,17 +194,25 @@ class CloudOtaActivity() : BaseActivity() {
         QuecHttpOtaServiceFactory.getInstance().getService(IQuecHttpOtaService::class.java)
             .getBatchUpgradeDetailsWithList(list, object : IHttpCallBack {
                 override fun onSuccess(s: String) {
-                    val result = QuecGsonUtil.getPageResult(s, OtaUpgradeStatusModel::class.java)
-                    result.data?.list?.forEach { statusModel ->
-
-                        deviceOtaAdapter.data.find { statusModel.deviceKey == it.deviceKey && statusModel.productKey == it.productKey && statusModel.planId == it.planId}?.apply {
-                            upgradeProgress = statusModel.upgradeProgress
-                            userConfirmStatus = statusModel.userConfirmStatus
-                            deviceStatus = statusModel.deviceStatus
-                        }
+                    val typeToken = object : TypeToken<QuecResult<List<OtaUpgradeStatusModel>>>() {}
+                   val result : QuecResult<List<OtaUpgradeStatusModel>> = QuecGsonUtil.getGson().fromJson(s, typeToken.type)
+                    result.data?.forEach { statusModel ->
+                        deviceOtaAdapter.data.find { statusModel.deviceKey == it.deviceKey && statusModel.productKey == it.productKey && statusModel.planId == it.planId }
+                            ?.apply {
+                                upgradeProgress = statusModel.upgradeProgress
+                                userConfirmStatus = statusModel.userConfirmStatus
+                                deviceStatus = statusModel.deviceStatus
+                            }
                     }
+                    //更新列表
                     QuecThreadUtil.RunMainThread {
                         deviceOtaAdapter.notifyDataSetChanged()
+                    }
+                    //判断是否已经全部升级完成，如果已经全部升级完成，则取消定时器
+                    if (isAllPlansFinished()) {
+                        //取消定时器
+                        timer?.cancel()
+                        timer = null
                     }
                 }
 
@@ -199,7 +222,7 @@ class CloudOtaActivity() : BaseActivity() {
             })
     }
 
-    //定时器，定时5秒查询升级详情
+    //定时器，定时3秒查询升级详情
     private fun startTimer() {
         if (timer != null) return
         timer = Timer()
@@ -207,7 +230,18 @@ class CloudOtaActivity() : BaseActivity() {
             override fun run() {
                 getBatchUpgradeDetails()
             }
-        }, 0, 5000)
+        }, 0, 3000)
+    }
+
+    private fun isAllPlansFinished(): Boolean {
+        deviceOtaAdapter.data.forEach {
+            if (it.deviceStatus == OtaUpgradeStatus.UPGRADING
+                || (it.userConfirmStatus == OtaUpgradeStatus.UPGRADING && it.deviceStatus == OtaUpgradeStatus.NOT_UPGRADE)
+            ) {
+                return false
+            }
+        }
+        return true
     }
 
 }
