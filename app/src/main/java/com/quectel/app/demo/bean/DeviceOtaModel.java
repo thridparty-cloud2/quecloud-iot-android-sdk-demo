@@ -3,7 +3,7 @@ package com.quectel.app.demo.bean;
 public class DeviceOtaModel {
     private String productKey;
     private String deviceKey;
-    private int planId;
+    private long planId;
     private String deviceName;
     private String version;
     private String desc;
@@ -33,11 +33,11 @@ public class DeviceOtaModel {
         this.deviceKey = deviceKey;
     }
 
-    public int getPlanId() {
+    public long getPlanId() {
         return planId;
     }
 
-    public void setPlanId(int planId) {
+    public void setPlanId(long planId) {
         this.planId = planId;
     }
 

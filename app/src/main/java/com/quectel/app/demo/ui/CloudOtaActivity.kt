@@ -18,6 +18,7 @@ import com.quectel.app.quecnetwork.httpservice.IHttpCallBack
 import com.quectel.basic.common.utils.QuecGsonUtil
 import com.quectel.basic.common.utils.QuecThreadUtil
 import com.quectel.basic.queclog.QLog
+import com.quectel.sdk.ota.upgrade.model.OtaUpgradeStatusModel
 import com.quectel.sdk.ota.upgrade.service.IQuecHttpOtaService
 import com.quectel.sdk.ota.upgrade.util.QuecHttpOtaServiceFactory
 import java.util.Timer
@@ -101,7 +102,7 @@ class CloudOtaActivity() : BaseActivity() {
                 val upgradePlan = UpgradePlan()
                 upgradePlan.deviceKey = it.deviceKey
                 upgradePlan.productKey = it.productKey
-                upgradePlan.planId = it.planId.toLong()
+                upgradePlan.planId = it.planId
                 upgradePlan.operType = 1 //1-马上升级(确认随时升级) 2-预约升级(预约指定时间窗口升级) 3-(取消预约和取消升级)
                 planList.add(upgradePlan)
             }
@@ -170,7 +171,7 @@ class CloudOtaActivity() : BaseActivity() {
         deviceOtaList.forEach {
             val bean = UpgradeDeviceBean()
             bean.deviceKey = it.deviceKey
-            bean.planId = it.planId.toLong()
+            bean.planId = it.planId
             bean.productKey = it.productKey
             list.add(bean)
         }
@@ -178,7 +179,18 @@ class CloudOtaActivity() : BaseActivity() {
         QuecHttpOtaServiceFactory.getInstance().getService(IQuecHttpOtaService::class.java)
             .getBatchUpgradeDetailsWithList(list, object : IHttpCallBack {
                 override fun onSuccess(s: String) {
-                    val result = QuecGsonUtil.getResult(s, OtaUpgradePlanModel::class.java)
+                    val result = QuecGsonUtil.getPageResult(s, OtaUpgradeStatusModel::class.java)
+                    result.data?.list?.forEach { statusModel ->
+
+                        deviceOtaAdapter.data.find { statusModel.deviceKey == it.deviceKey && statusModel.productKey == it.productKey && statusModel.planId == it.planId}?.apply {
+                            upgradeProgress = statusModel.upgradeProgress
+                            userConfirmStatus = statusModel.userConfirmStatus
+                            deviceStatus = statusModel.deviceStatus
+                        }
+                    }
+                    QuecThreadUtil.RunMainThread {
+                        deviceOtaAdapter.notifyDataSetChanged()
+                    }
                 }
 
                 override fun onFail(e: Throwable) {
@@ -187,7 +199,7 @@ class CloudOtaActivity() : BaseActivity() {
             })
     }
 
-    //定时器，定时三秒查询升级详情
+    //定时器，定时5秒查询升级详情
     private fun startTimer() {
         if (timer != null) return
         timer = Timer()
@@ -195,7 +207,7 @@ class CloudOtaActivity() : BaseActivity() {
             override fun run() {
                 getBatchUpgradeDetails()
             }
-        }, 0, 3000)
+        }, 0, 5000)
     }
 
 }
