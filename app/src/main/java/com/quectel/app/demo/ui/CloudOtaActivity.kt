@@ -9,7 +9,6 @@ import com.quectel.app.demo.adapter.DeviceOtaAdapter
 import com.quectel.app.demo.base.BaseActivity
 import com.quectel.app.demo.bean.DeviceOtaModel
 import com.quectel.app.demo.bean.DeviceUpgradeSumBean
-import com.quectel.app.demo.bean.OtaUpgradePlanModel
 import com.quectel.app.demo.bean.UpgradeDeviceResult
 import com.quectel.app.demo.utils.MyUtils
 import com.quectel.app.demo.utils.ToastUtils
