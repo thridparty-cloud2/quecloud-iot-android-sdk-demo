@@ -118,6 +118,10 @@
             android:name=".ui.CloudOtaActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme" />
+        <activity
+            android:name=".ui.BleOtaActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentTheme" />
 
 
 

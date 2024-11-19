@@ -36,4 +36,7 @@
 
     <color name="gray_btn">#999999</color>
 
+
+    <color name="text">#FF000000</color>
+    <color name="text_sub">#87888B</color>
 </resources>

@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ import com.quectel.app.demo.bean.LanVO;
 import com.quectel.app.demo.bean.UserDeviceList;
 import com.quectel.app.demo.constant.DeviceConfig;
 import com.quectel.app.demo.fragmentbase.BaseMainFragment;
+import com.quectel.app.demo.ui.BleOtaActivity;
 import com.quectel.app.demo.ui.DeviceControlActivity;
 import com.quectel.app.demo.ui.DistributionNetworkActivity;
 import com.quectel.app.demo.ui.SelectOtaActivity;
@@ -45,6 +47,7 @@ import com.quectel.app.quecnetwork.httpservice.IHttpCallBack;
 import com.quectel.app.usersdk.userservice.IUserService;
 import com.quectel.app.usersdk.utils.UserServiceFactory;
 import com.quectel.basic.common.entity.QuecDeviceModel;
+import com.quectel.basic.common.interfaces.QuecClickListener;
 import com.quectel.basic.common.utils.QuecThreadUtil;
 import com.quectel.sdk.iot.channel.kit.chanel.IQuecChannelManager;
 import com.quectel.sdk.iot.channel.kit.constaint.QuecIotChannelType;
@@ -57,6 +60,7 @@ import org.xutils.http.RequestParams;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -168,7 +172,7 @@ public class DeviceFragment extends BaseMainFragment {
         String deviceKey = strArray[1];
         List<UserDeviceList.DataBean.ListBean> list = mAdapter.getData();
         for (UserDeviceList.DataBean.ListBean bean : list) {
-            if (bean.getProductKey().equals(productKey) && bean.getProductKey().equals(deviceKey)) {
+            if (bean.getProductKey().equals(productKey) && bean.getDeviceKey().equals(deviceKey)) {
                 bean.setDeviceStatus( isConnected? "在线" : "离线");
                 mAdapter.notifyDataSetChanged();
                 return;
@@ -200,7 +204,12 @@ public class DeviceFragment extends BaseMainFragment {
                                 for (UserDeviceList.DataBean.ListBean bean : mList) {
                                     QuecDeviceModel quecDeviceModel = new QuecDeviceModel(bean.getProductKey(), bean.getDeviceKey());
                                     quecDeviceModel.setCapabilitiesBitmask(bean.getCapabilitiesBitmask());
-                                    quecDeviceModel.setBindingkey(bean.getAuthKey());
+                                    String bindingCode = bean.getBindingCode();
+                                    if(!TextUtils.isEmpty(bindingCode)){
+                                        String bindingKey = Base64.encodeToString(bindingCode.getBytes(StandardCharsets.UTF_8),Base64.DEFAULT);
+                                        quecDeviceModel.setBindingkey(bindingKey);
+                                    }
+
                                     quecDeviceModels.add(quecDeviceModel);
                                 }
                                 IotChannelController.getInstance().startChannels(requireContext(), quecDeviceModels, null);
@@ -216,7 +225,7 @@ public class DeviceFragment extends BaseMainFragment {
                                 @Override
                                 public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
                                     UserDeviceList.DataBean.ListBean lanVO = mAdapter.getData().get(position);
-                                    createSelectDialog(lanVO,lanVO.getProductKey(), lanVO.getDeviceKey(), lanVO.getShareCode(), lanVO.getDeviceStatus());
+                                    createSelectDialog(lanVO,lanVO.getProductKey(), lanVO.getDeviceKey(), lanVO.getShareCode(), lanVO.getDeviceStatus(), lanVO.getCapabilitiesBitmask());
 //                                    Intent intent = new Intent(getActivity(), DeviceControlActivity.class);
 //                                    intent.putExtra("device", (Serializable) lanVO);
 //                                    intent.putExtra("pk", lanVO.getProductKey());
@@ -543,7 +552,7 @@ public class DeviceFragment extends BaseMainFragment {
         mDialog.show();
     }
 
-    private void createSelectDialog(UserDeviceList.DataBean.ListBean lanVO,String pk, String dk, String shareCode, String deviceStatus) {
+    private void createSelectDialog(UserDeviceList.DataBean.ListBean lanVO,String pk, String dk, String shareCode, String deviceStatus, int bitmask) {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.device_select_dialog, null);
         final Dialog mDialog = new Dialog(getActivity(), R.style.dialogTM);
@@ -559,6 +568,8 @@ public class DeviceFragment extends BaseMainFragment {
         Button bt_cancelShareByReceiver = (Button) mDialog.findViewById(R.id.bt_cancelShareByReceiver);
         Button bt_device_control = (Button) mDialog.findViewById(R.id.bt_device_control);
         Button bt_query_group = (Button) mDialog.findViewById(R.id.bt_query_group);
+        Button bt_ble_ota = mDialog.findViewById(R.id.bt_ble_ota);
+
         bt_query_group.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -742,6 +753,20 @@ public class DeviceFragment extends BaseMainFragment {
                 }
             }
         });
+
+        if (bitmask == 4) {
+            bt_ble_ota.setVisibility(View.VISIBLE);
+            bt_ble_ota.setOnClickListener(new QuecClickListener() {
+                @Override
+                public void onViewClick(View v) {
+                    Intent intent = new Intent(getActivity(), BleOtaActivity.class);
+                    intent.putExtra(BleOtaActivity.KEY_PK, pk);
+                    intent.putExtra(BleOtaActivity.KEY_DK, dk);
+                    startActivity(intent);
+                }
+            });
+        }
+
         mDialog.show();
     }
 

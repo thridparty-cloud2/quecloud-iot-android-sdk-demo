@@ -6,6 +6,10 @@ import com.google.gson.Gson;
 import com.quectel.app.demo.constant.CloudConfig;
 import com.quectel.app.demo.utils.SPUtils;
 import com.quectel.app.demo.utils.ToastUtils;
+import com.quectel.basic.foundation.utils.QuecOemUtil;
+import com.quectel.oem.config.Network;
+import com.quectel.oem.config.QuecOemAppConfig;
+import com.quectel.oem.config.common.QuecOemNetworkConfigModel;
 import com.quectel.sdk.iot.QuecCloudServiceType;
 import com.quectel.sdk.iot.QuecIotAppSdk;
 import com.quectel.sdk.iot.bean.QuecPublicConfigBean;
@@ -59,6 +63,10 @@ public class App extends MultiDexApplication {
 
             QuecIotAppSdk.getInstance().startWithUserDomain(this, userDomain, domainSecret, quecCloudServiceType);
             QuecIotAppSdk.getInstance().setDebugMode(true);
+
+//            QuecOemNetworkConfigModel model = new QuecOemNetworkConfigModel("product", "https://uat-iot-api.quectelcn.com", "wss://iot-ws.quectel.com/ws/v1", "wss://iot-south.quectelcn.com:8443/ws/v2", "", userDomain, domainSecret, "C1", "C1", "C2", "C3", "C7", "C1", "C2", "C1", "C5", "https://aiot-bootstrap.quectel.com", "/v1/bootstrap/mcc/addr", "s1PH9Lhq");
+//            QuecOemAppConfig.INSTANCE.setNetwork(new Network(model, model, model));
+//            QuecOemUtil.INSTANCE.setConfigInfo(QuecOemAppConfig.network.getChina());
 
         }
 
