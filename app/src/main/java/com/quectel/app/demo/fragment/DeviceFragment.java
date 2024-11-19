@@ -204,10 +204,15 @@ public class DeviceFragment extends BaseMainFragment {
                                 for (UserDeviceList.DataBean.ListBean bean : mList) {
                                     QuecDeviceModel quecDeviceModel = new QuecDeviceModel(bean.getProductKey(), bean.getDeviceKey());
                                     quecDeviceModel.setCapabilitiesBitmask(bean.getCapabilitiesBitmask());
-                                    String bindingCode = bean.getBindingCode();
-                                    if(!TextUtils.isEmpty(bindingCode)){
-                                        String bindingKey = Base64.encodeToString(bindingCode.getBytes(StandardCharsets.UTF_8),Base64.DEFAULT);
-                                        quecDeviceModel.setBindingkey(bindingKey);
+                                    //纯蓝牙设备
+                                    if (bean.getCapabilitiesBitmask() == 4) {
+                                        String bindingCode = bean.getBindingCode();
+                                        if (!TextUtils.isEmpty(bindingCode)) {
+                                            String bindingKey = Base64.encodeToString(bindingCode.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
+                                            quecDeviceModel.setBindingkey(bindingKey);
+                                        }
+                                    }else {
+                                        quecDeviceModel.setBindingkey(bean.getAuthKey());
                                     }
 
                                     quecDeviceModels.add(quecDeviceModel);
