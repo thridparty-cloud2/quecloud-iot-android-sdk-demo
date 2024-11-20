@@ -182,7 +182,6 @@ public void phoneSmsCodeLogin(String phone,String smsCode,String internationalCo
 
 ```
 
-
 #### 删除用户
 
 ```
@@ -529,13 +528,13 @@ public void queryNationalityList(IHttpCallBack callback);
 
 ### IDevService服务
 #### 获取Service对象
-```
+```java
 DeviceServiceFactory.getInstance().getService(IDevService.class)
 
 ```
 
 #### 使用SN绑定设备
-```
+```java
  public void bindDeviceSn(String pk,String sn,String deviceName , IHttpCallBack callback);
 ```
 
@@ -548,7 +547,7 @@ DeviceServiceFactory.getInstance().getService(IDevService.class)
 
 #### 查询设备信息
 
-```
+```java
  public void queryDeviceInfo(String pk,String dk,String shareCode,IHttpCallBack callback);
 
 ```
@@ -561,7 +560,7 @@ DeviceServiceFactory.getInstance().getService(IDevService.class)
 
 #### pk dk  解绑设备
 
-```
+```java
  public void unBindDevice(String pk,String dk,IHttpCallBack callback);
 
 ```
@@ -573,7 +572,7 @@ DeviceServiceFactory.getInstance().getService(IDevService.class)
 
 #### 查询用户设备列表
 
-```
+```java
 public void queryUserDeviceList(String deviceName,int page,int pageSize,IHttpCallBack callback);
 
 ```
@@ -586,7 +585,7 @@ public void queryUserDeviceList(String deviceName,int page,int pageSize,IHttpCal
 
 #### 蓝牙设备绑定
 
-```
+```java
  public void bindDeviceByBlueTooth(String authCode,String pk, String dk,String pwd,IHttpCallBack callback);
 
 ```
@@ -601,7 +600,7 @@ public void queryUserDeviceList(String deviceName,int page,int pageSize,IHttpCal
 
 #### wifi设备绑定
 
-```
+```java
  public void bindDeviceByWifi(String deviceName, String pk,String dk, String authCode,IHttpCallBack callback);
 
 ```
@@ -616,7 +615,7 @@ public void queryUserDeviceList(String deviceName,int page,int pageSize,IHttpCal
 
 #### 分享人设置设备分享信息
 
-```
+```java
  public void shareDeviceInfo(long acceptingExpireAt,String pk, String dk, int coverMark,long sharingExpireAt, IHttpCallBack callback);
 
 ```
@@ -631,7 +630,7 @@ public void queryUserDeviceList(String deviceName,int page,int pageSize,IHttpCal
 
 #### 被分享人接受分享
 
-```
+```java
   public void acceptShareDevice(String shareCode,String deviceName,IHttpCallBack callback);
 
 ```
@@ -643,7 +642,7 @@ public void queryUserDeviceList(String deviceName,int page,int pageSize,IHttpCal
 
 #### 被分享人取消设备分享
 
-```
+```java
  public void cancelShareByReceiver(String shareCode,IHttpCallBack callback);
 
 ```
@@ -655,7 +654,7 @@ public void queryUserDeviceList(String deviceName,int page,int pageSize,IHttpCal
 
 #### 分享人取消设备分享
 
-```
+```java
 public void cancelShareByOwner(String shareCode, IHttpCallBack callback);
 
 ```
@@ -666,7 +665,7 @@ public void cancelShareByOwner(String shareCode, IHttpCallBack callback);
 
 #### 分享人查询设备的被分享人列表
 
-```
+```java
  public void getDeviceShareUserList(String pk,String dk, IHttpCallBack callback);
 
 ```
@@ -679,7 +678,7 @@ public void cancelShareByOwner(String shareCode, IHttpCallBack callback);
 
 #### 修改设备信息 deviceName
 
-```
+```java
 public void changeDeviceInfo(String deviceName, String pk,String dk, IHttpCallBack callback);
 
 ```
@@ -693,7 +692,7 @@ public void changeDeviceInfo(String deviceName, String pk,String dk, IHttpCallBa
 
 #### 被分享人修改分享的设备名称
 
-```
+```java
 public void changeShareDeviceName(String deviceName,String shareCode, IHttpCallBack callback);
 
 ```
@@ -706,20 +705,38 @@ public void changeShareDeviceName(String deviceName,String shareCode, IHttpCallB
 
 #### 查询物模型 TSL
 
-```
+```java
  public void queryProductTSL(String pk, IHttpCallBack callback);
-    请调用SDK的 buildModelListContent方法解析出TSL数据结构
+  // 请调用SDK的 buildModelListContent方法解析出TSL数据结构
    List<ModelBasic> modelBasics = ObjectModelParse.buildModelListContent(jsonArray);
 ```
 
+#### ~~查询物模型 TSL 有网络走http 没有网络本地缓存~~
+
+```java
+  public void queryProductTSLWithCache(Context context, String pk, IHttpCallBack callback);
+   // 请调用SDK的 buildModelListContent方法解析出TSL数据结构
+  List<ModelBasic> modelBasics = ObjectModelParse.buildModelListContent(jsonArray);
+```
+
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| context |	是| Context | 
+| pk |	是| productKey | 
+
+#### 查询物模型 TSL 有网络走http 没有网络本地缓存
+
+```java
+  public void getProductTSLWithCache(String pk, IDeviceTSLCallBack iDeviceTSLCallBack);
+```
 |参数|	是否必传|说明|	
 | --- | --- | --- |
 | pk |	是| productKey | 
 
 
-#### 查询设备业务属性
-
-```
+#### 查询设备业务属性值
+例如一个设备定义了一个bool的属性，则可以查到该属性值的true或false，仅对联网设备有效。
+```java
  public void queryBusinessAttributes(List<String> codeList, String pk, String dk, List<String> typeList, String gatewayPk, String gatewayDk, IHttpCallBack callback);
  
 ```
@@ -732,6 +749,24 @@ public void changeShareDeviceName(String deviceName,String shareCode, IHttpCallB
 | gatewayPk |	否|网关设备pk 没有传空字符串""	| 
 | gatewayDk |	否|网关设备dk	没有传空字符串""| 
 | typeList |	否| 查询类型  1 查询设备基础属性  2 查询物模型属性  3 查询定位信息| 
+
+
+#### 查询设备业务物模型和属性值
+查询TLS和属性值。
+```java
+  public void getProductTSLValueWithProductKey(String productKey, String deviceKey, String gatewayPk, String gatewayDk, List<String> codeList, List<String> typeList, IDeviceTSLModelCallback callback); 
+```
+
+|参数|	是否必传|说明|	
+| --- | --- | --- | 
+| productKey |	是|productKey|
+| deviceKey |	是|deviceKey|
+| gatewayPk |	否|网关设备pk 没有传空字符串""	| 
+| gatewayDk |	否|网关设备dk	没有传空字符串""| 
+| codeList |	否|要查询的属性标识符; 和查询类型配合使用，如果传null 查询所有属性，同时typeList也传null	| 
+| typeList |	否| 查询类型  1 查询设备基础属性  2 查询物模型属性  3 查询定位信息| 
+
+
 
 #### 查询设备升级计划
 
@@ -1045,9 +1080,7 @@ public void queryAcceptSharedDeviceGroup(String shareCode ,IHttpCallBack callbac
 #### 批量控制设备
 
 ```
-   public void batchControlDevice(String data, List<BatchControlDevice> deviceList, int cacheTime,int isCache,int isCover,int dataFormat, int type, IHttpCallBack callback);
-  
-         
+   public void batchControlDevice(String data, List<BatchControlDevice> deviceList, int cacheTime,int isCache,int isCover,int dataFormat, int type, IHttpCallBack callback);       
 ```
 |参数|	是否必传|说明|	
 | --- | --- | --- |
@@ -1059,6 +1092,114 @@ public void queryAcceptSharedDeviceGroup(String shareCode ,IHttpCallBack callbac
 | isCover |是| 是否覆盖之前发送的相同的命令 1：覆盖 2：不覆盖，默认不覆盖，启用缓存时此参数有效     默认传 2 不覆盖	|
 | cacheTime |是| 缓存时间，单位为秒，缓存时间范围 1-7776000 秒，启用缓存时必须设置缓存时间	|
 | deviceList |是| 要控制的设备的列表list	|
+
+
+#### 添加云端定时
+
+```java
+  void addCornJob(CloudTiming timing, IHttpCallBack callBack);     
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| timing |是|  	定时相关参数 | 
+| callBack |是| 回调 |
+
+CloudTiming类
+|成员|	类型|说明|	
+| --- | --- | --- |
+| ruleId |String|  规则唯一标识，修改规则实例信息时必填	| 
+| productKey |String| 产品 pk |
+| deviceKey |String| 设备 dk	|
+| type |String|定时任务类型，once: 执行一次，day-repeat: 每天重复，custom-repeat: 自定义重复，multi-section: 多段执行，random: 随机执行，delay: 延迟执行（倒计时）	|
+| enabled |boolean| 规则状态，false: 停止，true: 启动，默认: false	|
+| dayOfWeek |String| 当 type 为 custom-repeat、multi-section、random 时必填，周一/周二/周三/周四/周五/周六/周日的任意组合，格式为 "1,3,4"，以 "," 分隔	|
+| timers |CloudTimingTimer| 定时器列表	|
+
+CloudTimingTimer类
+|成员|	类型|说明|	
+| --- | --- | --- |
+| action |String|  JSON 格式，指定物模型（属性/服务）+ 指定状态	| 
+| time |String| 当 type 为 once、day-repeat、custom-repeat、multi-section 时必填，格式为 "HH:mm:ss"，如 "12:00:00" |
+| startTime |String|起始时间 当 type 为 random 时必填，格式为 "HH:mm:ss"，如 "12:00:00"	|
+| endTime |String|终止时间 当 type 为 random 时必填，且 endTime 必须在 startTime 之后，格式为 "HH:mm:ss"，如 "13:00:00"	|
+| delay |long| 当 type 为 delay 时必填，单位为 s|
+
+#### 修改云端定时
+```java
+  void setCronJob(CloudTiming timing, IHttpCallBack callBack);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| timing |是|  	定时相关参数 | 
+| callBack |是| 回调 |
+
+#### 查询设备下定时任务列表
+```java
+  void getCronJobList(CloudTimingList timingList, IHttpCallBack callBack);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| timingList |是| 定时列表请求参数 | 
+| callBack |是| 回调 |
+
+CloudTimingList类
+|成员|	类型|说明|	
+| --- | --- | --- |
+| productKey |String| 产品 pk |
+| deviceKey |String| 设备 dk	|
+| type |String|定时任务类型，不填则查询所有类型；once: 执行一次，day-repeat: 每天重复，custom-repeat: 自定义重复，multi-section: 多段执行，random: 随机执行，delay: 延迟执行（倒计时）	|
+| page |int| 分页页码，默认: 1|
+| pageSize |int| 分页大小，默认: 10	|
+
+#### 查询定时任务详情
+```java
+  void getCronJobInfo(String ruleId, IHttpCallBack callBack);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| ruleId |是| 规则引擎ID | 
+| callBack |是| 回调 |
+
+#### 删除定时任务
+```java
+  void batchDeleteCronJob(BatchDeleteCloudTiming batchDeleteCloudTiming, IHttpCallBack callBack);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| batchDeleteCloudTiming |是| 规则引擎ID列表 | 
+| callBack |是| 回调 |
+
+BatchDeleteCloudTiming类
+|成员|	类型|说明|	
+| --- | --- | --- |
+| ruleIdList |List<String>| 规则引擎ID列表 |
+
+#### 查询产品下定时任务限制数
+```java
+  void getProductCornJobLimit(String productKey, IHttpCallBack callBack);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| productKey |是| 产品 pk | 
+| callBack |是| 回调 |
+
+#### 用户确认升级计划
+```java
+  void userConfirmUpgrade(UpgradePlan plan, IHttpCallBack callBack);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| plan |是| 升级计划参数 | 
+| callBack |是| 回调 |
+
+UpgradePlan类
+|成员|	类型|说明|	
+| --- | --- | --- |
+| deviceKey |String| 产品 dk |
+| productKey |String| 产品 pk |
+| operType |int| 1-马上升级(确认随时升级) 2-预约升级(预约指定时间窗口升级) 3-(取消预约和取消升级) |
+| appointEndTime |long| 预约升级结束时间（毫秒时间戳，当操作类型为 2 时必传 |
+| appointStartTime |long| 预约升级开始时间（毫秒时间戳，当操作类型为 2 时必传） |
 
 ### IIotChannelControl设备控制
 该类主要包含设备控制相关，如设备数据下行，监听设备上行数据，底层会根据设备的能力值和当前APP以及设备的环境，自动选择合适的链路进行连接和数据传输。
@@ -1239,6 +1380,17 @@ public void removeListener(IQuecChannelManager.IQuecCallBackListener listener);
 |参数|	是否必传|说明|	
 | --- | --- | --- |
 | listener |是| 通道监听listener | 
+
+#### ble设备时间同步
+```java
+void timeZoneSync(String pk, String dk, IotResultCallback callback);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| pk |是| 设备pk | 
+| dk |是| 设备dk | 
+| callback |是| 时间同步结果回调 | 
+
 
 ### IWebSocketService服务
 #### 获取Service对象
@@ -1711,7 +1863,7 @@ public void stopScan();
 ### TTLV 格式数据的编码与解码
 
 ### ttlv data
-```
+```java
   public  class TTLVData<T>  {
     /**
      * 数据类型
@@ -1800,7 +1952,7 @@ public void stopScan();
  
 ```
 
-### wifi配网
+### ~~wifi配网~~（已过时，使用IQuecDevicePairingService）
 ```
 1 Ble 扫描连接上蓝牙设备;
 2 wifi名称ssid和密码pass,编码ttlv格式,ble write数据
@@ -1836,12 +1988,12 @@ example:
 |	注册配网监听|  |	1.0.0	| |
 |	注销配网监听|  |	1.0.0	| |
 
-### 二、设计接口/属性
+### 二、~~IQuecSmartConfigService设计接口/属性~~（已过时，使用IQuecDevicePairingService）
 
-#### 开始配网
+#### ~~开始配网~~（已过时）
 ```java
+@Deprecated
 public void startConfigDevices(@NonNull List<DeviceBean> list, @NonNull String ssid, @NonNull String password)
-
 ``` 
 |参数|	是否必传|说明|	
 | --- | --- | --- |
@@ -1849,20 +2001,361 @@ public void startConfigDevices(@NonNull List<DeviceBean> list, @NonNull String s
 | ssid |是| ssid	| 
 | password |是| password	| 
 
-
-
-#### 注册配网监听
+#### ~~注册配网监听~~（已过时）
 
 ```java
+  @Deprecated
    public void addSmartConfigListener(QuecSmartConfigListener listener)
-
 ```
 
-
-#### 注销配网监听
+#### ~~注销配网监听~~（已过时）
 
 ```java
+  @Deprecated
   public void removeSmartConfigListener(QuecSmartConfigListener listener) 
 ```
+### 三、QuecDevicePairingServiceManager
 
 
+#### 初始化
+```kotlin
+  fun init(context: Context)
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+|context|是|Context|
+
+#### 扫描设备
+
+扫描结果参考QuecPairingListener
+
+```kotlin
+  fun scan(fid: String?, name: String?, mac: String?)
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+|fid|否|家庭id|
+|name|否|蓝牙名称|
+|mac|否|蓝牙mac地址|
+
+#### 停止扫描
+
+```kotlin
+  fun stopScan()
+```
+#### 开始配对设备
+
+配网进度和结果参考QuecPairingListener
+
+```kotlin
+  fun startPairingByDevices(
+        devices: MutableList<QuecPairDeviceBean>?, fid: String?, ssid: String?, pw: String?
+    )
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+|devices|是|待绑定设备|
+|fid|否|家庭id|
+|ssid|否|WiFi名称|
+|pw|否|WiFi密码|
+
+
+#### 取消所有设备配对
+
+```kotlin
+  fun cancelAllDevicePairing()
+```
+
+#### 设置WiFi配网超时时间
+
+```kotlin
+  fun setWiFiPairingDuration(duration: Int): Boolean
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+|duration|是|60~120,默认120秒，单位：秒|
+
+##- return true:设置成功，false:设置失败
+
+#### 设置Ble配对超时时间
+
+```kotlin
+  fun setBlePairingDuration(duration: Int): Boolean
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+|duration|是|30~60,默认60秒，单位：秒|
+
+
+#### 添加配网监听
+
+```kotlin
+  fun addPairingListener(listener: QuecPairingListener?)
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+|listener|是|结果回调（扫描设备回调、配网进度和结果）|
+
+#### 移除配网监听
+
+```kotlin
+  fun removePairingListener(listener: QuecPairingListener?)
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+|listener|是|结果回调）|
+
+#### QuecPairingListener接口
+
+```kotlin
+  interface QuecPairingListener {
+
+    /**
+     * 扫描到设备
+     * @param deviceBean 设备信息
+     */
+    fun onScanDevice(deviceBean: QuecPairDeviceBean)
+    /**
+     * 更新配对进度
+     * @param deviceBean 设备信息
+     * @param progress 进度
+     */
+    fun onUpdatePairingStatus(deviceBean: QuecPairDeviceBean, progress: Float)
+
+    /**
+     * 配网结果
+     * @param deviceBean 设备信息
+     * @param result 配网结果
+     * @param errorCode 错误码
+     */
+    fun onUpdatePairingResult(deviceBean: QuecPairDeviceBean, result: Boolean, errorCode: QuecPairErrorCode)
+}
+```
+
+QuecPairDeviceBean类
+|成员|	类型|说明|	
+| --- | --- | --- |
+| bleDevice | QuecBleDevice | 扫描的BLE设备对象|
+| deviceName | String | 设备名称|
+| productName | String | 产品名称|
+| productLogo | String | 产品LOGO |
+| bindingMode | int | 设备绑定模式绑 多绑：1 唯一：2 轮流：3|
+
+QuecBleDevice类
+|成员|	类型|说明|	
+| --- | --- | --- |
+| id | String |设备唯一标志|
+| version | String | 固件版本|
+| productKey | String | 设备pk|
+| deviceKey | String | 设备dk |
+| mac | String | 蓝牙mac地址|
+| isWifiConfig | Boolean | wifi 设备是否已配网，1 表示已配网，0 表示未配网|
+| isBind | Boolean | 是否已绑定|
+| isEnableBind | String | 是否允许绑定|
+| capabilitiesBitmask | Int | 设备能力值 bit0=1 表示设备支持 WAN 远场通讯能力 bit1=1 表示设备支持 WiFi LAN 近场通讯能力 bit2=1 表示设备支持 BLE 近场通讯能力|
+
+QuecPairErrorCodes说明
+|类型|	值|说明|	
+| --- | --- | --- |
+|QUEC_PAIRING_WAITING|301|设备待绑定|	
+|QUEC_PAIRING_BLE_CONNECTING|302|蓝牙连接中|	
+|QUEC_PAIRING_BLE_CONNECTED_FAIL|303|蓝牙连接失败|	
+|QUEC_PAIRING_WIFI_GET_BINDING_CODE_FAIL|304|WiFi配网设备，超时未获取到bindingcode|	
+|QUEC_PAIRING_WIFI_BINDING_SUCCESS|305|WiFi配网成功|	
+|QUEC_PAIRING_WIFI_BINDING_FAIL|306|WiFi配网失败|	
+|QUEC_PAIRING_BLE_GET_RANDOM_FAIL|307|向蓝牙设备询问random失败|	
+|QUEC_PAIRING_BLE_GET_ENCRYPTION_CODE_FAIL|308|向云端请求加密bindingcode失败|	
+|QUEC_PAIRING_BLE_CODE_AUTH_FAIL|309|向蓝牙设备认证失败|	
+|QUEC_PAIRING_BLE_CODE_AUTH_SUCCESS|310|向设备认证成功|	
+|QUEC_PAIRING_BLE_BINDING_SUCCESS|311|蓝牙绑定成功|	
+|QUEC_PAIRING_BLE_BINDING_FAIL|312|蓝牙绑定失败|	
+|QUEC_PAIRING_FAIL|313|通用异常场景：绑定失败, 如入参问题等|	
+
+
+## OTA sdk
+
+### Http OTA
+
+#### 获取服务Service对象
+```kotlin
+  QuecHttpOtaServiceFactory.getInstance().getService(IQuecHttpOtaService::class.java)
+```
+
+#### 查询用户是否有可升级的设备
+
+```java
+  void getUserIsHaveDeviceUpgrade(String fid, IHttpCallBack callBack);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| fid |是| 家庭id | 
+| callBack |是| 回调 |
+
+#### 查询待升级设备列表
+```java
+  void getUpgradePlanDeviceList(String fid, int page, int pageSize, IHttpCallBack callBack);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| fid |是| 家庭id | 
+| page |是| 要查询的列表页，默认为 1 | 
+| pageSize |是| 要查询的页大小，默认 10 | 
+| callBack |是| 回调 |
+
+#### 查询设备升级计划
+```java
+  void getDeviceUpgradePlan(String dk, String pk, IHttpCallBack callBack);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| dk |是| 产品 dk | 
+| pk |是| 产品 pk | 
+| callBack |是| 回调 |
+
+#### 批量确认升级
+```java
+  void userBatchConfirmUpgradeWithList(List<UpgradePlan> list, IHttpCallBack callBack);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| list |是| 升级计划参数的List | 
+| callBack |是| 回调 |
+
+UpgradePlan类
+|成员|	类型|说明|	
+| --- | --- | --- |
+| version | String | 固件版本|
+| productKey | String | 设备pk|
+| deviceKey | String | 设备dk |
+| operType | int | 1-马上升级(确认随时升级) 2-预约升级(预约指定时间窗口升级) 3-(取消预约和取消升级)|
+| appointStartTime | long | 预约升级开始时间（毫秒时间戳，当操作类型为 2 时必传）|
+| appointEndTime | long | 预约升级结束时间（毫秒时间戳，当操作类型为 2 时必传）|
+| planId | long | 升级计划的ID |
+
+
+#### 批量查询设备升级详情
+```java
+  void getBatchUpgradeDetailsWithList(List<UpgradeDeviceBean> list, IHttpCallBack callBack);
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| list |是| 升级计划的List | 
+| callBack |是| 回调 |
+
+UpgradeDeviceBean类
+|成员|	类型|说明|	
+| --- | --- | --- |
+| deviceKey |String| 产品 dk |
+| productKey |String| 产品 pk |
+| planId |long| 升级计划的ID|
+
+
+### 蓝牙OTA QuecBleOtaManager
+
+#### 查询单个设备升级计划
+
+```kotlin
+  fun checkVersion(pk: String, dk: String, callback: QuecCallback<QuecBleOtaInfo?>)
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| pk | 是 | 设备pk |
+| dk | 是 | 设备dk |
+|callback|是|结果回调|
+
+QuecBleOtaInfo类
+|成员|	类型|说明|	
+| --- | --- | --- |
+| pk | String | 设备pk|
+| dk | String | 设备dk |
+| targetVersion | String | 新版本的版本号 |
+| componentNo | String | 组件号 |
+| desc | String | 升级说明 |
+| fileName | String | 文件名|
+| fileUrl | String | 文件下载地址 |
+| fileSize | Int | 文件大小|
+| fileSign | String | 文件Hash256值 |
+| planId | Int | 升级计划ID|
+
+#### 升级状态回调接口
+
+```kotlin
+   fun addStateListener(listener: StateListener?)
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| listener | 是 | 升级状态回调接口, 当OTA升级成功或者失败时, 触发回调 |
+
+```kotlin
+   fun addProgressListener(listener: ProgressListener?)
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| listener | 是 | 升级进度回调接口, 当OTA升级时, 回调进度, 范围: 0~1 |
+
+#### 开始OTA升级
+
+```kotlin
+   fun startOta(infoList: List<QuecBleOtaInfo>)
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| infoList | 是 | QuecBleOtaInfo在查询升级计划时获 |
+
+
+#### 停止OTA升级
+
+```kotlin
+   fun stopOta(infoList: List<QuecBleOtaInfo>)
+```
+|参数|	是否必传|说明|	
+| --- | --- | --- |
+| infoList | 是 | QuecBleOtaInfo在查询升级计划时获 |
+
+#### ProgressListener接口
+
+```kotlin
+   fun interface ProgressListener {
+        /**
+        * 升级成功
+        * @param pk 设备pk
+        * @param dk 设备dk
+        * @param progress 升级进度，范围是0.0~1.0
+        */
+        fun onUpdate(pk: String, dk: String, progress: Double)
+    }
+```
+
+#### StateListener接口
+```kotlin
+   interface StateListener {
+
+        /**
+        * 升级成功
+        * @param pk 设备pk
+        * @param dk 设备dk
+        * @param waitTime 等待设备升级成功需要的时间
+        */
+        fun onSuccess(pk: String, dk: String, waitTime: Long)
+
+        /**
+        * 升级成功
+        * @param pk 设备pk
+        * @param dk 设备dk
+        * @param errorCode 升级失败错误码
+        */
+        fun onFail(pk: String, dk: String, errorCode: BleFileErrorType)
+    }
+```
+
+BleFileErrorType说明
+|类型|说明|	
+| --- | --- |
+|COMMON|通用错误|	
+|NOT_CONNECT|蓝牙未连接|	
+|NO_FILE_PATH|升级文件路径不存在|	
+|FILE_CHECK_FAIL|升级文件校验失败|	
+|DEVICE_REFUSE|设备拒绝升级|	
+|DEVICE_CANCELLED|设备取消升级|	
+|DEVICE_FAIL|设备升级失败|	
+|TIMEOUT|升级超时|	
