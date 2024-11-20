@@ -102,7 +102,7 @@ dependencies {
 
     //sdk核心库
     // api project(":QuecIotSdk")
-    implementation 'com.quectel.app.sdk:quec-iot-sdk:1.12.0-beta.11-SNAPSHOT'
+    implementation 'com.quectel.app.sdk:quec-iot-sdk:1.12.0-beta.12-SNAPSHOT'
 }
 
 allprojects {

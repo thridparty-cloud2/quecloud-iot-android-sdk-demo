@@ -13,8 +13,6 @@ import com.quectel.app.demo.bean.UpgradeDeviceResult
 import com.quectel.app.demo.utils.MyUtils
 import com.quectel.app.demo.utils.ToastUtils
 import com.quectel.app.demo.widget.BottomItemDecorationSystem
-import com.quectel.app.device.bean.UpgradeDeviceBean
-import com.quectel.app.device.bean.UpgradePlan
 import com.quectel.app.quecnetwork.httpservice.IHttpCallBack
 import com.quectel.basic.common.entity.QuecResult
 import com.quectel.basic.common.utils.QuecGsonUtil
@@ -22,6 +20,8 @@ import com.quectel.basic.common.utils.QuecThreadUtil
 import com.quectel.basic.queclog.QLog
 import com.quectel.sdk.ota.upgrade.model.OtaUpgradeStatus
 import com.quectel.sdk.ota.upgrade.model.OtaUpgradeStatusModel
+import com.quectel.sdk.ota.upgrade.model.UpgradeDeviceBean
+import com.quectel.sdk.ota.upgrade.model.UpgradePlan
 import com.quectel.sdk.ota.upgrade.service.IQuecHttpOtaService
 import com.quectel.sdk.ota.upgrade.util.QuecHttpOtaServiceFactory
 import java.util.Timer
