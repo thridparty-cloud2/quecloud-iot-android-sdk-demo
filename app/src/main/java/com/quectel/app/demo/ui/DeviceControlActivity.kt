@@ -31,7 +31,6 @@ import com.quectel.app.device.bean.BusinessValue
 import com.quectel.app.device.bean.ModelBasic
 import com.quectel.app.device.bean.NumSpecs
 import com.quectel.app.device.bean.TSLEvent
-import com.quectel.app.device.bean.TSLProfile
 import com.quectel.app.device.bean.TSLService
 import com.quectel.app.device.bean.TextSpecs
 import com.quectel.app.device.callback.IDeviceTSLCallBack
@@ -39,8 +38,6 @@ import com.quectel.app.device.constant.ModelStyleConstant
 import com.quectel.app.device.deviceservice.IDevService
 import com.quectel.app.device.receiver.NetStatusReceiver
 import com.quectel.app.device.utils.DeviceServiceFactory
-import com.quectel.app.device.utils.ObjectModelParse
-import com.quectel.app.device.utils.ProductObjectModelCache
 import com.quectel.app.quecnetwork.httpservice.IHttpCallBack
 import com.quectel.app.websocket.deviceservice.IWebSocketService
 import com.quectel.app.websocket.utils.WebSocketServiceLocater
@@ -53,7 +50,6 @@ import com.quectel.sdk.iot.channel.kit.constaint.QuecIotChannelType
 import com.quectel.sdk.iot.channel.kit.constaint.QuecIotDataSendMode
 import com.quectel.sdk.iot.channel.kit.model.QuecIotDataPointsModel
 import com.quectel.sdk.iot.channel.kit.model.QuecIotDataPointsModel.DataModel.QuecIotDataPointDataType
-import com.quectel.sdk.mqtt.channel.api.QuecMqttChannelManagerService
 import com.suke.widget.SwitchButton
 import org.json.JSONArray
 import org.json.JSONException
@@ -78,7 +74,8 @@ class DeviceControlActivity() : BaseActivity() {
         QuecIotDataPointDataType.ARRAY to QuecIotDataPointDataType.ARRAY_NUM,
         QuecIotDataPointDataType.ENUM to QuecIotDataPointDataType.ENUM_NUM,
         QuecIotDataPointDataType.INT to QuecIotDataPointDataType.INT_NUM,
-        QuecIotDataPointDataType.TEXT to QuecIotDataPointDataType.TEXT
+        QuecIotDataPointDataType.TEXT to QuecIotDataPointDataType.TEXT_NUM,
+        QuecIotDataPointDataType.STRUCT to QuecIotDataPointDataType.STRUCT_NUM
     )
 
     var mode: QuecIotDataSendMode = QuecIotDataSendMode.QuecIotDataSendModeAuto;
@@ -850,12 +847,12 @@ class DeviceControlActivity() : BaseActivity() {
                         }
                     }
 
-                    deviceControlManager?.writeDps(mListChild)
-//                    WebSocketServiceLocater.getService(IWebSocketService::class.java)
-//                        .writeWebSocketArrayOrStructBaseData(
-//                            item.abId,
-//                            item.name, mListChild, ModelStyleConstant.STRUCT, dk, pk
-//                        )
+                    val stuctData = QuecIotDataPointsModel.DataModel<Any>();
+                    stuctData.id = item.abId
+                    stuctData.code = item.name
+                    stuctData.dataType = map[item.dataType]
+                    stuctData.value = mListChild
+                    deviceControlManager?.writeDps(mutableListOf(stuctData))
                 } else {
                     // * "[{\"key\":[{\"key1\":\"value1\"},{\"key2\":\"value2\"}]}]"
                     try {
