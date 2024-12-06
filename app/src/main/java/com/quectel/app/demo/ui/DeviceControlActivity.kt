@@ -849,7 +849,7 @@ class DeviceControlActivity() : BaseActivity() {
 
                     val structData = QuecIotDataPointsModel.DataModel<Any>();
                     structData.id = item.abId
-                    structData.code = item.name
+                    structData.code = item.resourceCode
                     structData.dataType = map[item.dataType]
                     structData.value = mListChild
                     deviceControlManager?.writeDps(mutableListOf(structData))
