@@ -918,35 +918,51 @@ class DeviceControlActivity() : BaseActivity() {
             mDialog.dismiss()
             if (specs != null) {
                 if (isOnline) {
-                    val mListChild: MutableList<KValue> = ArrayList()
+                    val mListChild: MutableList<QuecIotDataPointsModel.DataModel<Any>> = ArrayList()
                     //根据 getDataType  判断 数组里添加什么类型的数据  添加数据不能超过   specs.getSize()
-                    if (specs.getDataType() == ModelStyleConstant.INT) {
-                        val v1 = KValue(0, "", ModelStyleConstant.INT, 8)
-                        mListChild.add(v1)
-                    } else if (specs.getDataType() == ModelStyleConstant.BOOL) {
-                        val v1 = KValue(0, "", ModelStyleConstant.BOOL, "true")
-                        mListChild.add(v1)
-                    } else if (specs.getDataType() == ModelStyleConstant.ENUM) {
-                        val v1 = KValue(0, "", ModelStyleConstant.ENUM, 1)
-                        mListChild.add(v1)
-                    } else if (specs.getDataType() == ModelStyleConstant.FLOAT) {
-                        val v1 = KValue(0, "", ModelStyleConstant.FLOAT, 2.3)
-                        mListChild.add(v1)
-                    } else if (specs.getDataType() == ModelStyleConstant.DOUBLE) {
-                        val v1 = KValue(0, "", ModelStyleConstant.DOUBLE, 3.3)
-                        mListChild.add(v1)
-                    } else if (specs.getDataType() == ModelStyleConstant.TEXT) {
-                        val v1 = KValue(0, "", ModelStyleConstant.TEXT, "text")
-                        mListChild.add(v1)
-                    } else if (specs.getDataType() == ModelStyleConstant.DATE) {
-                        val v1 = KValue(0, "", ModelStyleConstant.DATE, Date().time.toString())
-                        mListChild.add(v1)
+                    val mb = specs
+                    if (mb.getDataType() == ModelStyleConstant.BOOL) {
+                        val data = QuecIotDataPointsModel.DataModel<Any>();
+                        data.dataType = map[mb.getDataType()]
+                        data.value = true
+                        mListChild.add(data)
+                    } else if (mb.getDataType() == ModelStyleConstant.INT) {
+                        //val v1 = KValue(mb.getId(), mb.getName(), ModelStyleConstant.INT, 55)
+                        val data = QuecIotDataPointsModel.DataModel<Any>();
+                        data.dataType = map[mb.getDataType()]
+                        data.value = 8
+                        mListChild.add(data)
+
+                    } else if (mb.getDataType() == ModelStyleConstant.FLOAT) {
+                        val data = QuecIotDataPointsModel.DataModel<Any>();
+                        data.dataType = map[mb.getDataType()]
+                        data.value = "22.22"
+                        mListChild.add(data)
+                    } else if (mb.getDataType() == ModelStyleConstant.DOUBLE) {
+                        val data = QuecIotDataPointsModel.DataModel<Any>();
+                        data.dataType = map[mb.getDataType()]
+                        data.value = "33.33"
+                        mListChild.add(data)
+                    } else if (mb.getDataType() == ModelStyleConstant.TEXT) {
+                        val data = QuecIotDataPointsModel.DataModel<Any>();
+
+                        data.dataType = map[mb.getDataType()]
+                        data.value = "text_content"
+                        mListChild.add(data)
+                    } else if (mb.getDataType() == ModelStyleConstant.DATE) {
+                        val data = QuecIotDataPointsModel.DataModel<Any>();
+                        data.dataType = map[mb.getDataType()]
+                        data.value = Date().time.toString()
+                        mListChild.add(data)
                     }
-                    WebSocketServiceLocater.getService(IWebSocketService::class.java)
-                        .writeWebSocketArrayOrStructBaseData(
-                            item.abId,
-                            item.name, mListChild, ModelStyleConstant.ARRAY, dk, pk
-                        )
+
+                    val arrayData = QuecIotDataPointsModel.DataModel<Any>();
+                    arrayData.id = item.abId
+                    arrayData.code = item.resourceCode
+                    arrayData.dataType = map[item.dataType]
+                    arrayData.value = mListChild
+                    deviceControlManager?.writeDps(mutableListOf(arrayData))
+
                 } else {
                     //"[{\"key\":[{\"id\":\"value1\"},{\"id\":\"value2\"}]}]"（id为0）
                     try {
