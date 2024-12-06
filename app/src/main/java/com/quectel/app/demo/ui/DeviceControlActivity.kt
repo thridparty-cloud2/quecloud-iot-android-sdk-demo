@@ -847,12 +847,12 @@ class DeviceControlActivity() : BaseActivity() {
                         }
                     }
 
-                    val stuctData = QuecIotDataPointsModel.DataModel<Any>();
-                    stuctData.id = item.abId
-                    stuctData.code = item.name
-                    stuctData.dataType = map[item.dataType]
-                    stuctData.value = mListChild
-                    deviceControlManager?.writeDps(mutableListOf(stuctData))
+                    val structData = QuecIotDataPointsModel.DataModel<Any>();
+                    structData.id = item.abId
+                    structData.code = item.name
+                    structData.dataType = map[item.dataType]
+                    structData.value = mListChild
+                    deviceControlManager?.writeDps(mutableListOf(structData))
                 } else {
                     // * "[{\"key\":[{\"key1\":\"value1\"},{\"key2\":\"value2\"}]}]"
                     try {
