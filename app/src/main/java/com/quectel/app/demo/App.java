@@ -6,20 +6,12 @@ import com.google.gson.Gson;
 import com.quectel.app.demo.constant.CloudConfig;
 import com.quectel.app.demo.utils.SPUtils;
 import com.quectel.app.demo.utils.ToastUtils;
-import com.quectel.basic.foundation.utils.QuecOemUtil;
-import com.quectel.oem.config.Network;
-import com.quectel.oem.config.QuecOemAppConfig;
-import com.quectel.oem.config.common.QuecOemNetworkConfigModel;
 import com.quectel.sdk.iot.QuecCloudServiceType;
 import com.quectel.sdk.iot.QuecIotAppSdk;
 import com.quectel.sdk.iot.bean.QuecPublicConfigBean;
 
 
 public class App extends MultiDexApplication {
-
-    String defaulUserDomain = "C.DM.5903.1";
-    String defaulDomainSecret = "EufftRJSuWuVY7c6txzGifV9bJcfXHAFa7hXY5doXSn7";
-
     int defaulQuecCloudServiceType = QuecCloudServiceType.QuecCloudServiceTypeChina.getValue();
 
     @Override
@@ -39,8 +31,8 @@ public class App extends MultiDexApplication {
 
         } else {
 
-            String userDomain = SPUtils.getString(this, CloudConfig.QUEC_USER_DOMAIN, defaulUserDomain);
-            String domainSecret = SPUtils.getString(this, CloudConfig.QUEC_DOMAIN_SECRET, defaulDomainSecret);
+            String userDomain = SPUtils.getString(this, CloudConfig.QUEC_USER_DOMAIN, CloudConfig.DEFAULT_USER_DOMAIN);
+            String domainSecret = SPUtils.getString(this, CloudConfig.QUEC_DOMAIN_SECRET, CloudConfig.DEFAULT_DOMAIN_SECRET);
             int serviceType = SPUtils.getInt(this, CloudConfig.QUEC_ClOUD_SERVICE_TYPE, defaulQuecCloudServiceType);
 
             QuecCloudServiceType quecCloudServiceType = QuecCloudServiceType.QuecCloudServiceTypeChina;
