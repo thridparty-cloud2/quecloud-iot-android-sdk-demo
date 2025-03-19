@@ -32,9 +32,11 @@ import com.quectel.app.demo.ui.LoginActivity;
 import com.quectel.app.demo.ui.ResetPasswordByEmailActivity;
 import com.quectel.app.demo.ui.ResetPasswordByPhoneActivity;
 
+import com.quectel.app.demo.ui.StartActivity;
 import com.quectel.app.demo.ui.UpdateUserActivity;
 import com.quectel.app.demo.ui.UpdateUserPhoneActivity;
 
+import com.quectel.app.demo.ui.account.LoginExActivity;
 import com.quectel.app.demo.utils.DensityUtils;
 import com.quectel.app.demo.utils.MyUtils;
 import com.quectel.app.demo.utils.ToastUtils;
@@ -487,7 +489,7 @@ public class MineFragment extends BaseMainFragment {
                                         new Thread(() -> {
                                             IotChannelController.getInstance().closeChannelAll();
                                         }).start();
-                                        Intent intent1 = new Intent(getActivity(), LoginActivity.class);
+                                        Intent intent1 = new Intent(getActivity(), StartActivity.class);
                                         intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent1);
                                     }
@@ -497,7 +499,7 @@ public class MineFragment extends BaseMainFragment {
                                         new Thread(() -> {
                                             IotChannelController.getInstance().closeChannelAll();
                                         }).start();
-                                        Intent intent1 = new Intent(getActivity(), LoginActivity.class);
+                                        Intent intent1 = new Intent(getActivity(), StartActivity.class);
                                         intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intent1);
                                     }

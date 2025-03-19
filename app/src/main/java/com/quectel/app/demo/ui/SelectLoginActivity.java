@@ -50,9 +50,9 @@ public class SelectLoginActivity extends BaseActivity {
 
             case R.id.bt_login3:
 
-                intent = new Intent(activity, AuthCodeLoginActivity.class);
-                startActivity(intent);
-                finish();
+//                intent = new Intent(activity, AuthCodeLoginActivity.class);
+//                startActivity(intent);
+//                finish();
                 break;
 
         }

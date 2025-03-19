@@ -3,8 +3,10 @@ package com.quectel.app.demo.ui
 import android.os.Bundle
 import com.quectel.app.demo.base.activity.QuecBaseActivity
 import com.quectel.app.demo.databinding.ActivityStartBinding
+import com.quectel.app.demo.ui.account.AuthCodeLoginActivity
 import com.quectel.app.demo.ui.account.LoginExActivity
 import com.quectel.app.demo.ui.account.RegisterExActivity
+import com.quectel.app.demo.ui.account.ResetPwdExActivity
 
 class StartActivity : QuecBaseActivity<ActivityStartBinding>() {
     override fun getViewBinding(): ActivityStartBinding {
@@ -29,7 +31,7 @@ class StartActivity : QuecBaseActivity<ActivityStartBinding>() {
         }
 
         addItem("账号登录: 三方AuthCode") {
-            showMessage("test")
+            startTargetActivity(AuthCodeLoginActivity::class.java)
         }
 
         addItem("账号注册") {
@@ -37,7 +39,7 @@ class StartActivity : QuecBaseActivity<ActivityStartBinding>() {
         }
 
         addItem("找回密码") {
-            showMessage("test")
+            startTargetActivity(ResetPwdExActivity::class.java)
         }
     }
 

@@ -36,7 +36,7 @@ class LoginExActivity : QuecBaseActivity<ActivityLoginExBinding>() {
                 )
             }
 
-            btLogin.setOnClickListener {
+            btConfirm.setOnClickListener {
                 when (currentMode) {
                     Mode.PHONE -> {
                         loginWithPhonePwd(

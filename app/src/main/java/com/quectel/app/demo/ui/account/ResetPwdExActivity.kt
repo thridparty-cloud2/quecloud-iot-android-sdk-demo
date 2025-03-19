@@ -5,7 +5,7 @@ import android.view.View
 import com.quectel.app.demo.R
 import com.quectel.app.demo.base.activity.QuecBaseActivity
 import com.quectel.app.demo.common.AuthCodeManager
-import com.quectel.app.demo.databinding.ActivityRegisterExBinding
+import com.quectel.app.demo.databinding.ActivityResetPwdExBinding
 import com.quectel.app.quecnetwork.httpservice.IHttpCallBack
 import com.quectel.app.usersdk.constant.UserConstant
 import com.quectel.app.usersdk.userservice.IUserService
@@ -13,11 +13,11 @@ import com.quectel.app.usersdk.utils.UserServiceFactory
 import org.json.JSONException
 import org.json.JSONObject
 
-class RegisterExActivity : QuecBaseActivity<ActivityRegisterExBinding>() {
+class ResetPwdExActivity : QuecBaseActivity<ActivityResetPwdExBinding>() {
     private var currentMode = Mode.PHONE
 
-    override fun getViewBinding(): ActivityRegisterExBinding {
-        return ActivityRegisterExBinding.inflate(layoutInflater)
+    override fun getViewBinding(): ActivityResetPwdExBinding {
+        return ActivityResetPwdExBinding.inflate(layoutInflater)
     }
 
     override fun initView(savedInstanceState: Bundle?) {
@@ -53,7 +53,7 @@ class RegisterExActivity : QuecBaseActivity<ActivityRegisterExBinding>() {
             btConfirm.setOnClickListener {
                 when (currentMode) {
                     Mode.PHONE -> {
-                        registerWithPhone(
+                        resetPwdWithPhone(
                             binding.etCountry.text.toString(),
                             binding.etAccount.text.toString(),
                             binding.etCode.text.toString(),
@@ -62,7 +62,7 @@ class RegisterExActivity : QuecBaseActivity<ActivityRegisterExBinding>() {
                     }
 
                     Mode.EMAIL -> {
-                        registerWithEmail(
+                        resetPwdWithEmail(
                             binding.etAccount.text.toString(),
                             binding.etCode.text.toString(),
                             binding.etPwd.text.toString()
@@ -102,7 +102,7 @@ class RegisterExActivity : QuecBaseActivity<ActivityRegisterExBinding>() {
         )
     }
 
-    private fun registerWithPhone(country: String, phone: String, code: String, pwd: String) {
+    private fun resetPwdWithPhone(country: String, phone: String, code: String, pwd: String) {
         if (country.isEmpty()) {
             showMessage("请输入国家区号")
             return
@@ -120,8 +120,8 @@ class RegisterExActivity : QuecBaseActivity<ActivityRegisterExBinding>() {
             return
         }
         UserServiceFactory.getInstance().getService(IUserService::class.java)
-            .phonePwdRegister(
-                phone, pwd, code, country.replace("+", ""), "", "", "", object : IHttpCallBack {
+            .userPwdResetByPhone(
+                country.replace("+", ""), code, phone, pwd, object : IHttpCallBack {
                     override fun onSuccess(result: String) {
                         try {
                             val obj = JSONObject(result)
@@ -143,7 +143,7 @@ class RegisterExActivity : QuecBaseActivity<ActivityRegisterExBinding>() {
             )
     }
 
-    private fun registerWithEmail(email: String, code: String, pwd: String) {
+    private fun resetPwdWithEmail(email: String, code: String, pwd: String) {
         if (email.isEmpty()) {
             showMessage("请输入邮箱")
             return
@@ -157,8 +157,8 @@ class RegisterExActivity : QuecBaseActivity<ActivityRegisterExBinding>() {
             return
         }
         UserServiceFactory.getInstance().getService(IUserService::class.java)
-            .emailPwdRegister(
-                code, email, pwd, 0, 0, 0, object : IHttpCallBack {
+            .userPwdResetByEmail(
+                "", code, email, pwd, object : IHttpCallBack {
                     override fun onSuccess(result: String) {
                         try {
                             val obj = JSONObject(result)
@@ -181,8 +181,7 @@ class RegisterExActivity : QuecBaseActivity<ActivityRegisterExBinding>() {
     }
 
     private fun setSuccess() {
-        showMessage("注册成功")
-        startTargetActivity(LoginExActivity::class.java)
+        showMessage("重置密码成功")
         finish()
     }
 
