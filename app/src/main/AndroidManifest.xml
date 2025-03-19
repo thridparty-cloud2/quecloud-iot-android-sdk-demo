@@ -6,24 +6,30 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH"
+        android:maxSdkVersion="30" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_ADMIN"
+        android:maxSdkVersion="30" />
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:maxSdkVersion="30"
+        android:required="true" />
 
-    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30"/>
-    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true" android:maxSdkVersion="30"/>
+    <uses-permission-sdk-23 android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-    <uses-permission-sdk-23 android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
-
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"
-        tools:node="remove"/>
-
+    <uses-permission
+        android:name="android.permission.ACCESS_BACKGROUND_LOCATION"
+        tools:node="remove" />
 
     <application
         android:name=".App"
@@ -32,8 +38,14 @@
         android:label="@string/appname"
         android:networkSecurityConfig="@xml/network_security_config"
         android:requestLegacyExternalStorage="true"
-        android:supportsRtl="true">
-
+        android:supportsRtl="true"
+        android:theme="@style/TranslucentTheme">
+        <activity
+            android:name=".ui.account.LoginExActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.account.RegisterExActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
@@ -50,66 +62,71 @@
         <activity
             android:name=".ui.AuthCodeLoginActivity"
             android:exported="false"
-            android:theme="@style/TranslucentTheme"/>
+            android:theme="@style/TranslucentTheme" />
         <activity
             android:name=".ui.LoginActivity"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"
-            android:theme="@style/TranslucentTheme"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentTheme" />
+        <activity
+            android:name=".ui.StartActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentTheme" />
         <activity
             android:name=".ui.RegisterActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme"></activity>
+            android:theme="@style/TranslucentTheme" />
         <activity
             android:name=".ui.HomeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme"></activity>
+            android:theme="@style/TranslucentTheme" />
         <activity
             android:name=".ui.UpdateUserActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme"></activity>
+            android:theme="@style/TranslucentTheme" />
         <activity
             android:name=".ui.ResetPasswordByPhoneActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme"></activity>
+            android:theme="@style/TranslucentTheme" />
         <activity
             android:name=".ui.SelectLoginActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme"></activity>
+            android:theme="@style/TranslucentTheme" />
         <activity
             android:name=".ui.EmailLoginActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme"></activity>
+            android:theme="@style/TranslucentTheme" />
         <activity
             android:name=".ui.EmailRegisterActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme"></activity>
+            android:theme="@style/TranslucentTheme" />
         <activity
             android:name=".ui.ResetPasswordByEmailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme"></activity>
+            android:theme="@style/TranslucentTheme" />
         <activity
             android:name=".ui.UpdateUserPhoneActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme"></activity>
+            android:theme="@style/TranslucentTheme" />
         <activity
             android:name=".ui.DeviceControlActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme"></activity>
+            android:theme="@style/TranslucentTheme" />
         <activity
             android:name=".ui.SharedGroupOfDevicesActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme"></activity>
+            android:theme="@style/TranslucentTheme" />
         <activity
             android:name=".ui.DistributionNetworkActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.UpdateImageActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme"></activity>
+            android:theme="@style/TranslucentTheme" />
         <activity
             android:name=".ui.SelectOtaActivity"
             android:screenOrientation="portrait"
@@ -122,10 +139,6 @@
             android:name=".ui.BleOtaActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme" />
-
-
-
-
     </application>
 
 </manifest>

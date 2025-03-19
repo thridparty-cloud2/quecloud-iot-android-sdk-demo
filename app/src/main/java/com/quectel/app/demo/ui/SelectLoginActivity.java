@@ -3,7 +3,6 @@ package com.quectel.app.demo.ui;
 import android.content.Intent;
 import android.view.View;
 
-import com.quectel.app.demo.MainActivity;
 import com.quectel.app.demo.R;
 import com.quectel.app.demo.base.BaseActivity;
 import com.quectel.app.demo.utils.MyUtils;

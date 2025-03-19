@@ -5,18 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import com.quectel.app.common.tools.utils.QuecCommonManager;
 import com.quectel.app.demo.ui.HomeActivity;
-import com.quectel.app.demo.ui.LoginActivity;
-import com.quectel.app.demo.ui.SelectLoginActivity;
-import com.quectel.app.demo.utils.ToastUtils;
+import com.quectel.app.demo.ui.StartActivity;
 import com.quectel.app.quecnetwork.httpservice.IHttpCallBack;
 import com.quectel.app.usersdk.userservice.IUserService;
 import com.quectel.app.usersdk.utils.UserServiceFactory;
-
-import org.greenrobot.eventbus.EventBus;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
-                    Intent intent = new Intent(MainActivity.this, SelectLoginActivity.class);
+                    Intent intent = new Intent(MainActivity.this, StartActivity.class);
                     startActivity(intent);
                     finish();
                 }

@@ -56,8 +56,7 @@
     </style>
 
 
-    <style name="floatwindow" parent="@android:style/Theme.Dialog">
-    </style>
+    <style name="floatwindow" parent="@android:style/Theme.Dialog"></style>
 
     <style name="dialog_full">
         <item name="android:windowIsFloating">true</item>   <!--是否悬浮在界面上-->
@@ -72,8 +71,7 @@
         <item name="android:windowExitAnimation">@anim/dialog_bottom_exit</item>
     </style>
 
-    <style name="quec_smart_config_BottomDialog"
-        parent="@android:style/Theme.Holo.Light.Dialog.MinWidth">
+    <style name="quec_smart_config_BottomDialog" parent="@android:style/Theme.Holo.Light.Dialog.MinWidth">
         <!--背景颜色和透明程度-->
         <item name="android:windowBackground">@android:color/transparent</item>
         <!--		<item name="android:windowAnimationStyle">@style/quec_smart_config_BottomAnim</item>-->
@@ -85,4 +83,21 @@
         <item name="android:windowExitAnimation">@anim/quec_smart_config_dialog_out</item>
     </style>
 
+    <style name="CommEdit">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:textColorHint">@color/W3</item>
+    </style>
+
+    <style name="CommButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">50dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/white_bg</item>
+        <item name="android:textColor">@color/new_lan</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:layout_marginTop">20dp</item>
+    </style>
 </resources>
