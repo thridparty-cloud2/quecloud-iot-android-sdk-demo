@@ -6,4 +6,9 @@
     <string name="operation_record">操作记录</string>
     <string name="clear">清空</string>
 
+    <string name="quec_no_wifi_permission">开启定位权限，可自动获取 Wi-Fi 名称，</string>
+    <string name="quec_open_get_wifi_permission">开启权限</string>
+    <string name="quec_device_net_config_tip">温馨提示：此设备只支持2.4GHz WI-FI连接使用，请确保设备已进入配网状态</string>
+    <string name="quec_device_next_step">下一步</string>
+
 </resources>

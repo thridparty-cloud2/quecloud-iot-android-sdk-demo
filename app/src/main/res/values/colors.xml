@@ -39,4 +39,32 @@
 
     <color name="text">#FF000000</color>
     <color name="text_sub">#87888B</color>
+
+    <color name="B1">#F7F8FC</color>
+    <color name="B2">#FFFFFF</color>
+    <color name="B3">#F7F8FC</color>
+    <color name="B4">#FFFFFF</color>
+    <color name="B5">#FFFFFF</color>
+    <color name="B6">#E0F2FF</color>
+    <color name="M0">#0091FF</color>
+    <color name="M0_12">#1F0091FF</color>
+    <color name="M0_2">#7A0091FF</color>
+    <color name="M0_3">#1F0091FF</color>
+    <color name="M0_48">#7A0091FF</color>
+    <color name="M1">#0091FF</color>
+    <color name="M1_12">#1F0091FF</color>
+    <color name="M1_2">#7A0091FF</color>
+    <color name="M1_3">#1F0091FF</color>
+    <color name="M1_48">#7A0091FF</color>
+    <color name="M2">#FF7E27</color>
+    <color name="M3">#00CF63</color>
+    <color name="M4">#FF3E3E</color>
+    <color name="M5">#0091FF</color>
+    <color name="M6">#EFEFEF</color>
+    <color name="W1">#080F19</color>
+    <color name="W2">#6B6F75</color>
+    <color name="W3">#9C9FA3</color>
+    <color name="W4">#CECFD1</color>
+    <color name="W5">#9C9FA3</color>
+    <color name="W6">#F3F3F4</color>
 </resources>

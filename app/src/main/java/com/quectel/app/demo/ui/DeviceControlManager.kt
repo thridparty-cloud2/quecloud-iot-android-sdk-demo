@@ -81,7 +81,7 @@ class DeviceControlManager(
         IotChannelController.getInstance().startChannel(context, pkDkModel, mode)
     }
 
-    fun writeDps(dataPointsModel: MutableList<QuecIotDataPointsModel.DataModel<Any>>) {
+    fun writeDps(dataPointsModel: MutableList<QuecIotDataPointsModel.DataModel>) {
 
         IotChannelController.getInstance().writeDps(channelId, dataPointsModel, QuecIotDataSendMode.QuecIotDataSendModeAuto, null, object : IotResultCallback<Unit?>{
             override fun onFail(result: QuecResult<Unit>) {

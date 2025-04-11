@@ -13,12 +13,12 @@ import com.quectel.app.demo.base.BaseActivity;
 import com.quectel.app.demo.bean.UserInfor;
 import com.quectel.app.demo.fragment.MainFragment;
 import com.quectel.app.demo.utils.MyUtils;
+import com.quectel.app.demo.utils.QuecPermission;
 import com.quectel.app.quecnetwork.httpservice.IHttpCallBack;
 import com.quectel.app.quecnetwork.logservice.ILogService;
 import com.quectel.app.quecnetwork.utils.LogService;
 import com.quectel.app.usersdk.userservice.IUserService;
 import com.quectel.app.usersdk.utils.UserServiceFactory;
-import com.quectel.basic.permission.QuecPermission;
 import com.quectel.basic.quecmmkv.MmkvManager;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
