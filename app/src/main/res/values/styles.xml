@@ -83,6 +83,12 @@
         <item name="android:windowExitAnimation">@anim/quec_smart_config_dialog_out</item>
     </style>
 
+    <style name="CommText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/W1</item>
+    </style>
+
     <style name="CommEdit">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

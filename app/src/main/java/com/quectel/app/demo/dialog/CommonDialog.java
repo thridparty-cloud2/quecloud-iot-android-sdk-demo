@@ -59,6 +59,13 @@ public class CommonDialog extends Dialog {
 
     private boolean isEnableBackPressed = true; //默认允许返回关闭Dialog
 
+    public static void showSimpleInfo(Context context, String title, String content) {
+        CommonDialog commonDialog = new CommonDialog(context);
+        commonDialog.setTitle(title);
+        commonDialog.setMessage(content);
+        commonDialog.setOnShowListener(dialog -> commonDialog.setNoBtnVisible(View.GONE));
+        commonDialog.show();
+    }
 
     public CommonDialog(@NonNull Context context) {
         super(context, R.style.quec_basic_ui_MyDialog);
@@ -222,6 +229,8 @@ public class CommonDialog extends Dialog {
             public void onViewClick(View v) {
                 if (yesOnclickListener != null) {
                     yesOnclickListener.onYesOnclick();
+                } else {
+                    dismiss();
                 }
             }
         });
@@ -231,6 +240,8 @@ public class CommonDialog extends Dialog {
             public void onViewClick(View v) {
                 if (noOnclickListener != null) {
                     noOnclickListener.onNoClick();
+                } else {
+                    dismiss();
                 }
             }
         });

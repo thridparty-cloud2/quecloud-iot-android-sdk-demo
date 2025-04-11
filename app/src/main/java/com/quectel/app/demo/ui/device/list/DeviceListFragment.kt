@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.quectel.app.demo.base.activity.QuecBaseDeviceActivity
 import com.quectel.app.demo.base.fragment.QuecBaseFragment
+import com.quectel.app.demo.common.AppVariable
 import com.quectel.app.demo.databinding.ActivityDeviceListBinding
 import com.quectel.app.demo.ui.device.function.DeviceFunctionActivity
 import com.quectel.app.demo.widget.BottomItemDecorationSystem
@@ -58,6 +59,14 @@ class DeviceListFragment : QuecBaseFragment<ActivityDeviceListBinding>() {
         getDeviceList()
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (AppVariable.isDeviceInfoChange) {
+            AppVariable.isDeviceInfoChange = false
+            getDeviceList()
+        }
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     private fun getDeviceList(page: Int = 1) {
         QuecDeviceService.getDeviceList(QuecDeviceListParamsModel().apply {
@@ -78,6 +87,7 @@ class DeviceListFragment : QuecBaseFragment<ActivityDeviceListBinding>() {
     }
 
     private fun onItemClick(device: QuecDeviceModel) {
+        AppVariable.isDeviceInfoChange = false
         startActivity(Intent(context, DeviceFunctionActivity::class.java).apply {
             putExtra(QuecBaseDeviceActivity.CODE_DEVICE, device)
         })
