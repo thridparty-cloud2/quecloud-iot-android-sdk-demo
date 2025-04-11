@@ -6,12 +6,8 @@ import com.quectel.app.demo.R
 import com.quectel.app.demo.base.activity.QuecBaseActivity
 import com.quectel.app.demo.common.AuthCodeManager
 import com.quectel.app.demo.databinding.ActivityRegisterExBinding
-import com.quectel.app.quecnetwork.httpservice.IHttpCallBack
 import com.quectel.app.usersdk.constant.UserConstant
-import com.quectel.app.usersdk.userservice.IUserService
-import com.quectel.app.usersdk.utils.UserServiceFactory
-import org.json.JSONException
-import org.json.JSONObject
+import com.quectel.app.usersdk.service.QuecUserService
 
 class RegisterExActivity : QuecBaseActivity<ActivityRegisterExBinding>() {
     private var currentMode = Mode.PHONE
@@ -119,28 +115,13 @@ class RegisterExActivity : QuecBaseActivity<ActivityRegisterExBinding>() {
             showMessage("请输入密码")
             return
         }
-        UserServiceFactory.getInstance().getService(IUserService::class.java)
-            .phonePwdRegister(
-                phone, pwd, code, country.replace("+", ""), "", "", "", object : IHttpCallBack {
-                    override fun onSuccess(result: String) {
-                        try {
-                            val obj = JSONObject(result)
-                            if (obj.getInt("code") == 200) {
-                                setSuccess()
-                            } else {
-                                showMessage(obj.getString("msg"))
-                            }
-                        } catch (e: JSONException) {
-                            e.printStackTrace()
-                            showMessage(e.toString())
-                        }
-                    }
-
-                    override fun onFail(e: Throwable?) {
-                        showMessage(e?.toString() ?: "")
-                    }
-                }
-            )
+        QuecUserService.registerByPhone(phone, code, pwd, country) {
+            if (it.isSuccess) {
+                setSuccess()
+            } else {
+                showMessage("注册失败: ${it.msg}")
+            }
+        }
     }
 
     private fun registerWithEmail(email: String, code: String, pwd: String) {
@@ -156,28 +137,13 @@ class RegisterExActivity : QuecBaseActivity<ActivityRegisterExBinding>() {
             showMessage("请输入密码")
             return
         }
-        UserServiceFactory.getInstance().getService(IUserService::class.java)
-            .emailPwdRegister(
-                code, email, pwd, 0, 0, 0, object : IHttpCallBack {
-                    override fun onSuccess(result: String) {
-                        try {
-                            val obj = JSONObject(result)
-                            if (obj.getInt("code") == 200) {
-                                setSuccess()
-                            } else {
-                                showMessage(obj.getString("msg"))
-                            }
-                        } catch (e: JSONException) {
-                            e.printStackTrace()
-                            showMessage(e.toString())
-                        }
-                    }
-
-                    override fun onFail(e: Throwable?) {
-                        showMessage(e?.toString() ?: "")
-                    }
-                }
-            )
+        QuecUserService.registerByEmail(email, code, pwd) {
+            if (it.isSuccess) {
+                setSuccess()
+            } else {
+                showMessage("注册失败: ${it.msg}")
+            }
+        }
     }
 
     private fun setSuccess() {

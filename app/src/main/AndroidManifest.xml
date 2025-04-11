@@ -67,17 +67,8 @@
             android:exported="false"
             android:theme="@style/TranslucentTheme" />
         <activity
-            android:name=".ui.LoginActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme" />
-        <activity
             android:name=".ui.StartActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme" />
-        <activity
-            android:name=".ui.RegisterActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme" />
         <activity
@@ -86,26 +77,6 @@
             android:theme="@style/TranslucentTheme" />
         <activity
             android:name=".ui.UpdateUserActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme" />
-        <activity
-            android:name=".ui.ResetPasswordByPhoneActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme" />
-        <activity
-            android:name=".ui.SelectLoginActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme" />
-        <activity
-            android:name=".ui.EmailLoginActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme" />
-        <activity
-            android:name=".ui.EmailRegisterActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme" />
-        <activity
-            android:name=".ui.ResetPasswordByEmailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme" />
         <activity

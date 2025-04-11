@@ -9,11 +9,9 @@ import com.quectel.app.demo.constant.CloudConfig
 import com.quectel.app.demo.databinding.ActivityLoginExBinding
 import com.quectel.app.demo.ui.HomeActivity
 import com.quectel.app.demo.utils.SPUtils
-import com.quectel.app.quecnetwork.httpservice.IResponseCallBack
 import com.quectel.app.usersdk.constant.UserConstant
-import com.quectel.app.usersdk.userservice.IUserService
-import com.quectel.app.usersdk.utils.UserServiceFactory
-import com.quectel.sdk.iot.QuecIotAppSdk
+import com.quectel.app.usersdk.service.QuecUserService
+import com.quectel.sdk.iot.service.QuecIotSdk
 
 class LoginExActivity : QuecBaseActivity<ActivityLoginExBinding>() {
     private var currentMode = Mode.PHONE
@@ -120,22 +118,13 @@ class LoginExActivity : QuecBaseActivity<ActivityLoginExBinding>() {
             showMessage("请输入密码")
             return
         }
-        UserServiceFactory.getInstance().getService(IUserService::class.java)
-            .phonePwdLogin(
-                phone, pwd, country.replace("+", ""), object : IResponseCallBack {
-                    override fun onSuccess() {
-                        setLoginSuccess(country)
-                    }
-
-                    override fun onFail(e: Throwable) {
-                        showMessage(e.toString())
-                    }
-
-                    override fun onError(code: Int, errorMsg: String) {
-                        showMessage("$[$code] $errorMsg")
-                    }
-                }
-            )
+        QuecUserService.loginByPhone(phone, pwd, country) {
+            if (it.isSuccess) {
+                setLoginSuccess(country)
+            } else {
+                showMessage("登录失败: ${it.msg}")
+            }
+        }
     }
 
     private fun loginWithPhoneCode(country: String, phone: String, code: String) {
@@ -151,22 +140,13 @@ class LoginExActivity : QuecBaseActivity<ActivityLoginExBinding>() {
             showMessage("请输入验证码")
             return
         }
-        UserServiceFactory.getInstance().getService(IUserService::class.java)
-            .phoneSmsCodeLogin(
-                phone, code, country.replace("+", ""), object : IResponseCallBack {
-                    override fun onSuccess() {
-                        setLoginSuccess(country)
-                    }
-
-                    override fun onFail(e: Throwable) {
-                        showMessage(e.toString())
-                    }
-
-                    override fun onError(code: Int, errorMsg: String?) {
-                        showMessage("$[$code] $errorMsg")
-                    }
-                }
-            )
+        QuecUserService.loginWithMobile(phone, code, country) {
+            if (it.isSuccess) {
+                setLoginSuccess(country)
+            } else {
+                showMessage("登录失败: ${it.msg}")
+            }
+        }
     }
 
     private fun loginWithEmailPwd(email: String, pwd: String) {
@@ -178,20 +158,13 @@ class LoginExActivity : QuecBaseActivity<ActivityLoginExBinding>() {
             showMessage("请输入密码")
             return
         }
-        UserServiceFactory.getInstance().getService(IUserService::class.java)
-            .emailPwdLogin(
-                email, pwd, object : IResponseCallBack {
-                    override fun onSuccess() {
-                        setLoginSuccess(null)
-                    }
-
-                    override fun onFail(e: Throwable) {
-                        showMessage(e.toString())
-                    }
-
-                    override fun onError(code: Int, errorMsg: String?) {}
-                }
-            )
+        QuecUserService.loginByEmail(email, pwd) {
+            if (it.isSuccess) {
+                setLoginSuccess(null)
+            } else {
+                showMessage("登录失败: ${it.msg}")
+            }
+        }
     }
 
     private fun setLoginSuccess(country: String?) {
@@ -202,7 +175,7 @@ class LoginExActivity : QuecBaseActivity<ActivityLoginExBinding>() {
                 false
             ) && country != null
         ) {
-            QuecIotAppSdk.getInstance().setCountryCode(country)
+            QuecIotSdk.setCountryCode(country)
         }
         startTargetActivity(HomeActivity::class.java)
         finish()

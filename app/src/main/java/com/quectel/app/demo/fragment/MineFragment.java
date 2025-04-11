@@ -28,15 +28,12 @@ import com.quectel.app.demo.bean.LanVO;
 import com.quectel.app.demo.bean.UserInfor;
 import com.quectel.app.demo.fragmentbase.BaseMainFragment;
 
-import com.quectel.app.demo.ui.LoginActivity;
-import com.quectel.app.demo.ui.ResetPasswordByEmailActivity;
-import com.quectel.app.demo.ui.ResetPasswordByPhoneActivity;
-
 import com.quectel.app.demo.ui.StartActivity;
 import com.quectel.app.demo.ui.UpdateUserActivity;
 import com.quectel.app.demo.ui.UpdateUserPhoneActivity;
 
 import com.quectel.app.demo.ui.account.LoginExActivity;
+import com.quectel.app.demo.ui.account.ResetPwdExActivity;
 import com.quectel.app.demo.utils.DensityUtils;
 import com.quectel.app.demo.utils.MyUtils;
 import com.quectel.app.demo.utils.ToastUtils;
@@ -452,16 +449,7 @@ public class MineFragment extends BaseMainFragment {
                 break;
 
             case R.id.ll_reset_password:
-
-                if(TextUtils.isEmpty(user.getData().getEmail()))
-                {
-                    startActivity(new Intent(getActivity(), ResetPasswordByPhoneActivity.class));
-                }
-                else
-                {
-                    startActivity(new Intent(getActivity(), ResetPasswordByEmailActivity.class));
-                }
-
+                startActivity(new Intent(getActivity(), ResetPwdExActivity.class));
                 break;
 
             case R.id.ll_change_password:

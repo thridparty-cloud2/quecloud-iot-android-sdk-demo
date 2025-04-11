@@ -6,12 +6,8 @@ import com.quectel.app.demo.R
 import com.quectel.app.demo.base.activity.QuecBaseActivity
 import com.quectel.app.demo.common.AuthCodeManager
 import com.quectel.app.demo.databinding.ActivityResetPwdExBinding
-import com.quectel.app.quecnetwork.httpservice.IHttpCallBack
 import com.quectel.app.usersdk.constant.UserConstant
-import com.quectel.app.usersdk.userservice.IUserService
-import com.quectel.app.usersdk.utils.UserServiceFactory
-import org.json.JSONException
-import org.json.JSONObject
+import com.quectel.app.usersdk.service.QuecUserService
 
 class ResetPwdExActivity : QuecBaseActivity<ActivityResetPwdExBinding>() {
     private var currentMode = Mode.PHONE
@@ -119,28 +115,13 @@ class ResetPwdExActivity : QuecBaseActivity<ActivityResetPwdExBinding>() {
             showMessage("请输入密码")
             return
         }
-        UserServiceFactory.getInstance().getService(IUserService::class.java)
-            .userPwdResetByPhone(
-                country.replace("+", ""), code, phone, pwd, object : IHttpCallBack {
-                    override fun onSuccess(result: String) {
-                        try {
-                            val obj = JSONObject(result)
-                            if (obj.getInt("code") == 200) {
-                                setSuccess()
-                            } else {
-                                showMessage(obj.getString("msg"))
-                            }
-                        } catch (e: JSONException) {
-                            e.printStackTrace()
-                            showMessage(e.toString())
-                        }
-                    }
-
-                    override fun onFail(e: Throwable?) {
-                        showMessage(e?.toString() ?: "")
-                    }
-                }
-            )
+        QuecUserService.resetPasswordByPhone(phone, code, country, pwd) {
+            if (it.isSuccess) {
+                setSuccess()
+            } else {
+                showMessage("重置密码失败: ${it.msg}")
+            }
+        }
     }
 
     private fun resetPwdWithEmail(email: String, code: String, pwd: String) {
@@ -156,28 +137,13 @@ class ResetPwdExActivity : QuecBaseActivity<ActivityResetPwdExBinding>() {
             showMessage("请输入密码")
             return
         }
-        UserServiceFactory.getInstance().getService(IUserService::class.java)
-            .userPwdResetByEmail(
-                "", code, email, pwd, object : IHttpCallBack {
-                    override fun onSuccess(result: String) {
-                        try {
-                            val obj = JSONObject(result)
-                            if (obj.getInt("code") == 200) {
-                                setSuccess()
-                            } else {
-                                showMessage(obj.getString("msg"))
-                            }
-                        } catch (e: JSONException) {
-                            e.printStackTrace()
-                            showMessage(e.toString())
-                        }
-                    }
-
-                    override fun onFail(e: Throwable?) {
-                        showMessage(e?.toString() ?: "")
-                    }
-                }
-            )
+        QuecUserService.resetPasswordByEmail(code, email, null, pwd) {
+            if (it.isSuccess) {
+                setSuccess()
+            } else {
+                showMessage("重置密码失败: ${it.msg}")
+            }
+        }
     }
 
     private fun setSuccess() {
