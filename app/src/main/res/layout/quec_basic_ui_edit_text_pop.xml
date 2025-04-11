@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginHorizontal="@dimen/dp_50"
+    android:background="@drawable/quec_basic_ui_device_name_popup">
+
+    <TextView
+        tools:text="Title"
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_25"
+        android:paddingHorizontal="@dimen/dp_12"
+        android:textColor="@color/W1"
+        android:gravity="center"
+        android:textSize="@dimen/T7_F"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/edit_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:background="@drawable/quec_basic_ui_edit_shape"
+        android:maxLength="30"
+        android:focusable="true"
+        android:maxLines="1"
+        android:textColor="@color/W1"
+        android:textColorHint="@color/W3"
+        android:textSize="@dimen/T4_F"
+        android:textCursorDrawable="@drawable/quec_edittext_cursor"
+        app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+
+    <TextView
+        android:id="@+id/tv_cancel"
+        style="@style/quec_basic_ui_dialog_cancel_btn_style"
+        android:layout_width="0dp"
+        android:layout_marginTop="@dimen/dp_30"
+        android:layout_weight="1"
+        android:text="@string/quec_cancel"
+        app:layout_constraintEnd_toStartOf="@id/tv_sure"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edit_content" />
+
+    <TextView
+        android:id="@+id/tv_sure"
+        style="@style/quec_basic_ui_dialog_confirm_btn_style"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:text="@string/quec_sure"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/tv_cancel"
+        app:layout_constraintTop_toTopOf="@id/tv_cancel" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

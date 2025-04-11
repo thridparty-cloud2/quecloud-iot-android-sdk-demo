@@ -43,8 +43,16 @@ abstract class QuecBaseCommonFragment : SupportFragment(), QuecBaseView {
         return Intent(context, clazz)
     }
 
-    fun handlerError(result: QuecResult<*>) {
+    protected fun handlerError(result: QuecResult<*>) {
         showMessage("[${result.code}] ${result.msg}")
+    }
+
+    protected fun handlerResult(result: QuecResult<*>) {
+        if (result.isSuccess) {
+            showMessage("操作成功")
+        } else {
+            handlerError(result)
+        }
     }
 
     /**

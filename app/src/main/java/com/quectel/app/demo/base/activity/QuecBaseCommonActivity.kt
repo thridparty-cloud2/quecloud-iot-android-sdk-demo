@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.quectel.app.demo.base.QuecBaseView
 import com.quectel.app.demo.base.QuecLoadingDialog
 import com.quectel.app.demo.utils.DisplayUtil
+import com.quectel.basic.common.entity.QuecResult
 import com.quectel.basic.common.utils.QuecStatusBarUtil
 import com.quectel.basic.queclog.QLog
 import kotlinx.coroutines.CoroutineScope
@@ -254,5 +255,17 @@ abstract class QuecBaseCommonActivity : AppCompatActivity(), QuecBaseView {
         //QLog.i(this.toString(), "setFontSize $fontScale")
         this.fontScale = fontScale
         DisplayUtil.recreate(this)
+    }
+
+    protected fun handlerError(result: QuecResult<*>) {
+        showMessage("[${result.code}] ${result.msg}")
+    }
+
+    protected fun handlerResult(result: QuecResult<*>) {
+        if (result.isSuccess) {
+            showMessage("操作成功")
+        } else {
+            handlerError(result)
+        }
     }
 }

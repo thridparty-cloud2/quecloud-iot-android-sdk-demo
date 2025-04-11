@@ -100,4 +100,39 @@
         <item name="android:textSize">18sp</item>
         <item name="android:layout_marginTop">20dp</item>
     </style>
+
+    <!--自定义Dialog背景全透明无边框theme-->
+    <style name="quec_basic_ui_MyDialog" parent="android:style/Theme.Dialog">
+        <!--背景颜色和透明程度-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--是否去除标题-->
+        <item name="android:windowNoTitle">true</item>
+        <!--是否去除边框-->
+        <item name="android:windowFrame">@null</item>
+        <!--是否浮现在activity之上-->
+        <item name="android:windowIsFloating">true</item>
+
+        <!--是否模糊-->
+        <item name="android:backgroundDimEnabled">true</item>
+        <!-- 半透明的背景的透明度 -->
+        <item name="android:backgroundDimAmount">0.4</item>
+    </style>
+
+    <!--弹框按钮样式-->
+    <style name="quec_basic_ui_dialog_btn_style">
+        <item name="android:textSize">@dimen/T6_F</item>
+        <item name="android:layout_height">@dimen/dp_55</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <!--  弹框取消按钮样式  -->
+    <style name="quec_basic_ui_dialog_cancel_btn_style" parent="quec_basic_ui_dialog_btn_style">
+        <item name="android:textColor">@color/W1</item>
+        <item name="android:background">@drawable/quec_basic_ui_cancel_btn_shape</item>
+    </style>
+    <!--    弹框确认按钮样式-->
+    <style name="quec_basic_ui_dialog_confirm_btn_style" parent="quec_basic_ui_dialog_btn_style">
+        <item name="android:textColor">@color/M1</item>
+        <item name="android:background">@drawable/quec_basic_ui_confirm_btn_shape</item>
+    </style>
 </resources>
