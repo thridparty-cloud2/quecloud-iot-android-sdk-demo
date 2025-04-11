@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import com.quectel.app.demo.R;
+import com.quectel.app.demo.ui.device.list.DeviceListFragment;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -64,12 +66,12 @@ public class MainFragment extends SupportFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        SupportFragment firstFragment = findChildFragment(DeviceFragment.class);
+        SupportFragment firstFragment = findChildFragment(DeviceListFragment.class);
         if (firstFragment == null) {
             System.out.println("firstFragment == null");
             selectTabOne();
 
-            mFragments[FIRST] = DeviceFragment.newInstance();
+            mFragments[FIRST] = new DeviceListFragment();
             mFragments[SECOND] = DeviceGroupFragment.newInstance();
             mFragments[THIRD] = MineFragment.newInstance();
 

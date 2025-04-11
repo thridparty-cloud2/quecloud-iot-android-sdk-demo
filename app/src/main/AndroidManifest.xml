@@ -88,6 +88,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme" />
         <activity
+            android:name=".ui.device.function.DeviceFunctionActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentTheme" />
+        <activity
             android:name=".ui.SharedGroupOfDevicesActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme" />

@@ -31,6 +31,7 @@
         android:id="@+id/et_pwd"
         style="@style/CommEdit"
         android:hint="请输入密码"
+        android:inputType="textPassword"
         android:visibility="gone"
         tools:visibility="visible" />
 

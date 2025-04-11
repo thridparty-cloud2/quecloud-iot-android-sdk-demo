@@ -54,6 +54,7 @@ class LoginExActivity : QuecBaseActivity<ActivityLoginExBinding>() {
 
                     Mode.EMAIL -> {
                         loginWithEmailPwd(
+                            binding.etCountry.text.toString(),
                             binding.etAccount.text.toString(),
                             binding.etPwd.text.toString()
                         )
@@ -75,21 +76,18 @@ class LoginExActivity : QuecBaseActivity<ActivityLoginExBinding>() {
         currentMode = mode
         when (mode) {
             Mode.PHONE -> {
-                binding.etCountry.visibility = View.VISIBLE
                 binding.etAccount.hint = "请输入手机号"
                 binding.etPwd.hint = "请输入密码"
                 binding.btGetCode.visibility = View.INVISIBLE
             }
 
             Mode.EMAIL -> {
-                binding.etCountry.visibility = View.INVISIBLE
                 binding.etAccount.hint = "请输入邮箱"
                 binding.etPwd.hint = "请输入密码"
                 binding.btGetCode.visibility = View.INVISIBLE
             }
 
             Mode.PHONE_CODE -> {
-                binding.etCountry.visibility = View.VISIBLE
                 binding.etAccount.hint = "请输入手机号"
                 binding.etPwd.hint = "请输入验证码"
                 binding.btGetCode.visibility = View.VISIBLE
@@ -149,7 +147,11 @@ class LoginExActivity : QuecBaseActivity<ActivityLoginExBinding>() {
         }
     }
 
-    private fun loginWithEmailPwd(email: String, pwd: String) {
+    private fun loginWithEmailPwd(country: String, email: String, pwd: String) {
+        if (country.isEmpty()) {
+            showMessage("请输入国家区号")
+            return
+        }
         if (email.isEmpty()) {
             showMessage("请输入邮箱")
             return
@@ -160,7 +162,7 @@ class LoginExActivity : QuecBaseActivity<ActivityLoginExBinding>() {
         }
         QuecUserService.loginByEmail(email, pwd) {
             if (it.isSuccess) {
-                setLoginSuccess(null)
+                setLoginSuccess(country)
             } else {
                 showMessage("登录失败: ${it.msg}")
             }
