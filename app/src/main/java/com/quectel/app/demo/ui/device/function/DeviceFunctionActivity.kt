@@ -7,6 +7,7 @@ import com.quectel.app.demo.common.AppVariable
 import com.quectel.app.demo.databinding.ActivityDeviceFunctionBinding
 import com.quectel.app.demo.dialog.CommonDialog
 import com.quectel.app.demo.dialog.EditTextPopup
+import com.quectel.app.demo.ui.device.ota.DeviceOtaActivity
 import com.quectel.app.demo.ui.device.share.DeviceShareActivity
 import com.quectel.app.device.deviceservice.QuecDeviceService
 
@@ -51,7 +52,7 @@ class DeviceFunctionActivity : QuecBaseDeviceActivity<ActivityDeviceFunctionBind
         }
 
         addItem("设备升级") {
-
+            startActivity(Intent(this, DeviceOtaActivity::class.java))
         }
 
 

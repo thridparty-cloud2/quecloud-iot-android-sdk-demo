@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
@@ -26,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="蓝牙OTA"
+            android:text="设备升级"
             android:textColor="@color/main1"
             android:textSize="18sp" />
 
@@ -39,10 +38,10 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_marginHorizontal="8dp"
         android:id="@+id/ll_log"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginHorizontal="8dp"
         android:layout_marginTop="12dp"
         android:layout_weight="1"
         android:background="@drawable/shape_background"
@@ -57,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/operation_record"
-                android:textColor="@color/purple_200"
+                android:textColor="@color/M1"
                 android:textSize="12sp" />
 
             <View
@@ -70,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/clear"
-                android:textColor="@color/purple_500"
+                android:textColor="@color/M1"
                 android:textSize="12sp" />
         </LinearLayout>
 

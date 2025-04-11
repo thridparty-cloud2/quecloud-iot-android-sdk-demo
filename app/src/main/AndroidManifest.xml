@@ -118,7 +118,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme" />
         <activity
-            android:name=".ui.BleOtaActivity"
+            android:name=".ui.device.ota.DeviceOtaActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme" />
     </application>

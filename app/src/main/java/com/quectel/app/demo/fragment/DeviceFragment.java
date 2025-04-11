@@ -1,16 +1,12 @@
 package com.quectel.app.demo.fragment;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,15 +19,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.quectel.app.demo.R;
 import com.quectel.app.demo.adapter.DeviceAdapter;
-import com.quectel.app.demo.adapter.LanAdapter;
-import com.quectel.app.demo.bean.LanVO;
 import com.quectel.app.demo.bean.UserDeviceList;
-import com.quectel.app.demo.constant.DeviceConfig;
 import com.quectel.app.demo.fragmentbase.BaseMainFragment;
-import com.quectel.app.demo.ui.BleOtaActivity;
+import com.quectel.app.demo.ui.device.ota.DeviceOtaActivity;
 import com.quectel.app.demo.ui.DeviceControlActivity;
 import com.quectel.app.demo.ui.DistributionNetworkActivity;
 import com.quectel.app.demo.ui.SelectOtaActivity;
@@ -39,13 +31,10 @@ import com.quectel.app.demo.utils.MyUtils;
 import com.quectel.app.demo.utils.ToastUtils;
 import com.quectel.app.demo.widget.BottomItemDecorationSystem;
 import com.quectel.app.demo.widget.PayBottomDialog;
-import com.quectel.app.device.bean.BusinessValue;
 import com.quectel.app.device.deviceservice.IDevService;
 import com.quectel.app.device.iot.IotChannelController;
 import com.quectel.app.device.utils.DeviceServiceFactory;
 import com.quectel.app.quecnetwork.httpservice.IHttpCallBack;
-import com.quectel.app.usersdk.userservice.IUserService;
-import com.quectel.app.usersdk.utils.UserServiceFactory;
 import com.quectel.basic.common.entity.QuecDeviceModel;
 import com.quectel.basic.common.interfaces.QuecClickListener;
 import com.quectel.basic.common.utils.QuecThreadUtil;
@@ -53,30 +42,20 @@ import com.quectel.sdk.iot.channel.kit.chanel.IQuecChannelManager;
 import com.quectel.sdk.iot.channel.kit.constaint.QuecIotChannelType;
 import com.quectel.sdk.iot.channel.kit.model.QuecIotDataPointsModel;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xutils.http.RequestParams;
 
 import java.io.Serializable;
-import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 
 
 public class DeviceFragment extends BaseMainFragment {
@@ -745,15 +724,15 @@ public class DeviceFragment extends BaseMainFragment {
 
         if (bitmask == 4) {
             bt_ble_ota.setVisibility(View.VISIBLE);
-            bt_ble_ota.setOnClickListener(new QuecClickListener() {
-                @Override
-                public void onViewClick(View v) {
-                    Intent intent = new Intent(getActivity(), BleOtaActivity.class);
-                    intent.putExtra(BleOtaActivity.KEY_PK, pk);
-                    intent.putExtra(BleOtaActivity.KEY_DK, dk);
-                    startActivity(intent);
-                }
-            });
+//            bt_ble_ota.setOnClickListener(new QuecClickListener() {
+//                @Override
+//                public void onViewClick(View v) {
+//                    Intent intent = new Intent(getActivity(), DeviceOtaActivity.class);
+//                    intent.putExtra(DeviceOtaActivity.KEY_PK, pk);
+//                    intent.putExtra(DeviceOtaActivity.KEY_DK, dk);
+//                    startActivity(intent);
+//                }
+//            });
         }
 
         mDialog.show();
