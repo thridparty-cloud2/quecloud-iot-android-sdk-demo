@@ -53,6 +53,7 @@
             android:name=".MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
             android:exported="true"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme"
             android:windowSoftInputMode="adjustResize">
@@ -92,6 +93,14 @@
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme" />
         <activity
+            android:name=".ui.device.add.DeviceAddActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentTheme" />
+        <activity
+            android:name=".ui.device.add.DeviceNearbyAddActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentTheme" />
+        <activity
             android:name=".ui.device.share.DeviceShareActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme" />
@@ -107,14 +116,6 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.UpdateImageActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme" />
-        <activity
-            android:name=".ui.SelectOtaActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme" />
-        <activity
-            android:name=".ui.CloudOtaActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme" />
         <activity

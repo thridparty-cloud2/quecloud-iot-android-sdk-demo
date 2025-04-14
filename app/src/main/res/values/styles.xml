@@ -101,7 +101,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:minHeight">50dp</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/white_bg</item>
+        <item name="android:background">@drawable/button_selector</item>
         <item name="android:textColor">@color/new_lan</item>
         <item name="android:textSize">18sp</item>
         <item name="android:layout_marginTop">20dp</item>

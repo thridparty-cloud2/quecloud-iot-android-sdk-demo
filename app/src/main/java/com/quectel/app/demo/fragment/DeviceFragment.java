@@ -23,10 +23,8 @@ import com.quectel.app.demo.R;
 import com.quectel.app.demo.adapter.DeviceAdapter;
 import com.quectel.app.demo.bean.UserDeviceList;
 import com.quectel.app.demo.fragmentbase.BaseMainFragment;
-import com.quectel.app.demo.ui.device.ota.DeviceOtaActivity;
 import com.quectel.app.demo.ui.DeviceControlActivity;
 import com.quectel.app.demo.ui.DistributionNetworkActivity;
-import com.quectel.app.demo.ui.SelectOtaActivity;
 import com.quectel.app.demo.utils.MyUtils;
 import com.quectel.app.demo.utils.ToastUtils;
 import com.quectel.app.demo.widget.BottomItemDecorationSystem;
@@ -36,7 +34,6 @@ import com.quectel.app.device.iot.IotChannelController;
 import com.quectel.app.device.utils.DeviceServiceFactory;
 import com.quectel.app.quecnetwork.httpservice.IHttpCallBack;
 import com.quectel.basic.common.entity.QuecDeviceModel;
-import com.quectel.basic.common.interfaces.QuecClickListener;
 import com.quectel.basic.common.utils.QuecThreadUtil;
 import com.quectel.sdk.iot.channel.kit.chanel.IQuecChannelManager;
 import com.quectel.sdk.iot.channel.kit.constaint.QuecIotChannelType;
@@ -243,8 +240,8 @@ public class DeviceFragment extends BaseMainFragment {
         Intent intent = null;
         switch (view.getId()) {
             case R.id.tv_ota:
-                intent = new Intent(getActivity(), SelectOtaActivity.class);
-                startActivity(intent);
+//                intent = new Intent(getActivity(), SelectOtaActivity.class);
+//                startActivity(intent);
                 break;
             case R.id.iv_add:
                 System.out.println("iv_add");

@@ -20,7 +20,9 @@ abstract class QuecBaseActivity<T : ViewBinding> : QuecBaseCommonActivity() {
     abstract fun getViewBinding(): T
     abstract fun initView(savedInstanceState: Bundle?)
     abstract fun initData()
-    abstract fun initTestItem()
+    protected open fun initTestItem() {
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

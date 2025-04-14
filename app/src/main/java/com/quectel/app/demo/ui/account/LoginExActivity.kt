@@ -68,10 +68,6 @@ class LoginExActivity : QuecBaseActivity<ActivityLoginExBinding>() {
         setMode(Mode.PHONE)
     }
 
-    override fun initTestItem() {
-
-    }
-
     private fun setMode(mode: Mode) {
         currentMode = mode
         when (mode) {

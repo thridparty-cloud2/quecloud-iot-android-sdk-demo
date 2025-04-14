@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.Gravity
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.quectel.app.demo.MainActivity
 import com.quectel.app.demo.base.QuecBaseView
 import com.quectel.app.demo.base.QuecLoadingDialog
 import com.quectel.app.demo.utils.DisplayUtil
@@ -31,7 +32,7 @@ abstract class QuecBaseCommonActivity : AppCompatActivity(), QuecBaseView {
     protected lateinit var mContext: AppCompatActivity
 
     private var showLoading = false
-    private var fontScale=1f
+    private var fontScale = 1f
     private val loadingDelay = 200L
 
     protected val scope by lazy {
@@ -68,7 +69,7 @@ abstract class QuecBaseCommonActivity : AppCompatActivity(), QuecBaseView {
         }
     }
 
-    open fun showLoading(message: String ) {
+    open fun showLoading(message: String) {
         showLoading = true
         scope.launch {
             delay(loadingDelay)
@@ -86,8 +87,8 @@ abstract class QuecBaseCommonActivity : AppCompatActivity(), QuecBaseView {
         }
     }
 
-    fun showLoadingDialog(message: String ) {
-        if (this!=null && !this.isFinishing) {
+    fun showLoadingDialog(message: String) {
+        if (this != null && !this.isFinishing) {
             if (loadingDialog == null) {
                 loadingDialog = QuecLoadingDialog(this)
                     .apply {
@@ -99,7 +100,6 @@ abstract class QuecBaseCommonActivity : AppCompatActivity(), QuecBaseView {
             }
         }
     }
-
 
 
     private fun dismissLoadingDialog() {
@@ -230,7 +230,10 @@ abstract class QuecBaseCommonActivity : AppCompatActivity(), QuecBaseView {
 
     override fun setRequestedOrientation(requestedOrientation: Int) {
         if (needCheckOrientation()) {
-            QLog.i("BaseActivity", "setRequestedOrientation avoid calling setRequestedOrientation when Oreo");
+            QLog.i(
+                "BaseActivity",
+                "setRequestedOrientation avoid calling setRequestedOrientation when Oreo"
+            );
             return;
         }
         super.setRequestedOrientation(requestedOrientation)
@@ -267,5 +270,17 @@ abstract class QuecBaseCommonActivity : AppCompatActivity(), QuecBaseView {
         } else {
             handlerError(result)
         }
+    }
+
+    protected fun getFid(): String? {
+        return null
+    }
+
+    protected fun log(info: String?) {
+        QLog.i(this.javaClass.simpleName, info)
+    }
+
+    protected fun backMain() {
+        startActivity(Intent(this, MainActivity::class.java))
     }
 }

@@ -21,10 +21,6 @@ class AuthCodeLoginActivity : QuecBaseActivity<ActivityAuthCodeLoginBinding>() {
 
     }
 
-    override fun initTestItem() {
-
-    }
-
     private fun login(authCode: String) {
         if (authCode.isEmpty()) {
             showMessage("请输入authCode")
