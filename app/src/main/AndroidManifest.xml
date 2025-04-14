@@ -109,12 +109,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme" />
         <activity
-            android:name=".ui.DistributionNetworkActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
-            android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
             android:name=".ui.UpdateImageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme" />

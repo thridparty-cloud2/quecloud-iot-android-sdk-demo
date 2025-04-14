@@ -24,7 +24,6 @@ import com.quectel.app.demo.adapter.DeviceAdapter;
 import com.quectel.app.demo.bean.UserDeviceList;
 import com.quectel.app.demo.fragmentbase.BaseMainFragment;
 import com.quectel.app.demo.ui.DeviceControlActivity;
-import com.quectel.app.demo.ui.DistributionNetworkActivity;
 import com.quectel.app.demo.utils.MyUtils;
 import com.quectel.app.demo.utils.ToastUtils;
 import com.quectel.app.demo.widget.BottomItemDecorationSystem;
@@ -276,8 +275,8 @@ public class DeviceFragment extends BaseMainFragment {
 
                             case R.id.bt_wifi:
                                 myDialog.cancel();
-                                intent = new Intent(getActivity(), DistributionNetworkActivity.class);
-                                startActivity(intent);
+//                                intent = new Intent(getActivity(), DistributionNetworkActivity.class);
+//                                startActivity(intent);
 
                                 break;
                         }
