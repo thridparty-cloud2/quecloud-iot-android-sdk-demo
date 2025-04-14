@@ -1,5 +1,5 @@
 <resources>
-    <string name="appname">AndroidSDKDemo</string>
+    <string name="appname">QuecSdkDemo</string>
     <string name="press_again_exit">再按一次退出</string>
 
     <string name="please_wait">请稍后</string>
