@@ -366,12 +366,13 @@ public class DeviceGroupFragment extends BaseMainFragment {
                 QuecDeviceGroupService.INSTANCE.getDeviceGroupInfo(item.getDgid(), new QuecCallback<QuecDeviceGroupInfoModel>() {
                     @Override
                     public void onResult(@NonNull QuecResult<QuecDeviceGroupInfoModel> result) {
-                        if(result.isSuccess()){
-                            finishLoading();
+                        finishLoading();
+                        if (result.isSuccess()) {
                             String infoModelString = QuecGsonUtil.INSTANCE.gsonString(result.getData());
-                            ToastUtils.showShort(getActivity(),infoModelString);
+                            ToastUtils.showShort(getActivity(), infoModelString);
                             QLog.i(TAG, infoModelString);
                         } else {
+                            ToastUtils.showShort(getActivity(), result.getMsg());
                             QLog.e(TAG, result.toString());
                         }
                     }
@@ -529,6 +530,7 @@ public class DeviceGroupFragment extends BaseMainFragment {
                 QuecDeviceGroupService.INSTANCE.updateDeviceGroupInfo(item.getDgid(), model, new QuecCallback<Unit>() {
                     @Override
                     public void onResult(@NonNull QuecResult<Unit> result) {
+                        finishLoading();
                         if(result.isSuccess()){
                             queryGroupList();
                         }else{
