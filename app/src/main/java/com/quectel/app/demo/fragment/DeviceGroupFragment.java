@@ -17,31 +17,34 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.quectel.app.demo.R;
-import com.quectel.app.demo.adapter.DeviceAdapter;
 import com.quectel.app.demo.adapter.DeviceGroupAdapter;
-import com.quectel.app.demo.adapter.DeviceModelAdapter;
-import com.quectel.app.demo.bean.DeviceGroupVO;
 import com.quectel.app.demo.fragmentbase.BaseMainFragment;
 import com.quectel.app.demo.ui.SharedGroupOfDevicesActivity;
 import com.quectel.app.demo.utils.MyUtils;
 import com.quectel.app.demo.utils.ToastUtils;
 import com.quectel.app.demo.widget.BottomItemDecorationSystem;
 import com.quectel.app.demo.widget.PayBottomDialog;
-import com.quectel.app.device.bean.BusinessValue;
+import com.quectel.app.device.bean.QuecDeviceGroupInfoModel;
+import com.quectel.app.device.bean.QuecDeviceGroupParamModel;
+import com.quectel.app.device.bean.QuecOperateDeviceToGroupModel;
+import com.quectel.app.device.bean.QuecShareGroupInfoModel;
 import com.quectel.app.device.bean.UpdateGroup;
 import com.quectel.app.device.deviceservice.IDevService;
+import com.quectel.app.device.deviceservice.QuecDeviceGroupService;
 import com.quectel.app.device.param.AddDeviceParam;
 import com.quectel.app.device.utils.DeviceServiceFactory;
 import com.quectel.app.quecnetwork.httpservice.IHttpCallBack;
+import com.quectel.basic.common.entity.QuecCallback;
+import com.quectel.basic.common.entity.QuecDeviceModel;
+import com.quectel.basic.common.entity.QuecPageResponse;
+import com.quectel.basic.common.entity.QuecResult;
+import com.quectel.basic.common.utils.QuecGsonUtil;
+import com.quectel.basic.queclog.QLog;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,10 +54,13 @@ import butterknife.OnClick;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
+import kotlin.Unit;
 
 
 public class DeviceGroupFragment extends BaseMainFragment {
 
+
+    private final String TAG = this.getClass().getSimpleName();
 
     public static synchronized DeviceGroupFragment newInstance() {
         DeviceGroupFragment frag = new DeviceGroupFragment();
@@ -108,53 +114,39 @@ public class DeviceGroupFragment extends BaseMainFragment {
         mPtrFrameLayout.disableWhenHorizontalMove(true);
 
     }
-    List<DeviceGroupVO> mList = null;
+    List<QuecDeviceGroupInfoModel> mList = null;
     private void queryGroupList()
     {
         startLoading();
-        DeviceServiceFactory.getInstance().getService(IDevService.class).queryDeviceGroupList(1,10,
-                new IHttpCallBack() {
-                    @Override
-                    public void onSuccess(String result) {
-                          finishLoading();
-                        mPtrFrameLayout.refreshComplete();
-                        System.out.println("queryGroupList-frag-:"+result);
-                        try {
-                            JSONObject mainObj = new JSONObject(result);
-                            int code =  mainObj.getInt("code");
-                            if(code==200)
-                            {
-                                JSONObject obj = mainObj.getJSONObject("data");
-                                JSONArray array =  obj.getJSONArray("list");
-                                Type type =new TypeToken<List<DeviceGroupVO>>() {}.getType();
-                                 mList = new Gson().fromJson(array.toString(), type);
-                                 System.out.println("mList--:"+mList.size());
+        QuecDeviceGroupService.INSTANCE.getDeviceGroupList(1, 10, null, new QuecCallback<QuecPageResponse<QuecDeviceGroupInfoModel>>() {
+            @Override
+            public void onResult(@NonNull QuecResult<QuecPageResponse<QuecDeviceGroupInfoModel>> result) {
+                finishLoading();
+                mPtrFrameLayout.refreshComplete();
+                if(result.isSuccess()){
+                    QuecPageResponse<QuecDeviceGroupInfoModel> data = result.getData();
+                    QLog.i(TAG,"getDeviceGroupList size = " + data.getList().size());
 
-                                mAdapter = new DeviceGroupAdapter(getActivity(), mList);
-                                mRecyclerView.setAdapter(mAdapter);
+                    mList = data.getList();
+                    QLog.i(TAG,"mList--:"+mList.size());
 
-                                mAdapter.setOnItemClickListener(new OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-                                        System.out.println("position--:"+position);
-                                        DeviceGroupVO deviceGroupVO = mList.get(position);
-                                        createSelectDialog(deviceGroupVO);
+                    mAdapter = new DeviceGroupAdapter(getActivity(), mList);
+                    mRecyclerView.setAdapter(mAdapter);
 
-                                    }
-                                });
-
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                    mAdapter.setOnItemClickListener(new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+                            QLog.i(TAG,"position--:"+position);
+                            createSelectDialog(mList.get(position));
                         }
-                    }
-                    @Override
-                    public void onFail(Throwable e) {
-                        mPtrFrameLayout.refreshComplete();
-                        e.printStackTrace();
-                    }
+                    });
+
+                }else{
+                    QLog.e(TAG,result.toString());
                 }
-        );
+            }
+        });
+
     }
 
     private static final int PAGE_SIZE = 10;
@@ -172,7 +164,6 @@ public class DeviceGroupFragment extends BaseMainFragment {
 
     @OnClick({R.id.iv_add})
     public void onViewClick(View view) {
-        Intent intent = null;
         switch (view.getId()) {
             case R.id.iv_add:
                 View dialogView = getLayoutInflater().inflate(R.layout.bottom_pop_devicegroup_layout, null);
@@ -182,7 +173,6 @@ public class DeviceGroupFragment extends BaseMainFragment {
                 myDialog.setOnBottomItemClickListener(new PayBottomDialog.OnBottomItemClickListener() {
                     @Override
                     public void onBottomItemClick(PayBottomDialog dialog, View view) {
-                        Intent intent = null;
 
                         switch (view.getId()) {
                             case R.id.bt_cancel:
@@ -237,33 +227,25 @@ public class DeviceGroupFragment extends BaseMainFragment {
                     return;
                 }
                 startLoading();
-                DeviceServiceFactory.getInstance().getService(IDevService.class).addDeviceGroup(name,
-                        new IHttpCallBack() {
-                            @Override
-                            public void onSuccess(String result) {
-                                finishLoading();
-                                try {
-                                    JSONObject obj = new JSONObject(result);
-                                    if (obj.getInt("code") == 200) {
-                                        queryGroupList();
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            @Override
-                            public void onFail(Throwable e) {
-                                e.printStackTrace();
-                            }
-                        }
-                );
+                QuecDeviceGroupParamModel model = new QuecDeviceGroupParamModel();
+                model.setName(name);
+                QuecDeviceGroupService.INSTANCE.addDeviceGroup(model, new QuecCallback<Unit>() {
+                    @Override
+                    public void onResult(@NonNull QuecResult<Unit> result) {
+                        finishLoading();
+                        if(result.isSuccess()){
+                            queryGroupList();
+                        }else{
 
+                        }
+                    }
+                });
             }
         });
         mDialog.show();
     }
 
-    private void createSelectDialog(DeviceGroupVO item) {
+    private void createSelectDialog(QuecDeviceGroupInfoModel item) {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.devicegroup_select_dialog, null);
         final Dialog mDialog = new Dialog(getActivity(), R.style.dialogTM);
@@ -301,22 +283,15 @@ public class DeviceGroupFragment extends BaseMainFragment {
                 {
                     mDialog.dismiss();
                     startLoading();
-                    DeviceServiceFactory.getInstance().getService(IDevService.class).shareUserUnshare(item.getShareCode(), new IHttpCallBack() {
+                    QuecDeviceGroupService.INSTANCE.getShareUserUnshare(item.getShareCode(), new QuecCallback<Unit>() {
                         @Override
-                        public void onSuccess(String result) {
+                        public void onResult(@NonNull QuecResult<Unit> result) {
                             finishLoading();
-                            try {
-                                JSONObject obj = new JSONObject(result);
-                                if (obj.getInt("code") == 200) {
-                                    queryGroupList();
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                            if(result.isSuccess()){
+                                queryGroupList();
+                            } else {
+                                QLog.e(TAG, result.toString());
                             }
-                        }
-                        @Override
-                        public void onFail(Throwable e) {
-
                         }
                     });
                 }
@@ -343,6 +318,15 @@ public class DeviceGroupFragment extends BaseMainFragment {
             public void onClick(View view) {
                 mDialog.dismiss();
                 startLoading();
+                QuecDeviceGroupService.INSTANCE.getDeviceGroupShareUserList(item.getDgid(), new QuecCallback<Unit>() {
+                    @Override
+                    public void onResult(@NonNull QuecResult<Unit> result) {
+                        finishLoading();
+                        QLog.i(TAG,"result-:"+result.toString());
+                        ToastUtils.showShort(getActivity(),result.toString());
+                    }
+                });
+
                 DeviceServiceFactory.getInstance().getService(IDevService.class).deviceGroupShareUserList(item.getDgid(), new IHttpCallBack() {
                     @Override
                     public void onSuccess(String result) {
@@ -379,23 +363,17 @@ public class DeviceGroupFragment extends BaseMainFragment {
             public void onClick(View view) {
                 mDialog.dismiss();
                 startLoading();
-                DeviceServiceFactory.getInstance().getService(IDevService.class).queryDeviceGroup(item.getDgid(), new IHttpCallBack() {
+                QuecDeviceGroupService.INSTANCE.getDeviceGroupInfo(item.getDgid(), new QuecCallback<QuecDeviceGroupInfoModel>() {
                     @Override
-                    public void onSuccess(String result) {
-                        finishLoading();
-                        try {
-                            JSONObject obj = new JSONObject(result);
-                            if (obj.getInt("code") == 200) {
-                                ToastUtils.showShort(getActivity(),obj.getString("data"));
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                    public void onResult(@NonNull QuecResult<QuecDeviceGroupInfoModel> result) {
+                        if(result.isSuccess()){
+                            finishLoading();
+                            String infoModelString = QuecGsonUtil.INSTANCE.gsonString(result.getData());
+                            ToastUtils.showShort(getActivity(),infoModelString);
+                            QLog.i(TAG, infoModelString);
+                        } else {
+                            QLog.e(TAG, result.toString());
                         }
-
-                    }
-                    @Override
-                    public void onFail(Throwable e) {
-
                     }
                 });
 
@@ -440,23 +418,12 @@ public class DeviceGroupFragment extends BaseMainFragment {
             public void onClick(View view) {
                 mDialog.dismiss();
                 startLoading();
-                DeviceServiceFactory.getInstance().getService(IDevService.class).deleteDeviceGroup(item.getDgid(), new IHttpCallBack() {
-                    @Override
-                    public void onSuccess(String result) {
-                      finishLoading();
-                        try {
-                            JSONObject obj = new JSONObject(result);
-                            if (obj.getInt("code") == 200) {
-                                queryGroupList();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                    @Override
-                    public void onFail(Throwable e) {
-
+                QuecDeviceGroupService.INSTANCE.deleteDeviceGroup(item.getDgid(), result -> {
+                    finishLoading();
+                    if(result.isSuccess()){
+                        queryGroupList();
+                    }else{
+                        QLog.e(TAG, result.toString());
                     }
                 });
             }
@@ -465,7 +432,7 @@ public class DeviceGroupFragment extends BaseMainFragment {
         mDialog.show();
     }
 
-    private void generateShareGroupInfor(DeviceGroupVO item)
+    private void generateShareGroupInfor(QuecDeviceGroupInfoModel item)
     {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.sharer_generate_information_dialog, null);
@@ -484,35 +451,21 @@ public class DeviceGroupFragment extends BaseMainFragment {
             @Override
             public void onClick(View view) {
                 int time = 1*24*60*60*1000;
-                long useTime =   new Date().getTime();
+                long useTime = new Date().getTime();
                 useTime = useTime + time;
                 startLoading();
-                DeviceServiceFactory.getInstance().getService(IDevService.class).shareGroupInfo(useTime,item.getDgid(),0,0,
-                        new IHttpCallBack() {
-                            @Override
-                            public void onSuccess(String result) {
-                                finishLoading();
-                                //{"code":200,"msg":"","data":{"shareCode":"share_dg_C1719b382e58680e4781a68218d4e50f2277"}}
-                                try {
-                                    JSONObject  obj = new JSONObject(result);
-                                    if (obj.getInt("code") == 200) {
-                                        JSONObject infor =   obj.getJSONObject("data");
-                                        tv_share_infor.setText(infor.getString("shareCode"));
-                                    }
 
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-                            @Override
-                            public void onFail(Throwable e) {
-                                e.printStackTrace();
-                            }
+                QuecDeviceGroupService.INSTANCE.getShareGroupInfo(useTime, item.getDgid(), 0, 0, new QuecCallback<QuecShareGroupInfoModel>() {
+                    @Override
+                    public void onResult(@NonNull QuecResult<QuecShareGroupInfoModel> result) {
+                        finishLoading();
+                        if (result.isSuccess()) {
+                            tv_share_infor.setText(result.getData().getShareCode());
+                        } else {
+                            QLog.e(TAG, result.toString());
                         }
-                );
-
-
+                    }
+                });
             }
         });
 
@@ -535,7 +488,7 @@ public class DeviceGroupFragment extends BaseMainFragment {
 
     }
 
-    private void changeGroupDialog(DeviceGroupVO item)
+    private void changeGroupDialog(QuecDeviceGroupInfoModel item)
     {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.add_group, null);
@@ -569,37 +522,27 @@ public class DeviceGroupFragment extends BaseMainFragment {
                 UpdateGroup updateGroup =  new UpdateGroup();
                 updateGroup.setName(name);
                 updateGroup.setDgid(item.getDgid());
-                DeviceServiceFactory.getInstance().getService(IDevService.class).updateDeviceGroup(updateGroup,
-                        new IHttpCallBack() {
-                            @Override
-                            public void onSuccess(String result) {
-                                finishLoading();
-                                try {
-                                    JSONObject obj = new JSONObject(result);
-                                    if (obj.getInt("code") == 200) {
-                                        queryGroupList();
-                                    }
-                                    else
-                                    {
-                                        ToastUtils.showShort(getActivity(),obj.getString("msg"));
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            @Override
-                            public void onFail(Throwable e) {
-                                e.printStackTrace();
-                            }
+
+                QuecDeviceGroupParamModel model = new QuecDeviceGroupParamModel();
+                model.setName(name);
+
+                QuecDeviceGroupService.INSTANCE.updateDeviceGroupInfo(item.getDgid(), model, new QuecCallback<Unit>() {
+                    @Override
+                    public void onResult(@NonNull QuecResult<Unit> result) {
+                        if(result.isSuccess()){
+                            queryGroupList();
+                        }else{
+                            ToastUtils.showShort(getActivity(), result.getMsg());
                         }
-                );
+                    }
+                });
 
             }
         });
         mDialog.show();
     }
 
-    private void addDeviceToGroup(DeviceGroupVO item)
+    private void addDeviceToGroup(QuecDeviceGroupInfoModel item)
     {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.add_device_to_group_dialog, null);
@@ -630,37 +573,28 @@ public class DeviceGroupFragment extends BaseMainFragment {
                     return;
                 }
                 startLoading();
-                List<AddDeviceParam> mList = new ArrayList();
-                AddDeviceParam test1 =   new AddDeviceParam(pk,dk);
-                mList.add(test1);
-                DeviceServiceFactory.getInstance().getService(IDevService.class).addDeviceToGroup(item.getDgid(),mList,
-                        new IHttpCallBack() {
-                            @Override
-                            public void onSuccess(String result) {
-                                 finishLoading();
-                                try {
-                                    JSONObject obj = new JSONObject(result);
-                                    if (obj.getInt("code") == 200) {
-                                        queryGroupList();
-                                        ToastUtils.showShort(getActivity(),"添加成功");
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            @Override
-                            public void onFail(Throwable e) {
-                                e.printStackTrace();
-                            }
-                        }
-                );
+                List<QuecDeviceModel> quecDeviceModels = new ArrayList();
+                QuecDeviceModel quecDeviceModel = new QuecDeviceModel(pk,dk);
+                quecDeviceModels.add(quecDeviceModel);
 
+                QuecDeviceGroupService.INSTANCE.addDeviceToGroup(item.getDgid(), quecDeviceModels, new QuecCallback<QuecOperateDeviceToGroupModel>() {
+                    @Override
+                    public void onResult(@NonNull QuecResult<QuecOperateDeviceToGroupModel> result) {
+                        finishLoading();
+                        if(result.isSuccess()){
+                            queryGroupList();
+                            ToastUtils.showShort(getActivity(),"添加成功");
+                        }else{
+                            QLog.e(TAG, result.getMsg());
+                        }
+                    }
+                });
             }
         });
         mDialog.show();
     }
 
-    private void queryDeviceInGroup(DeviceGroupVO item)
+    private void queryDeviceInGroup(QuecDeviceGroupInfoModel item)
     {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.query_device_ingroup_dialog, null);
@@ -690,38 +624,31 @@ public class DeviceGroupFragment extends BaseMainFragment {
                 }
                 startLoading();
 
-                DeviceServiceFactory.getInstance().getService(IDevService.class).getGroupDeviceList(item.getDgid(),pk,1,10,
-                        new IHttpCallBack() {
-                            @Override
-                            public void onSuccess(String result) {
-                                  finishLoading();
+                QuecDeviceGroupService.INSTANCE.getDeviceList(item.getDgid(),null , null, pk, 1, 10, new QuecCallback<QuecPageResponse<QuecDeviceModel>>() {
+                    @Override
+                    public void onResult(@NonNull QuecResult<QuecPageResponse<QuecDeviceModel>> result) {
+                        finishLoading();
+                        if(result.isSuccess()){
+                            if (TextUtils.isEmpty(item.getShareCode())) {
+                                ToastUtils.showShort(getActivity(), result.toString());
+                            } else {
+                                Intent intent = new Intent(getActivity(), SharedGroupOfDevicesActivity.class);
+                                intent.putExtra("content", QuecGsonUtil.INSTANCE.gsonString(result.getData()));
+                                intent.putExtra("shareCode", item.getShareCode());
+                                startActivity(intent);
+                            }
+                        }else{
 
-                                  if(TextUtils.isEmpty(item.getShareCode()))
-                                  {
-                                      ToastUtils.showShort(getActivity(),result);
-                                  }
-                                  else
-                                  {
-                                      Intent intent = new Intent(getActivity(), SharedGroupOfDevicesActivity.class);
-                                      intent.putExtra("content",result);
-                                      intent.putExtra("shareCode",item.getShareCode());
-                                      startActivity(intent);
-                                  }
-                            }
-                            @Override
-                            public void onFail(Throwable e) {
-                                e.printStackTrace();
-                            }
                         }
-                );
-
+                    }
+                });
             }
         });
         mDialog.show();
     }
 
 
-    private void deleteDeviceFromGroup(DeviceGroupVO item)
+    private void deleteDeviceFromGroup(QuecDeviceGroupInfoModel item)
     {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.add_device_to_group_dialog, null);
@@ -755,31 +682,21 @@ public class DeviceGroupFragment extends BaseMainFragment {
                     return;
                 }
                 startLoading();
-                List<AddDeviceParam> mList = new ArrayList();
-                AddDeviceParam test1 =   new AddDeviceParam(pk,dk);
-                mList.add(test1);
-                DeviceServiceFactory.getInstance().getService(IDevService.class).deleteDeviceToGroup(item.getDgid(),mList,
-                        new IHttpCallBack() {
-                            @Override
-                            public void onSuccess(String result) {
-                                finishLoading();
-                                try {
-                                    JSONObject obj = new JSONObject(result);
-                                    if (obj.getInt("code") == 200) {
-                                        queryGroupList();
-                                        ToastUtils.showShort(getActivity(),"移除成功");
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            @Override
-                            public void onFail(Throwable e) {
-                                e.printStackTrace();
-                            }
+                List<QuecDeviceModel> deviceList = new ArrayList<>();
+                QuecDeviceModel quecDeviceModel = new QuecDeviceModel(pk,dk);
+                deviceList.add(quecDeviceModel);
+                QuecDeviceGroupService.INSTANCE.deleteDeviceFromGroup(item.getDgid(), deviceList, new QuecCallback<QuecOperateDeviceToGroupModel>() {
+                    @Override
+                    public void onResult(@NonNull QuecResult<QuecOperateDeviceToGroupModel> result) {
+                        finishLoading();
+                        if(result.isSuccess()){
+                            queryGroupList();
+                            ToastUtils.showShort(getActivity(),"移除成功");
+                        }else{
+                            QLog.e(TAG, result.getMsg());
                         }
-                );
-
+                    }
+                });
             }
         });
         mDialog.show();
@@ -816,35 +733,26 @@ public class DeviceGroupFragment extends BaseMainFragment {
                     return;
                 }
                 startLoading();
-                DeviceServiceFactory.getInstance().getService(IDevService.class).acceptDeviceGroupShare(code,
-                        new IHttpCallBack() {
-                            @Override
-                            public void onSuccess(String result) {
-                                finishLoading();
-                                try {
-                                    JSONObject  obj = new JSONObject(result);
-                                    if (obj.getInt("code") == 200) {
-                                        ToastUtils.showShort(getActivity(),"操作成功");
-                                        queryGroupList();
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            @Override
-                            public void onFail(Throwable e) {
-                                e.printStackTrace();
-                            }
-                        }
-                );
 
+                QuecDeviceGroupService.INSTANCE.getAcceptDeviceGroupShare(code, new QuecCallback<Unit>() {
+                    @Override
+                    public void onResult(@NonNull QuecResult<Unit> result) {
+                        finishLoading();
+                        if(result.isSuccess()){
+                            ToastUtils.showShort(getActivity(),"操作成功");
+                            queryGroupList();
+                        }else{
+                            QLog.e(TAG, result.toString());
+                        }
+                    }
+                });
             }
         });
         mDialog.show();
     }
 
 
-    private void accepterChangeGroupName(DeviceGroupVO item)
+    private void accepterChangeGroupName(QuecDeviceGroupInfoModel item)
     {
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.accepter_change_group_name_dialog, null);
@@ -872,27 +780,18 @@ public class DeviceGroupFragment extends BaseMainFragment {
                     return;
                 }
                 startLoading();
-                DeviceServiceFactory.getInstance().getService(IDevService.class).shareUserSetDeviceGroupName(name,item.getShareCode(),
-                        new IHttpCallBack() {
-                            @Override
-                            public void onSuccess(String result) {
-                                finishLoading();
-                                try {
-                                    JSONObject obj = new JSONObject(result);
-                                    if (obj.getInt("code") == 200) {
-                                        queryGroupList();
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            @Override
-                            public void onFail(Throwable e) {
-                                e.printStackTrace();
-                            }
-                        }
-                );
 
+                QuecDeviceGroupService.INSTANCE.getShareUserSetDeviceGroupName(name, item.getShareCode(), new QuecCallback<Unit>() {
+                    @Override
+                    public void onResult(@NonNull QuecResult<Unit> result) {
+                        finishLoading();
+                        if(result.isSuccess()){
+                            queryGroupList();
+                        }else{
+                            QLog.e(TAG, result.toString());
+                        }
+                    }
+                });
             }
         });
         mDialog.show();
@@ -929,32 +828,20 @@ public class DeviceGroupFragment extends BaseMainFragment {
                     return;
                 }
                 startLoading();
-                DeviceServiceFactory.getInstance().getService(IDevService.class).owerUserUnshare(code,
-                        new IHttpCallBack() {
-                            @Override
-                            public void onSuccess(String result) {
-                                finishLoading();
-                                try {
-                                    JSONObject  obj = new JSONObject(result);
-                                    if (obj.getInt("code") == 200) {
-                                        ToastUtils.showShort(getActivity(),"操作成功");
-                                        queryGroupList();
-                                    }
-                                    else
-                                    {
-                                        ToastUtils.showShort(getActivity(),obj.getString("msg"));
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            @Override
-                            public void onFail(Throwable e) {
-                                e.printStackTrace();
-                            }
-                        }
-                );
 
+                QuecDeviceGroupService.INSTANCE.getOwerUserUnshare(code, new QuecCallback<Unit>() {
+                    @Override
+                    public void onResult(@NonNull QuecResult<Unit> result) {
+                        finishLoading();
+                        if(result.isSuccess()){
+                            ToastUtils.showShort(getActivity(),"操作成功");
+                            queryGroupList();
+                        }else{
+                            ToastUtils.showShort(getActivity(), result.getMsg());
+                            QLog.e(TAG, result.toString());
+                        }
+                    }
+                });
             }
         });
         mDialog.show();

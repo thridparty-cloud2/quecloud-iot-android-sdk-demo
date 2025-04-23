@@ -29,6 +29,9 @@ import com.quectel.app.demo.widget.BottomItemDecorationSystem;
 import com.quectel.app.device.deviceservice.IDevService;
 import com.quectel.app.device.utils.DeviceServiceFactory;
 import com.quectel.app.quecnetwork.httpservice.IHttpCallBack;
+import com.quectel.basic.common.entity.QuecDeviceModel;
+import com.quectel.basic.common.entity.QuecPageResponse;
+import com.quectel.basic.common.utils.QuecGsonUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,7 +62,7 @@ public class SharedGroupOfDevicesActivity extends BaseActivity {
     RecyclerView mRecyclerView;
     SharedDeviceAdapter mAdapter;
 
-    List<SharedDevice> mList = null;
+    List<QuecDeviceModel> mList = null;
     @Override
     protected void initData() {
 
@@ -69,17 +72,9 @@ public class SharedGroupOfDevicesActivity extends BaseActivity {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(activity));
         mRecyclerView.addItemDecoration(new BottomItemDecorationSystem(activity));
-
+        QuecPageResponse<QuecDeviceModel> quecPageResponse = QuecGsonUtil.INSTANCE.gsonToBean(content, QuecPageResponse.class);
         try {
-            JSONObject mainObj = new JSONObject(content);
-            int code =  mainObj.getInt("code");
-            if(code==200)
-            {
-                JSONObject obj = mainObj.getJSONObject("data");
-                JSONArray array =  obj.getJSONArray("list");
-                Type type =new TypeToken<List<SharedDevice>>() {}.getType();
-                mList = new Gson().fromJson(array.toString(), type);
-
+                mList = quecPageResponse.getList();
                 if(mList.size()<=0)
                 {
                     ToastUtils.showLong(activity,"分组中没有设备");
@@ -93,20 +88,18 @@ public class SharedGroupOfDevicesActivity extends BaseActivity {
                     @Override
                     public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
                         System.out.println("position--:"+position);
-                        SharedDevice item = mList.get(position);
+                        QuecDeviceModel item = mList.get(position);
                         createChangeNameDialog(shareCode,item);
 
                     }
                 });
-
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    private void createChangeNameDialog(String shareCode,SharedDevice item)
+    private void createChangeNameDialog(String shareCode,QuecDeviceModel item)
     {
         LayoutInflater inflater = LayoutInflater.from(activity);
         View view = inflater.inflate(R.layout.accepter_change_device_ingroup_dialog, null);
@@ -136,7 +129,7 @@ public class SharedGroupOfDevicesActivity extends BaseActivity {
                 }
                 mDialog.dismiss();
                 startLoading();
-                DeviceServiceFactory.getInstance().getService(IDevService.class).shareUserSetDeviceName(name,item.getPk(),item.getDk(),shareCode,
+                DeviceServiceFactory.getInstance().getService(IDevService.class).shareUserSetDeviceName(name,item.getProductKey(),item.getDeviceKey(),shareCode,
                         new IHttpCallBack() {
                             @Override
                             public void onSuccess(String result) {

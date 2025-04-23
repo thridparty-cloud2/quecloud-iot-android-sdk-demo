@@ -7,10 +7,11 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.quectel.app.demo.R;
 import com.quectel.app.demo.bean.DeviceGroupVO;
 import com.quectel.app.demo.bean.SharedDevice;
+import com.quectel.basic.common.entity.QuecDeviceModel;
 
 import java.util.List;
 
-public class SharedDeviceAdapter extends BaseQuickAdapter<SharedDevice, BaseViewHolder> {
+public class SharedDeviceAdapter extends BaseQuickAdapter<QuecDeviceModel, BaseViewHolder> {
 
     private Context mContext;
 
@@ -19,10 +20,10 @@ public class SharedDeviceAdapter extends BaseQuickAdapter<SharedDevice, BaseView
         this.mContext  = context;
     }
     @Override
-    protected void convert(BaseViewHolder helper, final SharedDevice item) {
+    protected void convert(BaseViewHolder helper, final QuecDeviceModel item) {
 
-        helper.setText(R.id.tv_pk,"pk: "+item.getPk());
-        helper.setText(R.id.tv_dk,"dk: "+item.getDk());
+        helper.setText(R.id.tv_pk,"pk: "+item.getProductKey());
+        helper.setText(R.id.tv_dk,"dk: "+item.getDeviceKey());
         helper.setText(R.id.tv_dgid,"dgid: "+item.getDgid());
         helper.setText(R.id.tv_group_name,"groupName: "+item.getGroupName());
         helper.setText(R.id.tv_device_name,"deviceName: "+item.getDeviceName());

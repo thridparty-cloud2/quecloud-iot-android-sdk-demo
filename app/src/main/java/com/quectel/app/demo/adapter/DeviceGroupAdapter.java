@@ -6,12 +6,11 @@ import android.text.TextUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.quectel.app.demo.R;
-import com.quectel.app.demo.bean.DeviceGroupVO;
-import com.quectel.app.demo.bean.UserDeviceList;
+import com.quectel.app.device.bean.QuecDeviceGroupInfoModel;
 
 import java.util.List;
 
-public class DeviceGroupAdapter extends BaseQuickAdapter<DeviceGroupVO, BaseViewHolder> {
+public class DeviceGroupAdapter extends BaseQuickAdapter<QuecDeviceGroupInfoModel, BaseViewHolder> {
 
     private Context mContext;
 
@@ -20,7 +19,7 @@ public class DeviceGroupAdapter extends BaseQuickAdapter<DeviceGroupVO, BaseView
         this.mContext  = context;
     }
     @Override
-    protected void convert(BaseViewHolder helper, final DeviceGroupVO item) {
+    protected void convert(BaseViewHolder helper, final QuecDeviceGroupInfoModel item) {
 
         helper.setText(R.id.tv_dgid,"dgid: "+item.getDgid());
         helper.setText(R.id.tv_group_name,"groupName: "+item.getName());
