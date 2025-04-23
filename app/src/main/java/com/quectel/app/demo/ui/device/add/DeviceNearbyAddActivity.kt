@@ -94,7 +94,7 @@ class DeviceNearbyAddActivity : QuecBaseActivity<ActivityNearbyAddBinding>() {
     }
 
     private fun startScan() {
-        QuecDevicePairingService.scan(getFid(), null, null)
+        QuecDevicePairingService.scan(null, null)
         scanTimeout?.let { QuecThreadUtil.CancelWait(it) }
         scanTimeout = QuecThreadUtil.Wait(20000) {
             stopScan()
@@ -131,9 +131,8 @@ class DeviceNearbyAddActivity : QuecBaseActivity<ActivityNearbyAddBinding>() {
 
         showOrHideLoading(true)
         stopScan()
-        QuecDevicePairingService.startPairingByDevices(
+        QuecDevicePairingService.startPairingWithDevices(
             mutableListOf(bean),
-            getFid(),
             ssid,
             pwd
         )

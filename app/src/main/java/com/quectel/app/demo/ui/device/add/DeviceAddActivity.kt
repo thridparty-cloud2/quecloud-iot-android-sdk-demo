@@ -44,7 +44,7 @@ class DeviceAddActivity : QuecBaseActivity<ActivityDeviceAddBinding>() {
             setHint2("请输入Sn")
             setEditTextListener { content1, content2 ->
                 //可输入自定义的设备名
-                QuecDeviceService.bindDeviceBySerialNumber(content2, content1, null, getFid()) {
+                QuecDeviceService.bindDeviceWithSerialNumber(content2, content1, null) {
                     if (it.isSuccess) {
                         AppVariable.setDeviceChange()
                         showMessage("SN绑定设备成功")

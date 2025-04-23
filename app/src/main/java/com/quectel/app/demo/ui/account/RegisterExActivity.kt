@@ -133,7 +133,7 @@ class RegisterExActivity : QuecBaseActivity<ActivityRegisterExBinding>() {
             showMessage("请输入密码")
             return
         }
-        QuecUserService.registerByEmail(email, code, pwd) {
+        QuecUserService.registerByEmail(email, code, pwd, 0, 0, 0) {
             if (it.isSuccess) {
                 setSuccess()
             } else {
