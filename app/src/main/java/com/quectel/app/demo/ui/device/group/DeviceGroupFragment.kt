@@ -132,6 +132,7 @@ class DeviceGroupFragment : QuecBaseFragment<DeviceGroupLayoutBinding>() {
                 })
 
             } else {
+                ToastUtils.showShort(context, result.msg)
                 QLog.e(TAG, result.msg)
             }
         }
@@ -181,6 +182,7 @@ class DeviceGroupFragment : QuecBaseFragment<DeviceGroupLayoutBinding>() {
                     if (result.isSuccess) {
                         queryGroupList()
                     } else {
+                        ToastUtils.showShort(context, result.msg)
                         QLog.e(TAG, result.toString())
                     }
                 }
@@ -221,6 +223,7 @@ class DeviceGroupFragment : QuecBaseFragment<DeviceGroupLayoutBinding>() {
                         ToastUtils.showShort(context, "操作成功")
                         queryGroupList()
                     } else {
+                        ToastUtils.showShort(context, result.msg)
                         QLog.e(TAG, result.toString())
                     }
                 }

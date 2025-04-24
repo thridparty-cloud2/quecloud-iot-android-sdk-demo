@@ -43,7 +43,7 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
         dGid = intent.getStringExtra("dGid")
         name = intent.getStringExtra("name")
         shareCode = intent.getStringExtra("shareCode")
-        if(!name.isNullOrEmpty()){
+        if (!name.isNullOrEmpty()) {
             binding.tvStatus.text = name
         }
     }
@@ -136,8 +136,10 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
                 QuecDeviceGroupService.updateDeviceGroupInfo(dGid!!, model) { result ->
                     finishLoading()
                     if (result.isSuccess) {
+                        ToastUtils.showShort(mContext,"成功")
                         finish()
                     } else {
+                        QLog.e(TAG, result.msg)
                         ToastUtils.showShort(mContext, result.msg)
                     }
                 }
@@ -157,18 +159,16 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
         val mEditDk = mDialog.findViewById<View>(R.id.edit_dk) as EditText
         val mBtCancel = mDialog.findViewById<View>(R.id.bt_cancel) as Button
         val mBtSure = mDialog.findViewById<View>(R.id.bt_sure) as Button
-        mBtCancel.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(view: View) {
-                mDialog.dismiss()
-            }
-        })
+        mBtCancel.setOnClickListener {
+            mDialog.dismiss()
+        }
 
         mBtSure.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View) {
                 mDialog.dismiss()
                 val pk = MyUtils.getEditTextContent(mEditPk)
                 val dk = MyUtils.getEditTextContent(mEditDk)
-                if (pk.isNullOrEmpty()|| dk.isNullOrEmpty()) {
+                if (pk.isNullOrEmpty() || dk.isNullOrEmpty()) {
                     ToastUtils.showShort(mContext, "参数不能为空")
                     return
                 }
@@ -180,10 +180,11 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
                 QuecDeviceGroupService.addDeviceToGroup(dGid!!, quecDeviceModels) { result ->
                     finishLoading()
                     if (result.isSuccess) {
-                        finish()
                         ToastUtils.showShort(mContext, "添加成功")
+                        finish()
                     } else {
                         QLog.e(TAG, result.msg)
+                        ToastUtils.showShort(mContext, result.msg)
                     }
                 }
             }
@@ -233,6 +234,7 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
                     }
                 } else {
                     QLog.e(TAG, result.msg)
+                    ToastUtils.showShort(mContext, result.msg)
                 }
             }
         }
@@ -277,10 +279,11 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
                 ) { result ->
                     finishLoading()
                     if (result.isSuccess) {
-                        finish()
                         ToastUtils.showShort(mContext, "移除成功")
+                        finish()
                     } else {
                         QLog.e(TAG, result.msg)
+                        ToastUtils.showShort(mContext, result.msg)
                     }
                 }
             }
@@ -295,9 +298,11 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
         ) { result ->
             finishLoading()
             if (result.isSuccess) {
+                ToastUtils.showShort(mContext, "成功")
                 finish()
             } else {
-                QLog.e(TAG, result.toString())
+                QLog.e(TAG, result.msg)
+                ToastUtils.showShort(mContext, result.msg)
             }
         }
     }
@@ -329,6 +334,7 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
                     if (result.isSuccess) {
                         mTvShareInfo.text = result.data!!.shareCode
                     } else {
+                        ToastUtils.showShort(mContext, result.msg)
                         QLog.e(TAG, result.toString())
                     }
                 }
@@ -360,6 +366,7 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
                 ToastUtils.showShort(mContext, result.toString())
             } else {
                 QLog.e(TAG, result.msg)
+                ToastUtils.showShort(mContext, result.msg)
             }
 
         }
@@ -403,8 +410,10 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
                 ) { result ->
                     finishLoading()
                     if (result.isSuccess) {
+                        ToastUtils.showShort(mContext, "成功")
                         finish()
                     } else {
+                        ToastUtils.showShort(mContext, result.msg)
                         QLog.e(TAG, result.toString())
                     }
                 }
@@ -425,7 +434,9 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
                 finishLoading()
                 if (result.isSuccess) {
                     finish()
+                    ToastUtils.showShort(mContext,"成功")
                 } else {
+                    ToastUtils.showShort(mContext, result.msg)
                     QLog.e(TAG, result.toString())
                 }
             }
