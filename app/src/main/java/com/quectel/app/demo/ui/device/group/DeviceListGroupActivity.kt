@@ -44,7 +44,7 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
         name = intent.getStringExtra("name")
         shareCode = intent.getStringExtra("shareCode")
         if(!name.isNullOrEmpty()){
-            binding.tvStatus.text = name;
+            binding.tvStatus.text = name
         }
     }
 
