@@ -5,8 +5,6 @@ import android.content.Context;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.quectel.app.demo.R;
-import com.quectel.app.demo.bean.DeviceGroupVO;
-import com.quectel.app.demo.bean.SharedDevice;
 import com.quectel.basic.common.entity.QuecDeviceModel;
 
 import java.util.List;

@@ -44,6 +44,9 @@
             android:name=".ui.account.LoginExActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.device.group.DeviceListGroupActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.account.RegisterExActivity"
             android:exported="false" />
         <activity

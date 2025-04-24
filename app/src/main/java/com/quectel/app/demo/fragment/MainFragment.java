@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import com.quectel.app.demo.R;
+import com.quectel.app.demo.ui.device.group.DeviceGroupFragment;
 import com.quectel.app.demo.ui.device.list.DeviceListFragment;
 
 import org.greenrobot.eventbus.EventBus;
@@ -72,7 +73,7 @@ public class MainFragment extends SupportFragment {
             selectTabOne();
 
             mFragments[FIRST] = new DeviceListFragment();
-            mFragments[SECOND] = DeviceGroupFragment.newInstance();
+            mFragments[SECOND] = new DeviceGroupFragment();
             mFragments[THIRD] = MineFragment.newInstance();
 
 

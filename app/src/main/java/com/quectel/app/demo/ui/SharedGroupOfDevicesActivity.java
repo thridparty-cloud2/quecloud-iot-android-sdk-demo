@@ -14,15 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.quectel.app.demo.R;
-import com.quectel.app.demo.adapter.DeviceAdapter;
-import com.quectel.app.demo.adapter.DeviceGroupAdapter;
 import com.quectel.app.demo.adapter.SharedDeviceAdapter;
 import com.quectel.app.demo.base.BaseActivity;
-import com.quectel.app.demo.bean.DeviceGroupVO;
-import com.quectel.app.demo.bean.SharedDevice;
 import com.quectel.app.demo.utils.MyUtils;
 import com.quectel.app.demo.utils.ToastUtils;
 import com.quectel.app.demo.widget.BottomItemDecorationSystem;
@@ -33,11 +27,9 @@ import com.quectel.basic.common.entity.QuecDeviceModel;
 import com.quectel.basic.common.entity.QuecPageResponse;
 import com.quectel.basic.common.utils.QuecGsonUtil;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.List;
 
 import butterknife.BindView;
