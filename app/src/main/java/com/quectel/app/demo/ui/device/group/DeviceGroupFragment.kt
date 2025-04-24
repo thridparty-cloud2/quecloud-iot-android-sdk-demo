@@ -6,9 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.listener.OnItemClickListener
@@ -16,6 +13,7 @@ import com.quectel.app.demo.R
 import com.quectel.app.demo.adapter.DeviceGroupAdapter
 import com.quectel.app.demo.base.fragment.QuecBaseFragment
 import com.quectel.app.demo.databinding.DeviceGroupLayoutBinding
+import com.quectel.app.demo.dialog.EditTextPopup
 import com.quectel.app.demo.utils.MyUtils
 import com.quectel.app.demo.utils.ToastUtils
 import com.quectel.app.demo.widget.BottomItemDecorationSystem
@@ -24,6 +22,7 @@ import com.quectel.app.demo.widget.PayBottomDialog.OnBottomItemClickListener
 import com.quectel.app.device.bean.QuecDeviceGroupInfoModel
 import com.quectel.app.device.bean.QuecDeviceGroupParamModel
 import com.quectel.app.device.deviceservice.QuecDeviceGroupService
+import com.quectel.basic.common.utils.QuecClickUtils
 import com.quectel.basic.queclog.QLog
 import `in`.srain.cube.views.ptr.PtrDefaultHandler
 import `in`.srain.cube.views.ptr.PtrFrameLayout
@@ -41,7 +40,7 @@ class DeviceGroupFragment : QuecBaseFragment<DeviceGroupLayoutBinding>() {
 
     override fun getViewBinding(
         inflater: LayoutInflater,
-        container: ViewGroup?
+        container: ViewGroup?,
     ): DeviceGroupLayoutBinding {
         return DeviceGroupLayoutBinding.inflate(inflater, container, false)
     }
@@ -54,7 +53,7 @@ class DeviceGroupFragment : QuecBaseFragment<DeviceGroupLayoutBinding>() {
             override fun checkCanDoRefresh(
                 frame: PtrFrameLayout,
                 content: View,
-                header: View
+                header: View,
             ): Boolean {
                 return PtrDefaultHandler.checkContentCanBePulledDown(frame, binding.mList, header)
             }
@@ -68,6 +67,9 @@ class DeviceGroupFragment : QuecBaseFragment<DeviceGroupLayoutBinding>() {
     override fun initData() {
         queryGroupList()
         binding.ivAdd.setOnClickListener { it ->
+            if (QuecClickUtils.isFastClick()) {
+                return@setOnClickListener
+            }
             val dialogView =
                 View.inflate(context, R.layout.bottom_pop_devicegroup_layout, null)
             val myDialog = PayBottomDialog(
@@ -118,7 +120,7 @@ class DeviceGroupFragment : QuecBaseFragment<DeviceGroupLayoutBinding>() {
                     override fun onItemClick(
                         adapter: BaseQuickAdapter<*, *>,
                         view: View,
-                        position: Int
+                        position: Int,
                     ) {
                         val data: QuecDeviceGroupInfoModel =
                             adapter.data[position] as QuecDeviceGroupInfoModel
@@ -154,81 +156,48 @@ class DeviceGroupFragment : QuecBaseFragment<DeviceGroupLayoutBinding>() {
     }
 
     private fun createAddGroupDialog() {
-        val view = View.inflate(context, R.layout.add_group, null)
-        val mDialog = Dialog(requireActivity(), R.style.dialogTM)
-        mDialog.setContentView(view)
-        mDialog.setCancelable(true)
-        mDialog.setCanceledOnTouchOutside(false)
-        val mEditName = mDialog.findViewById<View?>(R.id.edit_name) as EditText
-        val mBtCancel = mDialog.findViewById<View?>(R.id.bt_cancel) as Button
-        val mBtSure = mDialog.findViewById<View?>(R.id.bt_sure) as Button
-        mBtCancel.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(view: View?) {
-                mDialog.dismiss()
-            }
-        })
-
-        mBtSure.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(view: View?) {
-                mDialog.dismiss()
-                val name: String = MyUtils.getEditTextContent(mEditName)
-                if (name.isEmpty()) return
-
+        EditTextPopup(context).apply {
+            setTitle("添加设备组")
+            setHint("请输入group name")
+            setEditTextListener { name ->
+                if (name.isNullOrEmpty()) {
+                    ToastUtils.showShort(context, "参数不能为空")
+                    return@setEditTextListener
+                }
+                dismiss()
                 startLoading()
                 val model = QuecDeviceGroupParamModel()
                 model.name = name
                 QuecDeviceGroupService.addDeviceGroup(model) { result ->
                     finishLoading()
+                    handlerResult(result)
                     if (result.isSuccess) {
                         queryGroupList()
-                    } else {
-                        ToastUtils.showShort(context, result.msg)
-                        QLog.e(TAG, result.toString())
                     }
                 }
             }
-        })
-        mDialog.show()
+        }.showPopupWindow()
     }
 
     private fun createReceiveGroupShare() {
-        val view = View.inflate(context, R.layout.receiver_accept_shareinformation_dialog, null)
-        val mDialog = Dialog(requireActivity(), R.style.dialogTM)
-        mDialog.setContentView(view)
-        mDialog.setCancelable(true)
-        mDialog.setCanceledOnTouchOutside(false)
-        val mEditShareCode = mDialog.findViewById<View?>(R.id.edit_share_code) as EditText
-        val mBtCancel = mDialog.findViewById<View?>(R.id.bt_cancel) as Button
-        val mBtSure = mDialog.findViewById<View?>(R.id.bt_sure) as Button
-        val mTvTitle = mDialog.findViewById<View?>(R.id.tv_title) as TextView
-        mTvTitle.text = "接受别人设备组分享"
-        mBtCancel.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(view: View?) {
-                mDialog.dismiss()
-            }
-        })
-
-        mBtSure.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(view: View?) {
-                mDialog.dismiss()
-                val code = MyUtils.getEditTextContent(mEditShareCode)
+        EditTextPopup(context).apply {
+            setTitle("接受别人设备组分享")
+            setHint("请输入share_code")
+            setEditTextListener { code ->
                 if (code.isNullOrEmpty()) {
-                    return
+                    ToastUtils.showShort(context, "参数不能为空")
+                    return@setEditTextListener
                 }
+                dismiss()
                 startLoading()
-
                 QuecDeviceGroupService.getAcceptDeviceGroupShare(code) { result ->
                     finishLoading()
+                    handlerResult(result)
                     if (result.isSuccess) {
-                        ToastUtils.showShort(context, "操作成功")
                         queryGroupList()
-                    } else {
-                        ToastUtils.showShort(context, result.msg)
-                        QLog.e(TAG, result.toString())
                     }
                 }
             }
-        })
-        mDialog.show()
+        }.showPopupWindow()
     }
 }

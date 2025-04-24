@@ -5,11 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import com.quectel.app.demo.R
 import com.quectel.app.demo.base.activity.QuecBaseActivity
 import com.quectel.app.demo.databinding.ActivityListGroupBinding
+import com.quectel.app.demo.dialog.CommonDialog
+import com.quectel.app.demo.dialog.EditDoubleTextPopup
+import com.quectel.app.demo.dialog.EditTextPopup
 import com.quectel.app.demo.ui.SharedGroupOfDevicesActivity
 import com.quectel.app.demo.utils.MyUtils
 import com.quectel.app.demo.utils.ToastUtils
@@ -95,83 +97,53 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
         startLoading()
         QuecDeviceGroupService.getDeviceGroupInfo(dGid!!) { result ->
             finishLoading()
+            handlerResult(result)
             if (result.isSuccess) {
-                val infoModelString = QuecGsonUtil.gsonString(result.getData())
-                ToastUtils.showShort(mContext, infoModelString)
-                QLog.i(TAG, infoModelString)
-            } else {
-                ToastUtils.showShort(mContext, result.msg)
-                QLog.e(TAG, result.toString())
+                CommonDialog.showSimpleInfo(
+                    this@DeviceListGroupActivity,
+                    "查询设备组详情",
+                    result.data.toString()
+                )
             }
         }
     }
 
     private fun changeGroupDialog() {
-        val view = View.inflate(mContext, R.layout.add_group, null)
-        val mDialog = Dialog(this@DeviceListGroupActivity, R.style.dialogTM)
-        mDialog.setContentView(view)
-        mDialog.setCancelable(true)
-        mDialog.setCanceledOnTouchOutside(false)
-        val mEditName = mDialog.findViewById<View>(R.id.edit_name) as EditText
-        val mBtCancel = mDialog.findViewById<View>(R.id.bt_cancel) as Button
-        val mBtSure = mDialog.findViewById<View>(R.id.bt_sure) as Button
-        val mTvTitle = mDialog.findViewById<View>(R.id.tv_title) as TextView
-        mTvTitle.text = "修改设备组"
-        mBtCancel.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(view: View) {
-                mDialog.dismiss()
-            }
-        })
-
-        mBtSure.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(view: View) {
-                mDialog.dismiss()
-                val name = MyUtils.getEditTextContent(mEditName)
+        EditTextPopup(this).apply {
+            setTitle("添加设备组")
+            setHint("请输入group name")
+            setEditTextListener { name ->
                 if (name.isNullOrEmpty()) {
-                    return
+                    ToastUtils.showShort(mContext, "参数不能为空")
+                    return@setEditTextListener
                 }
+                dismiss()
                 startLoading()
                 val model = QuecDeviceGroupParamModel()
                 model.name = name
                 QuecDeviceGroupService.updateDeviceGroupInfo(dGid!!, model) { result ->
                     finishLoading()
+                    handlerResult(result)
                     if (result.isSuccess) {
-                        ToastUtils.showShort(mContext,"成功")
                         finish()
-                    } else {
-                        QLog.e(TAG, result.msg)
-                        ToastUtils.showShort(mContext, result.msg)
                     }
                 }
             }
-        })
-        mDialog.show()
+        }.showPopupWindow()
     }
 
 
     private fun addDeviceToGroup() {
-        val view = View.inflate(mContext, R.layout.add_device_to_group_dialog, null)
-        val mDialog = Dialog(this@DeviceListGroupActivity, R.style.dialogTM)
-        mDialog.setContentView(view)
-        mDialog.setCancelable(true)
-        mDialog.setCanceledOnTouchOutside(false)
-        val mEditPk = mDialog.findViewById<View>(R.id.edit_pk) as EditText
-        val mEditDk = mDialog.findViewById<View>(R.id.edit_dk) as EditText
-        val mBtCancel = mDialog.findViewById<View>(R.id.bt_cancel) as Button
-        val mBtSure = mDialog.findViewById<View>(R.id.bt_sure) as Button
-        mBtCancel.setOnClickListener {
-            mDialog.dismiss()
-        }
-
-        mBtSure.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(view: View) {
-                mDialog.dismiss()
-                val pk = MyUtils.getEditTextContent(mEditPk)
-                val dk = MyUtils.getEditTextContent(mEditDk)
+        EditDoubleTextPopup(mContext).apply {
+            setTitle("添加设备到设备组")
+            setHint1("请输入pk")
+            setHint2("请输入dk")
+            setEditTextListener { pk, dk ->
                 if (pk.isNullOrEmpty() || dk.isNullOrEmpty()) {
                     ToastUtils.showShort(mContext, "参数不能为空")
-                    return
+                    return@setEditTextListener
                 }
+                dismiss()
                 startLoading()
                 val quecDeviceModels = ArrayList<QuecDeviceModel>()
                 val quecDeviceModel = QuecDeviceModel(pk, dk)
@@ -179,116 +151,80 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
 
                 QuecDeviceGroupService.addDeviceToGroup(dGid!!, quecDeviceModels) { result ->
                     finishLoading()
+                    handlerResult(result)
                     if (result.isSuccess) {
-                        ToastUtils.showShort(mContext, "添加成功")
                         finish()
-                    } else {
-                        QLog.e(TAG, result.msg)
-                        ToastUtils.showShort(mContext, result.msg)
                     }
                 }
             }
-        })
-        mDialog.show()
+        }.showPopupWindow()
     }
 
     private fun queryDeviceInGroup() {
-        val view = View.inflate(mContext, R.layout.query_device_ingroup_dialog, null)
-        val mDialog = Dialog(this@DeviceListGroupActivity, R.style.dialogTM)
-        mDialog.setContentView(view)
-        mDialog.setCancelable(true)
-        mDialog.setCanceledOnTouchOutside(false)
-        val mEditPk = mDialog.findViewById<View>(R.id.edit_pk) as EditText
-        val mBtCancel = mDialog.findViewById<View>(R.id.bt_cancel) as Button
-        val mBtSure = mDialog.findViewById<View>(R.id.bt_sure) as Button
-        mBtCancel.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(view: View) {
-                mDialog.dismiss()
-            }
-        })
-
-        mBtSure.setOnClickListener { it ->
-            mDialog.dismiss()
-            val pk = MyUtils.getEditTextContent(mEditPk)
-            if (pk.isNullOrEmpty()) {
-                ToastUtils.showShort(mContext, "参数不能为空")
-                return@setOnClickListener
-            }
-            startLoading()
-
-            QuecDeviceGroupService.getDeviceList(
-                dGid, null, null, pk, 1, 10
-            ) { result ->
-                finishLoading()
-                if (result.isSuccess) {
-                    if (shareCode.isNullOrEmpty()) {
-                        ToastUtils.showShort(mContext, result.toString())
-                    } else {
-                        val intent = Intent(
-                            this@DeviceListGroupActivity,
-                            SharedGroupOfDevicesActivity::class.java
-                        )
-                        intent.putExtra("content", QuecGsonUtil.gsonString(result.data))
-                        intent.putExtra("shareCode", shareCode)
-                        startActivity(intent)
+        EditTextPopup(this).apply {
+            setTitle("查询设备组中的设备列表")
+            setHint("请输入pk")
+            setEditTextListener {
+                if (it.isNullOrEmpty()) {
+                    ToastUtils.showShort(mContext, "参数不能为空")
+                    return@setEditTextListener
+                }
+                dismiss()
+                startLoading()
+                QuecDeviceGroupService.getDeviceList(
+                    dGid, null, null, it, 1, 10
+                ) { result ->
+                    finishLoading()
+                    handlerResult(result)
+                    if (result.isSuccess) {
+                        if (shareCode.isNullOrEmpty()) {
+                            CommonDialog.showSimpleInfo(
+                                this@DeviceListGroupActivity,
+                                "设备组中的设备列表",
+                                result.toString()
+                            )
+                        } else {
+                            val intent = Intent(
+                                this@DeviceListGroupActivity,
+                                SharedGroupOfDevicesActivity::class.java
+                            )
+                            intent.putExtra("content", QuecGsonUtil.gsonString(result.data))
+                            intent.putExtra("shareCode", shareCode)
+                            startActivity(intent)
+                        }
                     }
-                } else {
-                    QLog.e(TAG, result.msg)
-                    ToastUtils.showShort(mContext, result.msg)
                 }
             }
-        }
-        mDialog.show()
+        }.showPopupWindow()
     }
 
 
     private fun deleteDeviceFromGroup() {
-        val view = View.inflate(mContext, R.layout.add_device_to_group_dialog, null)
-        val mDialog = Dialog(this@DeviceListGroupActivity, R.style.dialogTM)
-        mDialog.setContentView(view)
-        mDialog.setCancelable(true)
-        mDialog.setCanceledOnTouchOutside(false)
-        val mEditPk = mDialog.findViewById<View>(R.id.edit_pk) as EditText
-        val mEditDk = mDialog.findViewById<View>(R.id.edit_dk) as EditText
-        val mBtCancel = mDialog.findViewById<View>(R.id.bt_cancel) as Button
-        val mBtSure = mDialog.findViewById<View>(R.id.bt_sure) as Button
-        val mTvTitle = mDialog.findViewById<View>(R.id.tv_title) as TextView
-        mTvTitle.text = "移除设备组中的设备"
-
-        mBtCancel.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(view: View) {
-                mDialog.dismiss()
-            }
-        })
-
-        mBtSure.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(view: View) {
-                mDialog.dismiss()
-                val pk = MyUtils.getEditTextContent(mEditPk)
-                val dk = MyUtils.getEditTextContent(mEditDk)
-                if (pk.isNullOrEmpty() || dk.isNullOrEmpty()) {
+        EditDoubleTextPopup(mContext).apply {
+            setTitle("移除设备组中的设备")
+            setHint1("请输入pk")
+            setHint2("请输入dk")
+            setEditTextListener { content1, content2 ->
+                if (content1.isNullOrEmpty() || content2.isNullOrEmpty()) {
                     ToastUtils.showShort(mContext, "参数不能为空")
-                    return
+                    return@setEditTextListener
                 }
+                dismiss()
                 startLoading()
                 val deviceList = ArrayList<QuecDeviceModel>()
-                val quecDeviceModel = QuecDeviceModel(pk, dk)
+                val quecDeviceModel = QuecDeviceModel(content1, content2)
                 deviceList.add(quecDeviceModel)
                 QuecDeviceGroupService.deleteDeviceFromGroup(
                     dGid!!, deviceList
                 ) { result ->
                     finishLoading()
+                    handlerResult(result)
                     if (result.isSuccess) {
-                        ToastUtils.showShort(mContext, "移除成功")
                         finish()
-                    } else {
-                        QLog.e(TAG, result.msg)
-                        ToastUtils.showShort(mContext, result.msg)
                     }
                 }
             }
-        })
-        mDialog.show()
+        }.showPopupWindow()
     }
 
     private fun deleteGroup() {
@@ -297,12 +233,9 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
             dGid!!
         ) { result ->
             finishLoading()
+            handlerResult(result)
             if (result.isSuccess) {
-                ToastUtils.showShort(mContext, "成功")
                 finish()
-            } else {
-                QLog.e(TAG, result.msg)
-                ToastUtils.showShort(mContext, result.msg)
             }
         }
     }
@@ -360,13 +293,11 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
         QuecDeviceGroupService.getDeviceGroupShareUserList(
             dGid!!
         ) { result ->
+            handlerResult(result)
             if (result.isSuccess) {
                 finishLoading()
                 QLog.i(TAG, "result-:$result")
-                ToastUtils.showShort(mContext, result.toString())
-            } else {
-                QLog.e(TAG, result.msg)
-                ToastUtils.showShort(mContext, result.msg)
+                CommonDialog.showSimpleInfo(this, "分享人列表", result.toString())
             }
 
         }
@@ -382,31 +313,18 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
     }
 
     private fun accepterChangeGroupName() {
-        val view = View.inflate(mContext, R.layout.accepter_change_group_name_dialog, null)
-        val mDialog = Dialog(this@DeviceListGroupActivity, R.style.dialogTM)
-        mDialog.setContentView(view)
-        mDialog.setCancelable(true)
-        mDialog.setCanceledOnTouchOutside(false)
-        val mEditName = mDialog.findViewById<View>(R.id.edit_name) as EditText
-        val mBtCancel = mDialog.findViewById<View>(R.id.bt_cancel) as Button
-        val mBtSure = mDialog.findViewById<View>(R.id.bt_sure) as Button
-        mBtCancel.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(view: View) {
-                mDialog.dismiss()
-            }
-        })
-        mBtSure.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(view: View) {
-                mDialog.dismiss()
-                val name = MyUtils.getEditTextContent(mEditName)
-                if (name.isNullOrEmpty()) {
+        EditTextPopup(this).apply {
+            setTitle("修改设备组名称")
+            setHint("请输入group name")
+            setEditTextListener {
+                if (it.isNullOrEmpty()) {
                     ToastUtils.showShort(mContext, "参数不能为空")
-                    return
+                    return@setEditTextListener
                 }
+                dismiss()
                 startLoading()
-
                 QuecDeviceGroupService.getShareUserSetDeviceGroupName(
-                    name, shareCode!!
+                    it, shareCode!!
                 ) { result ->
                     finishLoading()
                     if (result.isSuccess) {
@@ -418,8 +336,7 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
                     }
                 }
             }
-        })
-        mDialog.show()
+        }.showPopupWindow()
     }
 
     private fun btSharerCancelGroup() {
@@ -434,7 +351,7 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
                 finishLoading()
                 if (result.isSuccess) {
                     finish()
-                    ToastUtils.showShort(mContext,"成功")
+                    ToastUtils.showShort(mContext, "成功")
                 } else {
                     ToastUtils.showShort(mContext, result.msg)
                     QLog.e(TAG, result.toString())
@@ -444,43 +361,27 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
     }
 
     private fun cancelShareGroupByOwner() {
-        val view = View.inflate(mContext, R.layout.receiver_cancel_share_dialog, null)
-        val mDialog = Dialog(this@DeviceListGroupActivity, R.style.dialogTM)
-        mDialog.setContentView(view)
-        mDialog.setCancelable(true)
-        mDialog.setCanceledOnTouchOutside(false)
-        val mEditCode = mDialog.findViewById<View>(R.id.edit_code) as EditText
-        val mTvTitle = mDialog.findViewById<View>(R.id.tv_title) as TextView
-        mTvTitle.text = "分享人取消设备组分享"
-        val mBtCancel = mDialog.findViewById<View>(R.id.bt_cancel) as Button
-        val mBtSure = mDialog.findViewById<View>(R.id.bt_sure) as Button
-        mBtCancel.setOnClickListener { it ->
-            mDialog.dismiss()
-        }
-
-        mBtSure.setOnClickListener(
-            object : View.OnClickListener {
-                override fun onClick(view: View) {
-                    mDialog.dismiss()
-                    val code = MyUtils.getEditTextContent(mEditCode)
-                    if (code.isNullOrEmpty()) {
-                        return
-                    }
-                    startLoading()
-
-                    QuecDeviceGroupService.getOwerUserUnshare(code) { result ->
-                        finishLoading()
-                        if (result.isSuccess) {
-                            ToastUtils.showShort(mContext, "操作成功")
-                            finish()
-                        } else {
-                            ToastUtils.showShort(mContext, result.msg)
-                            QLog.e(TAG, result.toString())
-                        }
+        EditTextPopup(this).apply {
+            setTitle("分享人取消设备组分享")
+            setHint("请输入shareCode")
+            setEditTextListener {
+                if (it.isNullOrEmpty()) {
+                    return@setEditTextListener
+                }
+                dismiss()
+                startLoading()
+                QuecDeviceGroupService.getOwerUserUnshare(it) { result ->
+                    finishLoading()
+                    if (result.isSuccess) {
+                        ToastUtils.showShort(mContext, "操作成功")
+                        finish()
+                    } else {
+                        ToastUtils.showShort(mContext, result.msg)
+                        QLog.e(TAG, result.toString())
                     }
                 }
-            })
-        mDialog.show()
+            }
+        }.showPopupWindow()
     }
 
     fun startLoading() {
