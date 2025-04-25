@@ -43,7 +43,12 @@ class MineFragment : QuecBaseFragment<MineLayoutBinding>() {
             btLogout.setOnClickListener { logout() }
             llNickname.setOnClickListener { changeNickName() }
             llAddress.setOnClickListener { changeAddress() }
+            civHead.setOnClickListener { changeHead() }
         }
+    }
+
+    private fun changeHead() {
+        startActivity(Intent(activity, PhotoHeadActivity::class.java));
     }
 
     override fun initData() {
