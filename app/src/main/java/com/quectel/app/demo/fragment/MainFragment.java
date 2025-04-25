@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import com.quectel.app.demo.R;
 import com.quectel.app.demo.ui.device.group.DeviceGroupFragment;
 import com.quectel.app.demo.ui.device.list.DeviceListFragment;
+import com.quectel.app.demo.ui.mine.MineFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -74,7 +75,7 @@ public class MainFragment extends SupportFragment {
 
             mFragments[FIRST] = new DeviceListFragment();
             mFragments[SECOND] = new DeviceGroupFragment();
-            mFragments[THIRD] = MineFragment.newInstance();
+            mFragments[THIRD] = new MineFragment();
 
 
             loadMultipleRootFragment(R.id.fl_tab_container, FIRST,

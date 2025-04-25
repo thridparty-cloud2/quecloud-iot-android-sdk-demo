@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/dp_50"
+    android:background="@drawable/quec_basic_ui_device_name_popup">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_25"
+        android:gravity="center"
+        android:paddingHorizontal="@dimen/dp_12"
+        android:textColor="@color/W1"
+        android:textSize="@dimen/T7_F"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Title" />
+
+
+    <TextView
+        android:id="@+id/tv_cancel"
+        style="@style/quec_basic_ui_dialog_cancel_btn_style"
+        android:layout_width="0dp"
+        android:layout_marginTop="@dimen/dp_30"
+        android:layout_weight="1"
+        android:text="@string/quec_cancel"
+        app:layout_constraintEnd_toStartOf="@id/tv_sure"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+    <TextView
+        android:id="@+id/tv_sure"
+        style="@style/quec_basic_ui_dialog_confirm_btn_style"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:text="@string/quec_sure"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/tv_cancel"
+        app:layout_constraintTop_toTopOf="@id/tv_cancel" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
