@@ -35,6 +35,8 @@ object SdkManager {
                 QuecCloudServiceType.QuecCloudServiceTypeNorthAmerica
             )
         }
+
+        QuecIotSdk.setDebugMode(true)
     }
 
     fun selectService(application: Application, type: Int) {
