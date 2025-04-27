@@ -9,6 +9,7 @@ import com.quectel.app.demo.databinding.ActivityDeviceFunctionBinding
 import com.quectel.app.demo.dialog.CommonDialog
 import com.quectel.app.demo.dialog.EditDoubleTextPopup
 import com.quectel.app.demo.dialog.EditTextPopup
+import com.quectel.app.demo.ui.device.control.DeviceControlActivity
 import com.quectel.app.demo.ui.device.ota.DeviceOtaActivity
 import com.quectel.app.demo.ui.device.share.DeviceShareActivity
 import com.quectel.app.device.deviceservice.QuecDeviceService
@@ -84,7 +85,7 @@ class DeviceFunctionActivity : QuecBaseDeviceActivity<ActivityDeviceFunctionBind
         }
 
         addItem("设备控制") {
-
+            startActivity(Intent(this, DeviceControlActivity::class.java))
         }
 
         addItem("设备升级") {
