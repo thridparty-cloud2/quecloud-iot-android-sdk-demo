@@ -42,6 +42,7 @@
         android:id="@+id/tv_connect"
         style="@style/CommText"
         android:paddingHorizontal="12dp"
+        android:textColor="@color/M1"
         android:textSize="18sp"
         tools:text="设备离线" />
 

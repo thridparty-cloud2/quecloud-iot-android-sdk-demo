@@ -13,9 +13,13 @@ import com.quectel.app.demo.databinding.ActivityDeviceControlExBinding
 import com.quectel.app.demo.dialog.EditTextPopup
 import com.quectel.app.demo.dialog.SelectItemDialog
 import com.quectel.app.device.bean.BooleanSpecs
+import com.quectel.app.device.bean.ModelBasic
 import com.quectel.app.device.bean.NumSpecs
 import com.quectel.app.device.bean.QuecProductTSLPropertyModel
+import com.quectel.app.device.bean.TSLEvent
+import com.quectel.app.device.bean.TSLService
 import com.quectel.app.device.bean.TextSpecs
+import com.quectel.app.device.callback.IDeviceTSLCallBack
 import com.quectel.app.device.callback.IDeviceTSLModelCallback
 import com.quectel.app.device.deviceservice.QuecDeviceService
 import com.quectel.basic.common.entity.QuecDeviceModel
@@ -32,7 +36,7 @@ import java.util.Calendar
 
 class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBinding>() {
     private lateinit var deviceClient: QuecDeviceClientApi
-    private var isConnecting = false
+    private var isConnecting = 0
     private var itemList = ArrayList<QuecProductTSLPropertyModel<*>>()
     private lateinit var adapter: DeviceControlAdapter
     private var sendMode = QuecIotDataSendMode.QuecIotDataSendModeAuto
@@ -51,7 +55,7 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
 
     private val listener = object : QuecDeviceClientApi.Listener {
         override fun connectingStateUpdate(device: QuecDeviceModel, connectingState: Int) {
-            isConnecting = connectingState == 1
+            isConnecting = connectingState
             QuecThreadUtil.RunMainThread {
                 showOnlineStatus()
             }
@@ -77,7 +81,8 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
                         when (dataType) {
                             QuecIotDataPointDataType.INT, QuecIotDataPointDataType.BOOL,
                             QuecIotDataPointDataType.FLOAT, QuecIotDataPointDataType.DOUBLE,
-                            QuecIotDataPointDataType.TEXT, QuecIotDataPointDataType.DATE -> {
+                            QuecIotDataPointDataType.TEXT, QuecIotDataPointDataType.DATE,
+                            QuecIotDataPointDataType.ENUM -> {
                                 attributeValue = item.value.toString()
                             }
                         }
@@ -116,10 +121,6 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
                 )
             )
 
-            radioWs.visibility = if (isSupport(Type.WS)) View.VISIBLE else View.GONE
-            radioWifi.visibility = if (isSupport(Type.WIFI)) View.VISIBLE else View.GONE
-            radioBle.visibility = if (isSupport(Type.BLE)) View.VISIBLE else View.GONE
-
             radioGroup.setOnCheckedChangeListener { _, checkedId ->
                 sendMode = when (checkedId) {
                     R.id.radio_ws -> QuecIotDataSendMode.QuecIotDataSendModeWS
@@ -138,6 +139,7 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
 
         deviceClient.addListener(listener)
 
+        isConnecting = deviceClient.getConnectingState()
         showOnlineStatus()
         queryTsl()
     }
@@ -201,23 +203,52 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
     }
 
     private fun queryTsl() {
-        QuecDeviceService.getProductTslAndDeviceBusinessAttributes(
-            device.productKey,
-            device.deviceKey,
-            null,
-            null,
-            null,
-            null,
-            object : IDeviceTSLModelCallback {
+        if (!device.isOnlyBle) {
+            QuecDeviceService.getProductTslAndDeviceBusinessAttributes(
+                device.productKey,
+                device.deviceKey,
+                null,
+                null,
+                null,
+                null,
+                object : IDeviceTSLModelCallback {
+                    @SuppressLint("NotifyDataSetChanged")
+                    override fun onResultCallback(list: MutableList<QuecProductTSLPropertyModel<*>>?) {
+                        itemList.clear()
+                        list?.forEach {
+                            itemList.add(it)
+                        }
+                        adapter.notifyDataSetChanged()
+                    }
+
+                    override fun onFail(throwable: Throwable?) {
+                        showMessage("查询设备失败: $throwable")
+                    }
+
+                }
+            )
+        } else {
+            QuecDeviceService.getProductTSL(device.productKey, object : IDeviceTSLCallBack {
                 @SuppressLint("NotifyDataSetChanged")
-                override fun onResultCallback(list: MutableList<QuecProductTSLPropertyModel<*>>?) {
+                override fun onSuccess(
+                    modelBasicList: MutableList<ModelBasic<Any>>?,
+                    tslEventList: MutableList<TSLEvent>?,
+                    tslServiceList: MutableList<TSLService>?
+                ) {
                     itemList.clear()
-                    list?.forEach {
-                        itemList.add(it)
+                    modelBasicList?.forEach { item ->
+                        itemList.add(QuecProductTSLPropertyModel<Any>().apply {
+                            id = item.id
+                            code = item.code
+                            dataType = item.dataType
+                            name = item.name
+                            subType = item.subType
+                            sort = item.sort
+                            specs = item.specs
+                        })
                     }
                     adapter.notifyDataSetChanged()
-
-                    if (device.isOnlyBle) {
+                    if (getOnlineStatus(deviceClient.getConnectState(), Type.BLE)) {
                         queryDps()
                     }
                 }
@@ -226,8 +257,8 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
                     showMessage("查询设备失败: $throwable")
                 }
 
-            }
-        )
+            })
+        }
     }
 
     private fun queryDps() {
@@ -237,10 +268,14 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
                 code = item.code
                 dataType = dataTypeMap[item.dataType]
             }
-        }) {
+        }, sendMode) {
             //todo 主线程切换
             QuecThreadUtil.RunMainThread {
-                handlerResult(it)
+                if (it.isSuccess) {
+                    showMessage("设备状态查询成功")
+                } else {
+                    handlerResult(it)
+                }
             }
         }
     }
@@ -366,18 +401,44 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
             code = item.code
             dataType = dataTypeMap[item.dataType]
             value = input
-        })) {
+        }), sendMode) {
             QuecThreadUtil.RunMainThread { handlerResult(it) }
         }
     }
 
     private fun showOnlineStatus(onlineState: Int = deviceClient.getConnectState()) {
-        val state = (if (isConnecting) "[连接中...] " else "") + if (onlineState == 0) {
+        QLog.i(TAG, "showOnlineStatus onlineState: $onlineState ,conning: $isConnecting")
+        val state = (if (isConnecting > 0) "[连接中...] " else "") + if (onlineState == 0) {
             "离线"
         } else {
-            "${if (onlineState and 1 == 1) "ws在线" else ""} ${if (onlineState and 2 == 2) " WiFi在线" else ""} ${if (onlineState and 3 == 3) " ble在线" else ""}"
+            "${
+                if (getOnlineStatus(
+                        onlineState,
+                        Type.WS
+                    )
+                ) "ws在线" else ""
+            } ${
+                if (getOnlineStatus(
+                        onlineState,
+                        Type.WIFI
+                    )
+                ) " WiFi在线" else ""
+            } ${
+                if (
+                    getOnlineStatus(onlineState, Type.BLE)
+                ) " ble在线" else ""
+            }"
         }
-        binding.tvConnect.text = state
+        binding.apply {
+            tvConnect.text = state
+            radioWs.visibility =
+                if (getOnlineStatus(onlineState, Type.WS)) View.VISIBLE else View.GONE
+            radioWifi.visibility =
+                if (getOnlineStatus(onlineState, Type.WIFI)) View.VISIBLE else View.GONE
+            radioBle.visibility =
+                if (getOnlineStatus(onlineState, Type.BLE)) View.VISIBLE else View.GONE
+        }
+
     }
 
     private fun isSupport(type: Type): Boolean {
@@ -386,6 +447,10 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
             Type.WS, Type.WIFI -> maskEnable && device.verified != "0"
             else -> maskEnable
         }
+    }
+
+    private fun getOnlineStatus(onlineState: Int, type: Type): Boolean {
+        return onlineState and type.mask != 0
     }
 
     private fun showDateTimePicker(onDateTimeSelected: (Calendar) -> Unit) {
