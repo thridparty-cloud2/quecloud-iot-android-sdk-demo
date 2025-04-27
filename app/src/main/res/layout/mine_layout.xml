@@ -188,7 +188,6 @@
 
 
           <LinearLayout
-              android:visibility="gone"
               android:id="@+id/ll_sex"
               android:layout_width="match_parent"
               android:orientation="horizontal"
@@ -216,14 +215,13 @@
 
           </LinearLayout>
 
-<!--          <View-->
-<!--              android:layout_width="match_parent"-->
-<!--              android:layout_height="0.5dp"-->
-<!--              android:background="@color/gray_line"-->
-<!--              />-->
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="0.5dp"
+              android:background="@color/gray_line"
+              />
 
           <LinearLayout
-              android:visibility="gone"
               android:id="@+id/ll_lan"
               android:layout_width="match_parent"
               android:orientation="horizontal"
@@ -251,14 +249,13 @@
 
           </LinearLayout>
 
-<!--          <View-->
-<!--              android:layout_width="match_parent"-->
-<!--              android:layout_height="0.5dp"-->
-<!--              android:background="@color/gray_line"-->
-<!--              />-->
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="0.5dp"
+              android:background="@color/gray_line"
+              />
 
           <LinearLayout
-              android:visibility="gone"
               android:id="@+id/ll_country"
               android:layout_width="match_parent"
               android:orientation="horizontal"
@@ -286,20 +283,20 @@
 
           </LinearLayout>
 
-<!--          <View-->
-<!--              android:layout_width="match_parent"-->
-<!--              android:layout_height="0.5dp"-->
-<!--              android:background="@color/gray_line"-->
-<!--              />-->
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="0.5dp"
+              android:background="@color/gray_line"
+              />
 
           <LinearLayout
-              android:visibility="gone"
               android:id="@+id/ll_timezone"
               android:layout_width="match_parent"
               android:orientation="horizontal"
               android:paddingLeft="20dp"
               android:gravity="center_vertical"
-              android:layout_height="44dp">
+              android:minHeight="@dimen/dp_44"
+              android:layout_height="wrap_content">
 
               <TextView
                   android:layout_width="wrap_content"
@@ -310,22 +307,24 @@
                   android:layout_height="wrap_content"/>
 
               <TextView
+                  android:layout_marginBottom="@dimen/dp_4"
+                  android:layout_marginTop="@dimen/dp_4"
                   android:id="@+id/tv_timezone"
                   android:layout_width="wrap_content"
                   android:text=""
                   android:layout_marginLeft="20dp"
                   android:textColor="@color/main1"
-                  android:textSize="16sp"
+                  android:textSize="@dimen/T4_F"
                   android:gravity="center"
                   android:layout_height="wrap_content"/>
 
           </LinearLayout>
 
-<!--          <View-->
-<!--              android:layout_width="match_parent"-->
-<!--              android:layout_height="0.5dp"-->
-<!--              android:background="@color/gray_line"-->
-<!--              />-->
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="0.5dp"
+              android:background="@color/gray_line"
+              />
 
           <LinearLayout
               android:id="@+id/ll_change_password"

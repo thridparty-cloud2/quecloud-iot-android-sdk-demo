@@ -11,6 +11,7 @@ import com.quectel.app.demo.base.fragment.QuecBaseFragment
 import com.quectel.app.demo.databinding.MineLayoutBinding
 import com.quectel.app.demo.dialog.EditDoubleTextPopup
 import com.quectel.app.demo.dialog.EditTextPopup
+import com.quectel.app.demo.dialog.SelectItemDialog
 import com.quectel.app.demo.dialog.SurePopup
 import com.quectel.app.demo.dialog.SurePopup.OnSureListener
 import com.quectel.app.demo.ui.StartActivity
@@ -23,7 +24,12 @@ import com.quectel.app.usersdk.bean.QuecUserModel
 import com.quectel.app.usersdk.service.QuecUserService
 import kotlin.concurrent.thread
 
-class MineFragment : QuecBaseFragment<MineLayoutBinding>() {
+public class MineFragment(
+    //1 语言   2 国家   3时区
+    public val lang: Int = 1,
+    public val nationality: Int = 2,
+    public val timezone: Int = 3,
+) : QuecBaseFragment<MineLayoutBinding>() {
 
     var mDialog: Dialog? = null
     lateinit var user: QuecUserModel
@@ -44,11 +50,50 @@ class MineFragment : QuecBaseFragment<MineLayoutBinding>() {
             llNickname.setOnClickListener { changeNickName() }
             llAddress.setOnClickListener { changeAddress() }
             civHead.setOnClickListener { changeHead() }
+            llSex.setOnClickListener { changeSex() }
+            llLan.setOnClickListener { openLangCountryTimezone(lang) }
+            llCountry.setOnClickListener { openLangCountryTimezone(nationality) }
+            llTimezone.setOnClickListener { openLangCountryTimezone(timezone) }
+        }
+    }
+
+    private fun openLangCountryTimezone(type: Int) {
+        var intent = Intent(activity, UpdataUserActivity::class.java)
+        intent.putExtra("type", type)
+        startActivity(intent)
+    }
+
+    private fun changeSex() {
+        SelectItemDialog(requireContext()).apply {
+            addItem("男") {
+                updateSex(0)
+                dismiss()
+            }
+            addItem("女") {
+                updateSex(1)
+                dismiss()
+            }
+            addItem("保密") {
+                updateSex(2)
+                dismiss()
+            }
+            addItem("取消") {
+                dismiss()
+            }
+        }.show()
+    }
+
+    private fun updateSex(type: Int) {
+        QuecUserService.updateUserSex(sex = type) { result ->
+            handlerResult(result)
+            if (result.isSuccess) {
+                queryUserInfor()
+            }
         }
     }
 
     private fun changeHead() {
-        startActivity(Intent(activity, PhotoHeadActivity::class.java));
+        startActivity(Intent(activity, PhotoHeadActivity::class.java))
     }
 
     override fun initData() {
@@ -74,6 +119,18 @@ class MineFragment : QuecBaseFragment<MineLayoutBinding>() {
                 }
                 if (!result.data.address.isNullOrEmpty()) {
                     binding.tvAddress.text = result.data.address
+                }
+                if (!result.data.sex.isNullOrEmpty()) {
+                    binding.tvSex.text = result.data.sex
+                }
+                if (!result.data.lang.isNullOrEmpty()) {
+                    binding.tvLan.text = result.data.lang
+                }
+                if (!result.data.nationality.isNullOrEmpty()) {
+                    binding.tvCountry.text = result.data.nationality
+                }
+                if (!result.data.timezone.isNullOrEmpty()) {
+                    binding.tvTimezone.text = result.data.timezone
                 }
                 if (!result.data.headimg.isNullOrEmpty()) {
                     val widthPic = DensityUtils.dp2px(context, 50f)

@@ -56,6 +56,9 @@
             android:name=".ui.mine.PhotoHeadActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.mine.UpdataUserActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
             android:exported="true"

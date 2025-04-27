@@ -9,6 +9,7 @@ import com.quectel.app.demo.adapter.MinePhotoAdapter
 import com.quectel.app.demo.base.activity.QuecBaseActivity
 import com.quectel.app.demo.databinding.ActivityListPhotoBinding
 import com.quectel.app.usersdk.service.QuecUserService
+import com.quectel.basic.queclog.QLog
 
 class PhotoHeadActivity : QuecBaseActivity<ActivityListPhotoBinding>() {
     companion object {
@@ -56,6 +57,7 @@ class PhotoHeadActivity : QuecBaseActivity<ActivityListPhotoBinding>() {
     }
 
     private fun selectPhotoUrl(string: String) {
+        QLog.e(TAG,string)
         QuecUserService.updateUserIcon(imagePath = string) { result ->
             handlerResult(result)
             if (result.isSuccess) {
