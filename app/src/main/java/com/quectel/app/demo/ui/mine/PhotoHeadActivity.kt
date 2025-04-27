@@ -7,6 +7,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.quectel.app.demo.adapter.MinePhotoAdapter
 import com.quectel.app.demo.base.activity.QuecBaseActivity
+import com.quectel.app.demo.common.AppVariable
 import com.quectel.app.demo.databinding.ActivityListPhotoBinding
 import com.quectel.app.usersdk.service.QuecUserService
 import com.quectel.basic.queclog.QLog
@@ -60,6 +61,7 @@ class PhotoHeadActivity : QuecBaseActivity<ActivityListPhotoBinding>() {
         QLog.e(TAG,string)
         QuecUserService.updateUserIcon(imagePath = string) { result ->
             handlerResult(result)
+            AppVariable.setMineChange()
             if (result.isSuccess) {
                 finish()
             }

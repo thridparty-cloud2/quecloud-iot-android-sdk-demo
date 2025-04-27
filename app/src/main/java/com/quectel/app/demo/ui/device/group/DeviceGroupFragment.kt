@@ -12,6 +12,7 @@ import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.quectel.app.demo.R
 import com.quectel.app.demo.adapter.DeviceGroupAdapter
 import com.quectel.app.demo.base.fragment.QuecBaseFragment
+import com.quectel.app.demo.common.AppVariable
 import com.quectel.app.demo.databinding.DeviceGroupLayoutBinding
 import com.quectel.app.demo.dialog.EditTextPopup
 import com.quectel.app.demo.utils.MyUtils
@@ -100,7 +101,10 @@ class DeviceGroupFragment : QuecBaseFragment<DeviceGroupLayoutBinding>() {
 
     override fun onResume() {
         super.onResume()
-        queryGroupList()
+        if(AppVariable.isGroupInfoChange){
+            AppVariable.isGroupInfoChange = false
+            queryGroupList()
+        }
     }
 
     private fun queryGroupList() {

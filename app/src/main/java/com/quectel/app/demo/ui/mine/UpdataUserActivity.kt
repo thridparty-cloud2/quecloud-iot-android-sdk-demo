@@ -7,6 +7,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.quectel.app.demo.adapter.LanAdapter
 import com.quectel.app.demo.base.activity.QuecBaseActivity
+import com.quectel.app.demo.common.AppVariable
 import com.quectel.app.demo.databinding.ActivityListUpdateBinding
 import com.quectel.app.usersdk.bean.LangBean
 import com.quectel.app.usersdk.service.QuecUserService
@@ -72,6 +73,7 @@ class UpdataUserActivity(
             lang -> {
                 QuecUserService.updateUserLang(data.id as Int) { result ->
                     handlerResult(result)
+                    AppVariable.setMineChange()
                     if (result.isSuccess) {
                         finish()
                     }
@@ -81,6 +83,7 @@ class UpdataUserActivity(
             nationality -> {
                 QuecUserService.updateUserNationality(data.id as Int) { result ->
                     handlerResult(result)
+                    AppVariable.setMineChange()
                     if (result.isSuccess) {
                         finish()
                     }
@@ -90,6 +93,7 @@ class UpdataUserActivity(
             timezone -> {
                 QuecUserService.updateUserTimezone(data.id as Int) { result ->
                     handlerResult(result)
+                    AppVariable.setMineChange()
                     if (result.isSuccess) {
                         finish()
                     }

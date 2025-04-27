@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.quectel.app.demo.R
 import com.quectel.app.demo.base.fragment.QuecBaseFragment
+import com.quectel.app.demo.common.AppVariable
 import com.quectel.app.demo.databinding.MineLayoutBinding
 import com.quectel.app.demo.dialog.EditDoubleTextPopup
 import com.quectel.app.demo.dialog.EditTextPopup
@@ -101,6 +102,9 @@ public class MineFragment(
 
     override fun onResume() {
         super.onResume()
+        if(AppVariable.isMineInfoChange){
+            AppVariable.isMineInfoChange = false
+        }
         queryUserInfor()
     }
 

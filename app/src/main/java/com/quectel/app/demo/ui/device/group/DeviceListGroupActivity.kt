@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.TextView
 import com.quectel.app.demo.R
 import com.quectel.app.demo.base.activity.QuecBaseActivity
+import com.quectel.app.demo.common.AppVariable
 import com.quectel.app.demo.databinding.ActivityListGroupBinding
 import com.quectel.app.demo.dialog.CommonDialog
 import com.quectel.app.demo.dialog.EditDoubleTextPopup
@@ -124,6 +125,7 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
                 QuecDeviceGroupService.updateDeviceGroupInfo(dGid!!, model) { result ->
                     finishLoading()
                     handlerResult(result)
+                    AppVariable.setGroupChange()
                     if (result.isSuccess) {
                         finish()
                     }
@@ -148,7 +150,7 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
                 val quecDeviceModels = ArrayList<QuecDeviceModel>()
                 val quecDeviceModel = QuecDeviceModel(pk, dk)
                 quecDeviceModels.add(quecDeviceModel)
-
+                AppVariable.setGroupChange()
                 QuecDeviceGroupService.addDeviceToGroup(dGid!!, quecDeviceModels) { result ->
                     finishLoading()
                     handlerResult(result)
@@ -217,6 +219,7 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
                 QuecDeviceGroupService.deleteDeviceFromGroup(
                     dGid!!, deviceList
                 ) { result ->
+                    AppVariable.setGroupChange()
                     finishLoading()
                     handlerResult(result)
                     if (result.isSuccess) {
@@ -234,6 +237,7 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
         ) { result ->
             finishLoading()
             handlerResult(result)
+            AppVariable.setGroupChange()
             if (result.isSuccess) {
                 finish()
             }
@@ -326,6 +330,7 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
                 QuecDeviceGroupService.getShareUserSetDeviceGroupName(
                     it, shareCode!!
                 ) { result ->
+                    AppVariable.setGroupChange()
                     finishLoading()
                     if (result.isSuccess) {
                         ToastUtils.showShort(mContext, "成功")
@@ -349,6 +354,7 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
                 shareCode!!
             ) { result ->
                 finishLoading()
+                AppVariable.setGroupChange()
                 if (result.isSuccess) {
                     finish()
                     ToastUtils.showShort(mContext, "成功")
@@ -370,6 +376,7 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
                 }
                 dismiss()
                 startLoading()
+                AppVariable.setGroupChange()
                 QuecDeviceGroupService.getOwerUserUnshare(it) { result ->
                     finishLoading()
                     if (result.isSuccess) {
