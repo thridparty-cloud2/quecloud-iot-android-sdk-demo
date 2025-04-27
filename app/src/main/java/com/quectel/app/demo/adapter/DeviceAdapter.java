@@ -1,13 +1,10 @@
 package com.quectel.app.demo.adapter;
 
 import android.content.Context;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.quectel.app.demo.R;
-import com.quectel.app.demo.bean.LanVO;
 import com.quectel.app.demo.bean.UserDeviceList;
 
 import java.util.List;

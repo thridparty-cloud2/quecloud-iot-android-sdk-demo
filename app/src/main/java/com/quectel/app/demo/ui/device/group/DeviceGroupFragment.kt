@@ -46,7 +46,7 @@ class DeviceGroupFragment : QuecBaseFragment<DeviceGroupLayoutBinding>() {
     }
 
     override fun initView(savedInstanceState: Bundle?) {
-        mAdapter = DeviceGroupAdapter(context, null)
+        mAdapter = DeviceGroupAdapter(requireContext(), null)
         binding.mList.setLayoutManager(LinearLayoutManager(activity))
         binding.mList.addItemDecoration(BottomItemDecorationSystem(activity))
         binding.fragmentPtrHomePtrFrame.setPtrHandler(object : PtrHandler {

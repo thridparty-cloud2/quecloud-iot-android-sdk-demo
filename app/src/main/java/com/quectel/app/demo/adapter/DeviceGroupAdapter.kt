@@ -1,42 +1,26 @@
-package com.quectel.app.demo.adapter;
+package com.quectel.app.demo.adapter
 
-import android.content.Context;
-import android.text.TextUtils;
+import android.content.Context
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.quectel.app.demo.R
+import com.quectel.app.device.bean.QuecDeviceGroupInfoModel
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.quectel.app.demo.R;
-import com.quectel.app.device.bean.QuecDeviceGroupInfoModel;
+class DeviceGroupAdapter(
+    private val mContext: Context,
+    data: MutableList<QuecDeviceGroupInfoModel>?,
+) :
+    BaseQuickAdapter<QuecDeviceGroupInfoModel, BaseViewHolder>(R.layout.device_group_item, data) {
+    override fun convert(helper: BaseViewHolder, item: QuecDeviceGroupInfoModel) {
+        helper.setText(R.id.tv_dgid, "dgid: " + item.dgid)
+        helper.setText(R.id.tv_group_name, "groupName: " + item.name)
 
-import java.util.List;
-
-public class DeviceGroupAdapter extends BaseQuickAdapter<QuecDeviceGroupInfoModel, BaseViewHolder> {
-
-    private Context mContext;
-
-    public DeviceGroupAdapter(Context context, List data) {
-        super(R.layout.device_group_item, data);
-        this.mContext  = context;
-    }
-    @Override
-    protected void convert(BaseViewHolder helper, final QuecDeviceGroupInfoModel item) {
-
-        helper.setText(R.id.tv_dgid,"dgid: "+item.getDgid());
-        helper.setText(R.id.tv_group_name,"groupName: "+item.getName());
-
-        int type =  item.getDeviceGroupType();
-        if(type==1)
-        {
-            helper.setText(R.id.tv_group_type,"自己分组");
+        val type = item.deviceGroupType
+        if (type == 1) {
+            helper.setText(R.id.tv_group_type, "自己分组")
+        } else {
+            helper.setText(R.id.tv_group_type, "接受别人的分组")
         }
-        else
-        {
-            helper.setText(R.id.tv_group_type,"接受别人的分组");
-        }
-
     }
-
-
-
 }
 
