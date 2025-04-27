@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="@dimen/dp_50"
+    android:layout_marginHorizontal="@dimen/dp_30"
     android:background="@drawable/quec_basic_ui_device_name_popup">
 
     <TextView
@@ -57,6 +57,7 @@
         android:textColorHint="@color/W3"
         android:textCursorDrawable="@drawable/quec_edittext_cursor"
         android:textSize="@dimen/T2_F"
+        app:layout_constraintBottom_toBottomOf="@id/edit_content_1"
         app:layout_constraintLeft_toRightOf="@id/edit_content_1"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title" />
@@ -97,6 +98,7 @@
         android:textSize="@dimen/T2_F"
         app:layout_constraintLeft_toRightOf="@id/edit_content_3"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/edit_content_3"
         app:layout_constraintTop_toBottomOf="@id/edit_content_2" />
 
     <EditText
@@ -132,6 +134,7 @@
         android:textColor="@color/W1"
         android:textColorHint="@color/W3"
         android:textCursorDrawable="@drawable/quec_edittext_cursor"
+        app:layout_constraintBottom_toBottomOf="@id/edit_content_5"
         android:textSize="@dimen/T2_F"
         app:layout_constraintLeft_toRightOf="@id/edit_content_5"
         app:layout_constraintRight_toRightOf="parent"
@@ -173,6 +176,7 @@
         android:textSize="@dimen/T2_F"
         app:layout_constraintLeft_toRightOf="@id/edit_content_7"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/edit_content_7"
         app:layout_constraintTop_toBottomOf="@id/edit_content_5" />
 
     <EditText
@@ -211,6 +215,7 @@
         android:textSize="@dimen/T2_F"
         app:layout_constraintLeft_toRightOf="@id/edit_content_9"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/edit_content_9"
         app:layout_constraintTop_toBottomOf="@id/edit_content_7" />
 
     <EditText
@@ -249,6 +254,7 @@
         android:textSize="@dimen/T2_F"
         app:layout_constraintLeft_toRightOf="@id/edit_content_11"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/edit_content_11"
         app:layout_constraintTop_toBottomOf="@id/edit_content_9" />
 
     <EditText
