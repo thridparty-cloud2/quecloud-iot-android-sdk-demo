@@ -1,15 +1,13 @@
 package com.quectel.app.demo;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.quectel.app.demo.ui.HomeActivity;
 import com.quectel.app.demo.ui.StartActivity;
-import com.quectel.app.quecnetwork.httpservice.IHttpCallBack;
-import com.quectel.app.usersdk.userservice.IUserService;
-import com.quectel.app.usersdk.utils.UserServiceFactory;
+import com.quectel.app.usersdk.service.QuecUserService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,26 +16,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        UserServiceFactory.getInstance().getService(IUserService.class).queryUserInfo(new IHttpCallBack() {
-            @Override
-            public void onSuccess(String result) {
-                String token =   UserServiceFactory.getInstance().getService(IUserService.class).getToken();
-                if(!TextUtils.isEmpty(token)) {
-                    Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    Intent intent = new Intent(MainActivity.this, StartActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-
-            }
-            @Override
-            public void onFail(Throwable e) {
-                  e.printStackTrace();
-            }
-        });
+        if (QuecUserService.INSTANCE.isLogin()) {
+            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            Intent intent = new Intent(MainActivity.this, StartActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
 }

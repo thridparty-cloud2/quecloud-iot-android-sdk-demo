@@ -3,12 +3,11 @@ package com.quectel.app.demo.ui.account
 import android.os.Bundle
 import android.view.View
 import com.quectel.app.demo.R
+import com.quectel.app.demo.SdkManager
 import com.quectel.app.demo.base.activity.QuecBaseActivity
 import com.quectel.app.demo.common.AuthCodeManager
-import com.quectel.app.demo.constant.CloudConfig
 import com.quectel.app.demo.databinding.ActivityLoginExBinding
 import com.quectel.app.demo.ui.HomeActivity
-import com.quectel.app.demo.utils.SPUtils
 import com.quectel.app.usersdk.constant.UserConstant
 import com.quectel.app.usersdk.service.QuecUserService
 import com.quectel.sdk.iot.service.QuecIotSdk
@@ -167,11 +166,7 @@ class LoginExActivity : QuecBaseActivity<ActivityLoginExBinding>() {
 
     private fun setLoginSuccess(country: String?) {
         showMessage("登录成功")
-        if (!SPUtils.getBoolean(
-                mContext,
-                CloudConfig.IS_CUSTOM_CLOUD,
-                false
-            ) && country != null
+        if (!SdkManager.isCustomService(application) && country != null
         ) {
             QuecIotSdk.setCountryCode(country)
         }
