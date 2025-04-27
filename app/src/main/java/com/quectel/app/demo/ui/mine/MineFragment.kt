@@ -99,12 +99,12 @@ public class MineFragment(
     }
 
     override fun initData() {
+        queryUserInfor()
     }
 
     override fun onResume() {
         super.onResume()
         if (AppVariable.isMineInfoChange) {
-            AppVariable.isMineInfoChange = false
             queryUserInfor()
         }
     }
@@ -113,8 +113,8 @@ public class MineFragment(
         startLoading()
         QuecUserService.getUserInfo { result ->
             finishLoading()
-            handlerResult(result)
             if (result.isSuccess) {
+                AppVariable.isMineInfoChange = false
                 user = result.data
                 if (!result.data.nikeName.isNullOrEmpty()) {
                     binding.tvNickname.text = result.data.nikeName
@@ -147,6 +147,8 @@ public class MineFragment(
                         .centerCrop()
                         .into(binding.civHead)
                 }
+            } else {
+                handlerResult(result)
             }
         }
     }
