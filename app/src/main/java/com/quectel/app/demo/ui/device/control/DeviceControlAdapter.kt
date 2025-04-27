@@ -31,20 +31,22 @@ class DeviceControlAdapter(
 
     override fun onBindViewHolder(holder: VH, position: Int) {
         val item = list[position]
-        holder.binding.tvName.text = getItemInfo(item)
+        holder.binding.tvName.text = getItemInfo(item, true)
         holder.binding.root.setOnClickListener { onItemClick(item) }
     }
 
-    private fun getItemInfo(item: QuecProductTSLPropertyModel<*>): String {
+    private fun getItemInfo(item: QuecProductTSLPropertyModel<*>, isTop: Boolean): String {
         val state = StringBuilder()
         if (item.subType != null) {
             state.append("读写类型: ").append(item.subType)
         }
         state.append(" 数据类型: ").append(item.dataType)
-        state.append(" \nid: ").append(item.id)
+        state.append("\nid: ").append(item.id)
         state.append(" ,code: ").append(item.code)
-        state.append(" ,\nname: ").append(item.name)
-        state.append(" ,sort: ").append(item.sort)
+        state.append("\nname: ").append(item.name)
+        if (isTop) {
+            state.append(" ,sort: ").append(item.sort)
+        }
 
         state.append("\nvalue: ")
 
@@ -53,7 +55,7 @@ class DeviceControlAdapter(
             if (item.specs != null && item.specs.isNotEmpty()) {
                 item.specs.forEach {
                     if (it is QuecProductTSLPropertyModel<*>) {
-                        state.append("\n").append(getItemInfo(it)).append("\n")
+                        state.append("\n").append(getItemInfo(it, false)).append("\n")
                     }
                 }
             } else {

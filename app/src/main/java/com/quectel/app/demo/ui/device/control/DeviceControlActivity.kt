@@ -85,6 +85,47 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
                             QuecIotDataPointDataType.ENUM -> {
                                 attributeValue = item.value.toString()
                             }
+
+                            QuecIotDataPointDataType.STRUCT -> {
+                                val newValue = item.value
+                                if (newValue != null && newValue is ArrayList<*>) {
+                                    for (newItem in newValue) {
+                                        if (newItem is QuecIotDataPointsModel.DataModel) {
+                                            specs.forEach { specsItem ->
+                                                if (specsItem is QuecProductTSLPropertyModel<*>) {
+                                                    if (specsItem.id == newItem.id) {
+                                                        if (newItem.value is ByteArray) {
+                                                            specsItem.attributeValue =
+                                                                String(newItem.value as ByteArray)
+                                                        } else {
+                                                            specsItem.attributeValue =
+                                                                newItem.value?.toString()
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            QuecIotDataPointDataType.ARRAY -> {
+                                val newValue = item.value
+                                if (newValue != null && newValue is ArrayList<*>) {
+                                    val newAttributeValue = mutableListOf<Map<String, Any?>>()
+                                    for (newItem in newValue) {
+                                        if (newItem is QuecIotDataPointsModel.DataModel) {
+                                            newAttributeValue.add(
+                                                linkedMapOf(
+                                                    "id" to newItem.id,
+                                                    "value" to newItem.value?.toString()
+                                                )
+                                            )
+                                        }
+                                    }
+                                    attributeValue = newAttributeValue
+                                }
+                            }
                         }
                         val index = itemList.indexOf(this)
                         adapter.notifyItemChanged(index)
@@ -222,6 +263,7 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
                     }
 
                     override fun onFail(throwable: Throwable?) {
+                        QLog.e(throwable)
                         showMessage("查询设备失败: $throwable")
                     }
 
@@ -254,6 +296,7 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
                 }
 
                 override fun onFail(throwable: Throwable?) {
+                    QLog.e(throwable)
                     showMessage("查询设备失败: $throwable")
                 }
 
