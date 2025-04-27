@@ -9,11 +9,13 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.quectel.app.demo.adapter.DeviceSceneAdapter
 import com.quectel.app.demo.base.activity.QuecBaseActivity
+import com.quectel.app.demo.bean.EditListBean
 import com.quectel.app.demo.common.AppVariable
 import com.quectel.app.demo.databinding.ActivityDeviceSceneBinding
-import com.quectel.app.demo.dialog.EditSceneTextPopup
+import com.quectel.app.demo.dialog.EditListTextPopup
 import com.quectel.app.demo.utils.MyUtils
 import com.quectel.app.demo.utils.ToastUtils
+import com.quectel.basic.queclog.QLog
 import com.quectel.sdk.scene.bean.QuecMetaDataModel
 import com.quectel.sdk.scene.bean.QuecSceneActionModel
 import com.quectel.sdk.scene.bean.QuecSceneInfoModel
@@ -69,32 +71,57 @@ class DeviceSceneActivity : QuecBaseActivity<ActivityDeviceSceneBinding>() {
     }
 
     private fun addScene() {
-        EditSceneTextPopup(mContext).apply {
+        var arrayData: ArrayList<EditListBean> = ArrayList<EditListBean>()
+        arrayData.add(EditListBean("场景名称"))
+        arrayData.add(EditListBean("场景图标"))
+        arrayData.add(EditListBean("actionModel.code\r\n物模型标志符"))
+        arrayData.add(EditListBean("actionModel.dataType\r\n物模型数据类型"))
+        arrayData.add(EditListBean("actionModel.id\r\n物模型功能ID"))
+        arrayData.add(EditListBean("actionModel.name\r\n物模型功能名称"))
+        arrayData.add(EditListBean("actionModel.subName\r\n物模型值subName"))
+        arrayData.add(EditListBean("actionModel.subType\r\n物模型subType"))
+        arrayData.add(EditListBean("actionModel.type\r\n物模型功能类型"))
+        arrayData.add(EditListBean("actionModel.value\r\n物模型值"))
+        arrayData.add(EditListBean("设备pk"))
+        arrayData.add(EditListBean("设备dk"))
+        arrayData.add(EditListBean("物模型数据类型"))
+
+        EditListTextPopup(mContext).apply {
             setTitle("添加一个新的场景")
-            setHint1("场景名称")
-            setHint2("场景图标")
-            setHint3("actionModel.code\r\n物模型标志符")
-            setHint4("actionModel.dataType\r\n物模型数据类型")
-            setHint5("actionModel.id\r\n物模型功能ID")
-            setHint6("actionModel.name\r\n物模型功能名称")
-            setHint7("actionModel.subName\r\n物模型值subName")
-            setHint8("actionModel.subType\r\n物模型subType")
-            setHint9("actionModel.type\r\n物模型功能类型")
-            setHint10("actionModel.value\r\n物模型值")
-            setHint11("设备pk")
-            setHint12("设备dk")
-            setHint13("物模型数据类型")
             setSure("添加")
-            setEditTextListener {
-                    sceneInfoModelName, sceneInfoModelIcon, actionModelCode, actionModelDataType,
-                    actionModelId, actionModelName, actionModelSubName, actionModelSubType,
-                    actionModelType, actionModelValue, metaDataModelProductKey, metaDataModelDeviceKey,
-                    metaDataModelDeviceType,
-                ->
+            setDataList(arrayData)
+            setEditTextListener { result ->
                 val model = QuecSceneModel()
                 val sceneInfoModel = QuecSceneInfoModel()
                 val metaDataModel = QuecMetaDataModel()
                 val actionModel = QuecSceneActionModel()
+                val sceneInfoModelName =
+                    arrayData.find { it.name == arrayData[0].name }?.value
+                val sceneInfoModelIcon =
+                    arrayData.find { it.name == arrayData[1].name }?.value
+                val actionModelCode =
+                    arrayData.find { it.name == arrayData[2].name }?.value
+                val actionModelDataType =
+                    arrayData.find { it.name == arrayData[3].name }?.value
+                val actionModelId =
+                    arrayData.find { it.name == arrayData[4].name }?.value
+                val actionModelName =
+                    arrayData.find { it.name == arrayData[5].name }?.value
+                val actionModelSubName =
+                    arrayData.find { it.name == arrayData[6].name }?.value
+                val actionModelSubType =
+                    arrayData.find { it.name == arrayData[7].name }?.value
+                val actionModelType =
+                    arrayData.find { it.name == arrayData[8].name }?.value
+                val actionModelValue =
+                    arrayData.find { it.name == arrayData[9].name }?.value
+                val metaDataModelProductKey =
+                    arrayData.find { it.name == arrayData[10].name }?.value
+                val metaDataModelDeviceKey =
+                    arrayData.find { it.name == arrayData[11].name }?.value
+                val metaDataModelDeviceType =
+                    arrayData.find { it.name == arrayData[12].name }?.value
+
                 if (sceneInfoModelName.isNullOrEmpty() || sceneInfoModelIcon.isNullOrEmpty() ||
                     actionModelCode.isNullOrEmpty() || actionModelDataType.isNullOrEmpty() ||
                     actionModelId.isNullOrEmpty() || actionModelName.isNullOrEmpty() ||
@@ -152,7 +179,6 @@ class DeviceSceneActivity : QuecBaseActivity<ActivityDeviceSceneBinding>() {
                         queryGroupList()
                     }
                 }
-
             }
         }.showPopupWindow()
     }
