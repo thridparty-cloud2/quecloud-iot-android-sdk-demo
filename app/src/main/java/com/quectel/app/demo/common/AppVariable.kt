@@ -4,6 +4,7 @@ object AppVariable {
     var isDeviceInfoChange = false
     var isGroupInfoChange = false
     var isMineInfoChange = false
+    var isSceneInfoChange = false
 
     fun setDeviceChange() {
         isDeviceInfoChange = true
@@ -15,5 +16,9 @@ object AppVariable {
 
     fun setMineChange() {
         isMineInfoChange = true
+    }
+
+    fun setSceneChange() {
+        isSceneInfoChange = true
     }
 }

@@ -103,7 +103,7 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
                 CommonDialog.showSimpleInfo(
                     this@DeviceListGroupActivity,
                     "查询设备组详情",
-                    result.data.toString()
+                    QuecGsonUtil.gsonString(result.data)
                 )
             }
         }

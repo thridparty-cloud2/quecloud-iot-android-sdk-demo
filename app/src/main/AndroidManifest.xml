@@ -56,6 +56,12 @@
             android:name=".ui.mine.PhotoHeadActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.device.scene.DeviceSceneActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.device.scene.DeviceSceneInfoActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.mine.UpdataUserActivity"
             android:exported="false" />
         <activity

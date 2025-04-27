@@ -99,7 +99,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
 
     //sdk核心库
-    implementation 'com.quectel.app.sdk:quec-iot-sdk:2.0.0-beta.8-SNAPSHOT'
+    implementation 'com.quectel.app.sdk:quec-iot-sdk:2.0.0-beta.9-SNAPSHOT'
 }
 
 allprojects {

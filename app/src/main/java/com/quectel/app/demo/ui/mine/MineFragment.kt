@@ -17,6 +17,7 @@ import com.quectel.app.demo.dialog.SurePopup
 import com.quectel.app.demo.dialog.SurePopup.OnSureListener
 import com.quectel.app.demo.ui.StartActivity
 import com.quectel.app.demo.ui.UpdateUserPhoneActivity
+import com.quectel.app.demo.ui.device.scene.DeviceSceneActivity
 import com.quectel.app.demo.utils.DensityUtils
 import com.quectel.app.demo.utils.MyUtils
 import com.quectel.app.demo.utils.ToastUtils
@@ -55,7 +56,12 @@ public class MineFragment(
             llLan.setOnClickListener { openLangCountryTimezone(lang) }
             llCountry.setOnClickListener { openLangCountryTimezone(nationality) }
             llTimezone.setOnClickListener { openLangCountryTimezone(timezone) }
+            llDeviceScene.setOnClickListener { openScene() }
         }
+    }
+
+    private fun openScene() {
+        startActivity( Intent(activity, DeviceSceneActivity::class.java))
     }
 
     private fun openLangCountryTimezone(type: Int) {
