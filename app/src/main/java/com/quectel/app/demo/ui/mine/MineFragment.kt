@@ -103,10 +103,10 @@ public class MineFragment(
 
     override fun onResume() {
         super.onResume()
-        if(AppVariable.isMineInfoChange){
+        if (AppVariable.isMineInfoChange) {
             AppVariable.isMineInfoChange = false
+            queryUserInfor()
         }
-        queryUserInfor()
     }
 
     private fun queryUserInfor() {
