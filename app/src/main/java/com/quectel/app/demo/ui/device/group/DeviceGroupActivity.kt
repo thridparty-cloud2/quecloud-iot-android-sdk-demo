@@ -3,15 +3,13 @@ package com.quectel.app.demo.ui.device.group
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.quectel.app.demo.R
 import com.quectel.app.demo.adapter.DeviceGroupAdapter
-import com.quectel.app.demo.base.fragment.QuecBaseFragment
+import com.quectel.app.demo.base.activity.QuecBaseActivity
 import com.quectel.app.demo.common.AppVariable
 import com.quectel.app.demo.databinding.DeviceGroupLayoutBinding
 import com.quectel.app.demo.dialog.EditTextPopup
@@ -29,27 +27,25 @@ import `in`.srain.cube.views.ptr.PtrDefaultHandler
 import `in`.srain.cube.views.ptr.PtrFrameLayout
 import `in`.srain.cube.views.ptr.PtrHandler
 
-class DeviceGroupFragment : QuecBaseFragment<DeviceGroupLayoutBinding>() {
+class DeviceGroupActivity : QuecBaseActivity<DeviceGroupLayoutBinding>() {
 
     companion object {
-        const val TAG = "DeviceGroupFragment"
+        const val TAG = "DeviceGroupActivity"
     }
 
     var mDialog: Dialog? = null
     var mList: MutableList<QuecDeviceGroupInfoModel>? = null
     var mAdapter: DeviceGroupAdapter? = null
 
-    override fun getViewBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-    ): DeviceGroupLayoutBinding {
-        return DeviceGroupLayoutBinding.inflate(inflater, container, false)
+
+    override fun getViewBinding(): DeviceGroupLayoutBinding {
+        return DeviceGroupLayoutBinding.inflate(layoutInflater)
     }
 
     override fun initView(savedInstanceState: Bundle?) {
-        mAdapter = DeviceGroupAdapter(requireContext(), null)
-        binding.mList.setLayoutManager(LinearLayoutManager(activity))
-        binding.mList.addItemDecoration(BottomItemDecorationSystem(activity))
+        mAdapter = DeviceGroupAdapter(this, null)
+        binding.mList.setLayoutManager(LinearLayoutManager(this))
+        binding.mList.addItemDecoration(BottomItemDecorationSystem(this))
         binding.fragmentPtrHomePtrFrame.setPtrHandler(object : PtrHandler {
             override fun checkCanDoRefresh(
                 frame: PtrFrameLayout,
@@ -72,9 +68,9 @@ class DeviceGroupFragment : QuecBaseFragment<DeviceGroupLayoutBinding>() {
                 return@setOnClickListener
             }
             val dialogView =
-                View.inflate(context, R.layout.bottom_pop_devicegroup_layout, null)
+                View.inflate(this, R.layout.bottom_pop_devicegroup_layout, null)
             val myDialog = PayBottomDialog(
-                activity, dialogView, intArrayOf(
+                this, dialogView, intArrayOf(
                     R.id.bt_cancel,
                     R.id.bt_add_group, R.id.bt_receive_group_share
                 )
@@ -101,7 +97,7 @@ class DeviceGroupFragment : QuecBaseFragment<DeviceGroupLayoutBinding>() {
 
     override fun onResume() {
         super.onResume()
-        if(AppVariable.isGroupInfoChange){
+        if (AppVariable.isGroupInfoChange) {
             AppVariable.isGroupInfoChange = false
             queryGroupList()
         }
@@ -129,7 +125,8 @@ class DeviceGroupFragment : QuecBaseFragment<DeviceGroupLayoutBinding>() {
                         val data: QuecDeviceGroupInfoModel =
                             adapter.data[position] as QuecDeviceGroupInfoModel
                         QLog.i(TAG, "position--:$position")
-                        var intent = Intent(activity, DeviceListGroupActivity::class.java)
+                        var intent =
+                            Intent(this@DeviceGroupActivity, DeviceListGroupActivity::class.java)
                         intent.putExtra("dGid", data.dgid)
                         intent.putExtra("name", data.name)
                         intent.putExtra("shareCode", data.shareCode)
@@ -138,7 +135,7 @@ class DeviceGroupFragment : QuecBaseFragment<DeviceGroupLayoutBinding>() {
                 })
 
             } else {
-                ToastUtils.showShort(context, result.msg)
+                ToastUtils.showShort(this, result.msg)
                 QLog.e(TAG, result.msg)
             }
         }
@@ -146,7 +143,7 @@ class DeviceGroupFragment : QuecBaseFragment<DeviceGroupLayoutBinding>() {
 
     fun startLoading() {
         if (mDialog == null) {
-            mDialog = MyUtils.createDialog(context)
+            mDialog = MyUtils.createDialog(this)
             mDialog!!.show()
         } else {
             mDialog!!.show()
@@ -160,7 +157,7 @@ class DeviceGroupFragment : QuecBaseFragment<DeviceGroupLayoutBinding>() {
     }
 
     private fun createAddGroupDialog() {
-        EditTextPopup(context).apply {
+        EditTextPopup(this).apply {
             setTitle("添加设备组")
             setHint("请输入group name")
             setEditTextListener { name ->
@@ -184,7 +181,7 @@ class DeviceGroupFragment : QuecBaseFragment<DeviceGroupLayoutBinding>() {
     }
 
     private fun createReceiveGroupShare() {
-        EditTextPopup(context).apply {
+        EditTextPopup(this).apply {
             setTitle("接受别人设备组分享")
             setHint("请输入share_code")
             setEditTextListener { code ->

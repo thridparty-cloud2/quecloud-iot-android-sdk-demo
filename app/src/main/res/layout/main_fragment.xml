@@ -85,7 +85,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:textSize="11sp"
-                    android:text="设备组"
+                    android:text="功能列表"
                     android:textColor="@color/main2"
                     android:layout_gravity="center_horizontal"
                     />

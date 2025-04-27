@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import com.quectel.app.demo.R;
-import com.quectel.app.demo.ui.device.group.DeviceGroupFragment;
+import com.quectel.app.demo.ui.device.features.FeaturesListFragment;
 import com.quectel.app.demo.ui.device.list.DeviceListFragment;
 import com.quectel.app.demo.ui.mine.MineFragment;
 
@@ -74,7 +74,7 @@ public class MainFragment extends SupportFragment {
             selectTabOne();
 
             mFragments[FIRST] = new DeviceListFragment();
-            mFragments[SECOND] = new DeviceGroupFragment();
+            mFragments[SECOND] = new FeaturesListFragment();
             mFragments[THIRD] = new MineFragment();
 
 
@@ -85,7 +85,7 @@ public class MainFragment extends SupportFragment {
             );
         } else {
             mFragments[FIRST] = firstFragment;
-            mFragments[SECOND] = findChildFragment(DeviceGroupFragment.class);
+            mFragments[SECOND] = findChildFragment(FeaturesListFragment.class);
             mFragments[THIRD] = findChildFragment(MineFragment.class);
             int  prePosition =  savedInstanceState.getInt("prePosition",0);
           //  System.out.println("savedInstanceState prePosition--:"+prePosition);

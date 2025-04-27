@@ -465,38 +465,6 @@
               android:layout_height="0.5dp"
               android:background="@color/gray_line"
               />
-          <LinearLayout
-              android:id="@+id/ll_device_scene"
-              android:layout_width="match_parent"
-              android:orientation="horizontal"
-              android:paddingLeft="20dp"
-              android:gravity="center_vertical"
-              android:layout_height="44dp">
-
-              <TextView
-                  android:layout_width="wrap_content"
-                  android:text="场景"
-                  android:textColor="@color/main1"
-                  android:textSize="16sp"
-                  android:gravity="center"
-                  android:layout_height="wrap_content"/>
-
-              <TextView
-                  android:layout_width="wrap_content"
-                  android:text=""
-                  android:layout_marginLeft="20dp"
-                  android:textColor="@color/main1"
-                  android:textSize="16sp"
-                  android:gravity="center"
-                  android:layout_height="wrap_content"/>
-
-          </LinearLayout>
-
-          <View
-              android:layout_width="match_parent"
-              android:layout_height="0.5dp"
-              android:background="@color/gray_line"
-              />
 
 
 

@@ -56,12 +56,7 @@ public class MineFragment(
             llLan.setOnClickListener { openLangCountryTimezone(lang) }
             llCountry.setOnClickListener { openLangCountryTimezone(nationality) }
             llTimezone.setOnClickListener { openLangCountryTimezone(timezone) }
-            llDeviceScene.setOnClickListener { openScene() }
         }
-    }
-
-    private fun openScene() {
-        startActivity( Intent(activity, DeviceSceneActivity::class.java))
     }
 
     private fun openLangCountryTimezone(type: Int) {

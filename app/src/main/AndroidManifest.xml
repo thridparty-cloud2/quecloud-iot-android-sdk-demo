@@ -47,6 +47,12 @@
             android:name=".ui.device.group.DeviceListGroupActivity"
             android:exported="false" />
         <activity
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentTheme"
+            android:name=".ui.device.group.DeviceGroupActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.account.RegisterExActivity"
             android:exported="false" />
         <activity
