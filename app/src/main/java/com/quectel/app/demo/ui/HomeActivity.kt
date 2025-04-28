@@ -1,131 +1,43 @@
-package com.quectel.app.demo.ui;
+package com.quectel.app.demo.ui
 
-import android.Manifest;
-import android.os.Build;
+import android.Manifest
+import android.os.Build
+import android.os.Bundle
+import com.quectel.app.demo.R
+import com.quectel.app.demo.databinding.ActivityHomeBinding
+import com.quectel.app.demo.fragment.MainFragment
+import com.quectel.app.demo.utils.MyUtils
+import com.quectel.app.demo.utils.QuecPermission
+import me.yokeyword.fragmentation.SupportActivity
 
-import androidx.annotation.NonNull;
+class HomeActivity : SupportActivity() {
+    private lateinit var binding: ActivityHomeBinding
 
-import com.google.gson.Gson;
-import com.permissionx.guolindev.PermissionMediator;
-import com.permissionx.guolindev.callback.RequestCallback;
-import com.quectel.app.demo.R;
-import com.quectel.app.demo.base.BaseActivity;
-import com.quectel.app.demo.bean.UserInfor;
-import com.quectel.app.demo.fragment.MainFragment;
-import com.quectel.app.demo.utils.MyUtils;
-import com.quectel.app.demo.utils.QuecPermission;
-import com.quectel.app.quecnetwork.httpservice.IHttpCallBack;
-import com.quectel.app.quecnetwork.logservice.ILogService;
-import com.quectel.app.quecnetwork.utils.LogService;
-import com.quectel.app.usersdk.userservice.IUserService;
-import com.quectel.app.usersdk.utils.UserServiceFactory;
-import com.quectel.basic.quecmmkv.MmkvManager;
-import com.tbruyelle.rxpermissions2.RxPermissions;
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-import java.util.List;
+        binding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-import io.reactivex.functions.Consumer;
-import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator;
-import me.yokeyword.fragmentation.anim.FragmentAnimator;
+        MyUtils.addStatusBarView(this, R.color.gray_bg)
 
-public class HomeActivity  extends BaseActivity {
-    private static final String[] permission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ? new String[]{
+        if (findFragment(MainFragment::class.java) == null) {
+            loadRootFragment(R.id.fl_container, MainFragment.newInstance())
+        }
+
+        val permissionMediator = QuecPermission.init(this)
+        permissionMediator.permissions(*permission)
+            .request { _: Boolean, _: List<String?>?, _: List<String?>? -> }
+    }
+
+    companion object {
+        private val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) arrayOf(
             Manifest.permission.BLUETOOTH_SCAN,
             Manifest.permission.BLUETOOTH_ADVERTISE,
             Manifest.permission.BLUETOOTH_CONNECT,
             Manifest.permission.ACCESS_FINE_LOCATION,
-    } : new String[]{
+        ) else arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
-    };
-
-
-    @Override
-    protected int getContentLayout() {
-        return R.layout.activity_home;
+        )
     }
-
-    @Override
-    protected void addHeadColor() {
-        MyUtils.addStatusBarView(this,R.color.gray_bg);
-    }
-
-    @Override
-    protected void initData() {
-
-        RxPermissions rxPermissions = new RxPermissions(this);
-        rxPermissions
-                .request(
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                )
-                .subscribe(new Consumer<Boolean>() {
-                               @Override
-                               public void accept(Boolean grant) throws Exception {
-                               }
-                           }
-
-                );
-
-
-        if (findFragment(MainFragment.class) == null) {
-            loadRootFragment(R.id.fl_container, MainFragment.newInstance());
-        }
-
-        queryUserInfor();
-
-        PermissionMediator permissionMediator = QuecPermission.init(this);
-        permissionMediator.permissions(permission).request(new RequestCallback() {
-            @Override
-            public void onResult(boolean allGranted, @NonNull List<String> grantedList, @NonNull List<String> deniedList) {
-
-            }
-        });
-
-    }
-
-    @Override
-    public void onBackPressedSupport() {
-        super.onBackPressedSupport();
-    }
-
-    @Override
-    public FragmentAnimator onCreateFragmentAnimator() {
-        return new DefaultHorizontalAnimator();
-    }
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        LogService.get(ILogService.class).closeLog();
-
-    }
-
-
-    private void queryUserInfor()
-    {
-        UserServiceFactory.getInstance().getService(IUserService.class).queryUserInfo(
-                new IHttpCallBack() {
-                    @Override
-                    public void onSuccess(String result) {
-                        finishLoading();
-                        UserInfor  user = new Gson().fromJson(result, UserInfor.class);
-                        if(user.getCode()==200)
-                        {
-                            UserInfor.DataDTO userInfor = user.getData();
-                            MmkvManager.getInstance().put("uid", userInfor.getUid());
-                        }
-                    }
-
-                    @Override
-                    public void onFail(Throwable e) {
-                        e.printStackTrace();
-                    }
-                }
-        );
-    }
-
-
-
-
 }
