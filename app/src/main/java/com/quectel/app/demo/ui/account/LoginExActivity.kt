@@ -111,7 +111,9 @@ class LoginExActivity : QuecBaseActivity<ActivityLoginExBinding>() {
             showMessage("请输入密码")
             return
         }
+        showOrHideLoading(true)
         QuecUserService.loginByPhone(phone, pwd, country) {
+            showOrHideLoading(false)
             if (it.isSuccess) {
                 setLoginSuccess(country)
             } else {
@@ -133,7 +135,9 @@ class LoginExActivity : QuecBaseActivity<ActivityLoginExBinding>() {
             showMessage("请输入验证码")
             return
         }
+        showOrHideLoading(true)
         QuecUserService.loginWithMobile(phone, code, country) {
+            showOrHideLoading(false)
             if (it.isSuccess) {
                 setLoginSuccess(country)
             } else {
@@ -155,7 +159,9 @@ class LoginExActivity : QuecBaseActivity<ActivityLoginExBinding>() {
             showMessage("请输入密码")
             return
         }
+        showOrHideLoading(true)
         QuecUserService.loginByEmail(email, pwd) {
+            showOrHideLoading(false)
             if (it.isSuccess) {
                 setLoginSuccess(country)
             } else {
