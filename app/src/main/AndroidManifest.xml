@@ -68,6 +68,12 @@
             android:name=".ui.device.scene.DeviceSceneInfoActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.device.automate.AutoMateListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.device.automate.AutoMateInfoActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.mine.UpdataUserActivity"
             android:exported="false" />
         <activity

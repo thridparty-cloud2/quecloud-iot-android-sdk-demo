@@ -15,7 +15,6 @@ import com.quectel.app.demo.databinding.ActivityDeviceSceneBinding
 import com.quectel.app.demo.dialog.EditListTextPopup
 import com.quectel.app.demo.utils.MyUtils
 import com.quectel.app.demo.utils.ToastUtils
-import com.quectel.basic.queclog.QLog
 import com.quectel.sdk.scene.bean.QuecMetaDataModel
 import com.quectel.sdk.scene.bean.QuecSceneActionModel
 import com.quectel.sdk.scene.bean.QuecSceneInfoModel
@@ -62,12 +61,12 @@ class DeviceSceneActivity : QuecBaseActivity<ActivityDeviceSceneBinding>() {
         super.onResume()
         if (AppVariable.isSceneInfoChange) {
             AppVariable.isSceneInfoChange = false
-            queryGroupList()
+            querySceneList()
         }
     }
 
     override fun initData() {
-        queryGroupList()
+        querySceneList()
     }
 
     private fun addScene() {
@@ -176,14 +175,14 @@ class DeviceSceneActivity : QuecBaseActivity<ActivityDeviceSceneBinding>() {
                     if (result.isSuccess) {
                         //添加场景成功
                         dismiss()
-                        queryGroupList()
+                        querySceneList()
                     }
                 }
             }
         }.showPopupWindow()
     }
 
-    private fun queryGroupList() {
+    private fun querySceneList() {
         startLoading()
         QuecSceneService.getSceneList(1, 10) { result ->
             finishLoading()
