@@ -3,10 +3,6 @@ package com.quectel.app.demo.ui.device.group
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
-import android.widget.TextView
-import com.quectel.app.demo.R
 import com.quectel.app.demo.base.activity.QuecBaseActivity
 import com.quectel.app.demo.common.AppVariable
 import com.quectel.app.demo.databinding.ActivityListGroupBinding
@@ -20,8 +16,6 @@ import com.quectel.app.device.bean.QuecDeviceGroupParamModel
 import com.quectel.app.device.deviceservice.QuecDeviceGroupService
 import com.quectel.basic.common.entity.QuecDeviceModel
 import com.quectel.basic.common.utils.QuecGsonUtil
-import com.quectel.basic.queclog.QLog
-import java.util.Date
 
 class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
 
@@ -73,21 +67,6 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
         }
         addItem("删除设备组") {
             deleteGroup()
-        }
-        addItem("分享人设置设备组分享信息") {
-            generateShareGroupInfo()
-        }
-        addItem("分享人查询设备组的被分享人列表") {
-            queryGroupAcceptUsers()
-        }
-        addItem("被分享人修改分享的设备组名称") {
-            changeSharedDeviceGroup()
-        }
-        addItem("被分享人取消设备组分享") {
-            btSharerCancelGroup()
-        }
-        addItem("分享人取消设备组分享") {
-            cancelShareGroupByOwner()
         }
         addItem("取消") {
             finish()
@@ -242,153 +221,6 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
                 finish()
             }
         }
-    }
-
-    private fun generateShareGroupInfo() {
-        val view = View.inflate(mContext, R.layout.sharer_generate_information_dialog, null)
-        val mDialog = Dialog(this@DeviceListGroupActivity, R.style.dialogTM)
-        mDialog.setContentView(view)
-        mDialog.setCancelable(true)
-        mDialog.setCanceledOnTouchOutside(false)
-        val mBtGenerate = mDialog.findViewById<View>(R.id.bt_generate) as Button
-        val mTvShareInfo = mDialog.findViewById<View>(R.id.tv_share_infor) as TextView
-        val mBtCopy = mDialog.findViewById<View>(R.id.bt_copy) as Button
-        val mBtCancel = mDialog.findViewById<View>(R.id.bt_cancel) as Button
-        val mTvTitle = mDialog.findViewById<View>(R.id.tv_title) as TextView
-        mTvTitle.text = "分享人设置设备组分享信息"
-
-        mBtGenerate.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(view: View) {
-                val time = 1 * 24 * 60 * 60 * 1000
-                var useTime = Date().time
-                useTime = useTime + time
-                startLoading()
-
-                QuecDeviceGroupService.getShareGroupInfo(
-                    useTime, dGid!!, 0, 0
-                ) { result ->
-                    finishLoading()
-                    if (result.isSuccess) {
-                        mTvShareInfo.text = result.data!!.shareCode
-                    } else {
-                        ToastUtils.showShort(mContext, result.msg)
-                        QLog.e(TAG, result.toString())
-                    }
-                }
-            }
-        })
-
-        mBtCopy.setOnClickListener { it ->
-            MyUtils.copyContentToClipboard(
-                mContext,
-                mTvShareInfo.text.toString().trim()
-            )
-            ToastUtils.showShort(mContext, "复制成功")
-        }
-        mBtCancel.setOnClickListener { it ->
-            mDialog.dismiss()
-        }
-        mDialog.show()
-    }
-
-
-    private fun queryGroupAcceptUsers() {
-        startLoading()
-        QuecDeviceGroupService.getDeviceGroupShareUserList(
-            dGid!!
-        ) { result ->
-            handlerResult(result)
-            if (result.isSuccess) {
-                finishLoading()
-                QLog.i(TAG, "result-:$result")
-                CommonDialog.showSimpleInfo(this, "分享人列表", result.toString())
-            }
-
-        }
-    }
-
-    private fun changeSharedDeviceGroup() {
-        if (shareCode.isNullOrEmpty()) {
-            ToastUtils.showShort(mContext, "不是被分享者")
-            return
-        } else {
-            accepterChangeGroupName()
-        }
-    }
-
-    private fun accepterChangeGroupName() {
-        EditTextPopup(this).apply {
-            setTitle("修改设备组名称")
-            setHint("请输入group name")
-            setEditTextListener {
-                if (it.isNullOrEmpty()) {
-                    ToastUtils.showShort(mContext, "参数不能为空")
-                    return@setEditTextListener
-                }
-                dismiss()
-                startLoading()
-                QuecDeviceGroupService.getShareUserSetDeviceGroupName(
-                    it, shareCode!!
-                ) { result ->
-                    AppVariable.setGroupChange()
-                    finishLoading()
-                    if (result.isSuccess) {
-                        ToastUtils.showShort(mContext, "成功")
-                        finish()
-                    } else {
-                        ToastUtils.showShort(mContext, result.msg)
-                        QLog.e(TAG, result.toString())
-                    }
-                }
-            }
-        }.showPopupWindow()
-    }
-
-    private fun btSharerCancelGroup() {
-        if (shareCode.isNullOrEmpty()) {
-            ToastUtils.showShort(mContext, "不是被分享者")
-            return
-        } else {
-            startLoading()
-            QuecDeviceGroupService.getShareUserUnshare(
-                shareCode!!
-            ) { result ->
-                finishLoading()
-                AppVariable.setGroupChange()
-                if (result.isSuccess) {
-                    finish()
-                    ToastUtils.showShort(mContext, "成功")
-                } else {
-                    ToastUtils.showShort(mContext, result.msg)
-                    QLog.e(TAG, result.toString())
-                }
-            }
-        }
-    }
-
-    private fun cancelShareGroupByOwner() {
-        EditTextPopup(this).apply {
-            setTitle("分享人取消设备组分享")
-            setHint("请输入shareCode")
-            setEditTextListener {
-                if (it.isNullOrEmpty()) {
-                    return@setEditTextListener
-                }
-                dismiss()
-                startLoading()
-                AppVariable.setGroupChange()
-                QuecDeviceGroupService.getOwerUserUnshare(it) { result ->
-                    finishLoading()
-                    if (result.isSuccess) {
-                        ToastUtils.showShort(mContext, "操作成功")
-                        finish()
-                    } else {
-                        ToastUtils.showShort(mContext, result.msg)
-                        QLog.e(TAG, result.toString())
-                    }
-                }
-            }
-        }.showPopupWindow()
     }
 
     fun startLoading() {
