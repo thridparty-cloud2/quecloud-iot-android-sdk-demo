@@ -152,7 +152,7 @@ class AutoMateInfoActivity : QuecBaseActivity<ActivityDeviceAutoMateInfoBinding>
             setHint1("场景名称")
             setHint2("场景id")
             setEditTextListener { content1, content2 ->
-                if (content1.trim().isNullOrEmpty() || content2.trim().isNullOrEmpty()) {
+                if (content1.isNullOrEmpty() || content2.isNullOrEmpty()) {
                     ToastUtils.showShort(this@AutoMateInfoActivity, "参数不可为空")
                     return@setEditTextListener
                 }
@@ -228,7 +228,7 @@ class AutoMateInfoActivity : QuecBaseActivity<ActivityDeviceAutoMateInfoBinding>
             setTitle("查询设备可作为自动化条件和触发动作的物模型")
             setHint("请输入productKey")
             setEditTextListener { content ->
-                if (content.trim().isNullOrEmpty()) {
+                if (content.isNullOrEmpty()) {
                     ToastUtils.showShort(this@AutoMateInfoActivity, "pk不可为空")
                     return@setEditTextListener
                 }
