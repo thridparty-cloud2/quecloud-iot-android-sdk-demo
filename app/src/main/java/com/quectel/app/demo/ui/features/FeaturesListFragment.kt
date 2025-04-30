@@ -1,4 +1,4 @@
-package com.quectel.app.demo.ui.device.features
+package com.quectel.app.demo.ui.features
 
 import android.content.Intent
 import android.os.Bundle

@@ -1,245 +1,146 @@
-package com.quectel.app.demo.fragment;
+package com.quectel.app.demo.fragment
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import androidx.annotation.Nullable;
-import com.quectel.app.demo.R;
-import com.quectel.app.demo.ui.device.features.FeaturesListFragment;
-import com.quectel.app.demo.ui.device.list.DeviceListFragment;
-import com.quectel.app.demo.ui.mine.MineFragment;
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.quectel.app.demo.R
+import com.quectel.app.demo.databinding.MainFragmentBinding
+import com.quectel.app.demo.ui.features.FeaturesListFragment
+import com.quectel.app.demo.ui.device.list.DeviceListFragment
+import com.quectel.app.demo.ui.mine.MineFragment
+import me.yokeyword.fragmentation.SupportFragment
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
-import me.yokeyword.fragmentation.SupportFragment;
+class MainFragment : SupportFragment() {
+    private val mFragments = arrayOfNulls<SupportFragment>(3)
+    private lateinit var binding: MainFragmentBinding
+    private var prePosition: Int = 0
 
-public class MainFragment extends SupportFragment {
-
-    public static final int FIRST = 0;
-    public static final int SECOND = 1;
-    public static final int THIRD = 2;
-
-    private SupportFragment[] mFragments = new SupportFragment[3];
-
-    public static MainFragment newInstance() {
-        Bundle args = new Bundle();
-        MainFragment fragment = new MainFragment();
-        fragment.setArguments(args);
-        return fragment;
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = MainFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    @BindView(R.id.iv_tab1)
-    ImageView iv_tab1;
-    @BindView(R.id.iv_tab2)
-    ImageView iv_tab2;
-    @BindView(R.id.iv_tab3)
-    ImageView iv_tab3;
-
-    @BindView(R.id.tv_tab1)
-    TextView tv_tab1;
-    @BindView(R.id.tv_tab2)
-    TextView tv_tab2;
-    @BindView(R.id.tv_tab3)
-    TextView tv_tab3;
-
-    private Unbinder unbinder;
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.main_fragment, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        return view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        SupportFragment firstFragment = findChildFragment(DeviceListFragment.class);
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val firstFragment: SupportFragment? = findChildFragment(
+            DeviceListFragment::class.java
+        )
         if (firstFragment == null) {
-            System.out.println("firstFragment == null");
-            selectTabOne();
+            println("firstFragment == null")
+            selectTabOne()
 
-            mFragments[FIRST] = new DeviceListFragment();
-            mFragments[SECOND] = new FeaturesListFragment();
-            mFragments[THIRD] = new MineFragment();
+            mFragments[FIRST] = DeviceListFragment()
+            mFragments[SECOND] = FeaturesListFragment()
+            mFragments[THIRD] = MineFragment()
 
 
-            loadMultipleRootFragment(R.id.fl_tab_container, FIRST,
-                    mFragments[FIRST],
-                    mFragments[SECOND],
-                    mFragments[THIRD]
-            );
+            loadMultipleRootFragment(
+                R.id.fl_tab_container, FIRST,
+                mFragments[FIRST],
+                mFragments[SECOND],
+                mFragments[THIRD]
+            )
         } else {
-            mFragments[FIRST] = firstFragment;
-            mFragments[SECOND] = findChildFragment(FeaturesListFragment.class);
-            mFragments[THIRD] = findChildFragment(MineFragment.class);
-            int  prePosition =  savedInstanceState.getInt("prePosition",0);
-          //  System.out.println("savedInstanceState prePosition--:"+prePosition);
-            resetTab(prePosition);
+            mFragments[FIRST] = firstFragment
+            mFragments[SECOND] = findChildFragment(
+                FeaturesListFragment::class.java
+            )
+            mFragments[THIRD] = findChildFragment(
+                MineFragment::class.java
+            )
+            val prePosition = savedInstanceState?.getInt("prePosition", 0) ?: 0
+            resetTab(prePosition)
         }
+
+        initView()
     }
 
-    @Override
-    public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
-        super.onFragmentResult(requestCode, resultCode, data);
-    }
-
-    /**
-     * start other BrotherFragment
-     */
-    public void startBrotherFragment(SupportFragment targetFragment) {
-        start(targetFragment);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
-
-   int  prePosition = 0;
-
-    @OnClick({R.id.rl_tab1, R.id.rl_tab2, R.id.rl_tab3})
-    public void buttonClick(View view) {
-
-        switch (view.getId()) {
-            case R.id.rl_tab1:
-
-                selectTabOne();
-
-                if(prePosition!=0)
-                {
-                    showHideFragment(mFragments[0], mFragments[prePosition]);
+    private fun initView() {
+        binding.apply {
+            rlTab1.setOnClickListener {
+                selectTabOne()
+                if (prePosition != 0) {
+                    showHideFragment(mFragments[0], mFragments[prePosition])
                 }
+                prePosition = 0
+            }
 
-                prePosition=0;
-                break;
+            rlTab2.setOnClickListener {
+                selectTabTwo()
+                showHideFragment(mFragments[1], mFragments[prePosition])
+                prePosition = 1
+            }
 
-            case R.id.rl_tab2:
-
-                selectTabTwo();
-
-                showHideFragment(mFragments[1], mFragments[prePosition]);
-
-                prePosition=1;
-                break;
-
-
-            case R.id.rl_tab3:
-                selectTabThree();
-                showHideFragment(mFragments[2], mFragments[prePosition]);
-                prePosition=2;
-                break;
-        }
-
-    }
-
-    public void selectTwoProject(){
-        selectTabTwo();
-        showHideFragment(mFragments[1], mFragments[prePosition]);
-        prePosition=1;
-      //  EventBus.getDefault().post(new RefreshMainGongDan());
-    }
-
-    public void  resetTab(int type)
-    {
-        prePosition=type;
-        switch (type)
-        {
-            case 0 :
-                selectTabOne();
-                break;
-
-            case 1 :
-                selectTabTwo();
-                break;
-            case 2 :
-                selectTabThree();
-                break;
+            rlTab3.setOnClickListener {
+                selectTabThree()
+                showHideFragment(mFragments[2], mFragments[prePosition])
+                prePosition = 2
+            }
         }
     }
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(Object object) {
 
-//        if(object instanceof GoToTuiJian)
-//        {
-//            selectTabFour();
-//            showHideFragment(mFragments[3], mFragments[prePosition]);
-//            prePosition=3;
-//        }
-//        else if(object instanceof GoToBuyHouse)
-//        {
-//            selectTabTwo();
-//            showHideFragment(mFragments[1], mFragments[prePosition]);
-//            prePosition=1;
-//        }
-//        else if(object instanceof PushOneEvent)
-//        {
-//            selectTabOne();
-//            if(prePosition!=0)
-//            {
-//                showHideFragment(mFragments[0], mFragments[prePosition]);
-//            }
-//            prePosition=0;
-//        }
-
+    private fun resetTab(type: Int) {
+        prePosition = type
+        when (type) {
+            0 -> selectTabOne()
+            1 -> selectTabTwo()
+            2 -> selectTabThree()
+        }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        EventBus.getDefault().unregister(this);
+    private fun selectTabOne() {
+        binding.apply {
+            ivTab1.setBackgroundResource(R.mipmap.tab_home_1)
+            tvTab1.setTextColor(resources.getColor(R.color.main2, null))
+            ivTab2.setBackgroundResource(R.mipmap.tab_msg_0)
+            tvTab2.setTextColor(resources.getColor(R.color.main2, null))
+            ivTab3.setBackgroundResource(R.mipmap.tab_my_0)
+            tvTab3.setTextColor(resources.getColor(R.color.main2, null))
+        }
     }
 
-    private void selectTabOne() {
-        iv_tab1.setBackgroundResource(R.mipmap.tab_home_1);
-        tv_tab1.setTextColor(getResources().getColor(R.color.main2));
-        iv_tab2.setBackgroundResource(R.mipmap.tab_msg_0);
-        tv_tab2.setTextColor(getResources().getColor(R.color.main2));
-        iv_tab3.setBackgroundResource(R.mipmap.tab_my_0);
-        tv_tab3.setTextColor(getResources().getColor(R.color.main2));
-
+    private fun selectTabTwo() {
+        binding.apply {
+            ivTab1.setBackgroundResource(R.mipmap.tab_home_0)
+            tvTab1.setTextColor(resources.getColor(R.color.main2, null))
+            ivTab2.setBackgroundResource(R.mipmap.tab_msg_1)
+            tvTab2.setTextColor(resources.getColor(R.color.main2, null))
+            ivTab3.setBackgroundResource(R.mipmap.tab_my_0)
+            tvTab3.setTextColor(resources.getColor(R.color.main2, null))
+        }
     }
 
-    private void selectTabTwo() {
-        iv_tab1.setBackgroundResource(R.mipmap.tab_home_0);
-        tv_tab1.setTextColor(getResources().getColor(R.color.main2));
-        iv_tab2.setBackgroundResource(R.mipmap.tab_msg_1);
-        tv_tab2.setTextColor(getResources().getColor(R.color.main2));
-        iv_tab3.setBackgroundResource(R.mipmap.tab_my_0);
-        tv_tab3.setTextColor(getResources().getColor(R.color.main2));
-
-
+    private fun selectTabThree() {
+        binding.apply {
+            ivTab1.setBackgroundResource(R.mipmap.tab_home_0)
+            tvTab1.setTextColor(resources.getColor(R.color.main2, null))
+            ivTab2.setBackgroundResource(R.mipmap.tab_msg_0)
+            tvTab2.setTextColor(resources.getColor(R.color.main2, null))
+            ivTab3.setBackgroundResource(R.mipmap.tab_my_1)
+            tvTab3.setTextColor(resources.getColor(R.color.main2, null))
+        }
     }
 
-    private void selectTabThree() {
-        iv_tab1.setBackgroundResource(R.mipmap.tab_home_0);
-        tv_tab1.setTextColor(getResources().getColor(R.color.main2));
-        iv_tab2.setBackgroundResource(R.mipmap.tab_msg_0);
-        tv_tab2.setTextColor(getResources().getColor(R.color.main2));
-        iv_tab3.setBackgroundResource(R.mipmap.tab_my_1);
-        tv_tab3.setTextColor(getResources().getColor(R.color.main2));
-
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putInt("prePosition", prePosition)
+        super.onSaveInstanceState(outState)
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putInt("prePosition",prePosition);
-        super.onSaveInstanceState(outState);
+    companion object {
+        const val FIRST: Int = 0
+        const val SECOND: Int = 1
+        const val THIRD: Int = 2
+
+        fun newInstance(): MainFragment {
+            val args = Bundle()
+            val fragment = MainFragment()
+            fragment.arguments = args
+            return fragment
+        }
     }
 }
