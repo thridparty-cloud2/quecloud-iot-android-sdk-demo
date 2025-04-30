@@ -22,7 +22,10 @@ class DeviceOtaActivity : QuecBaseDeviceActivity<ActivityDeviceOtaBinding>() {
     private var otaInfo: QuecOtaInfo? = null
     private val stateListener = object : QuecOnOtaStateChangeListener {
         override fun onCall(state: QuecOTAStateModel) {
-            showInfo("onData change: $state")
+            showInfo("[${state.state}] progress: ${state.progress}")
+            if (state.failCode != null) {
+                showInfo("failCode: ${state.failCode}")
+            }
         }
     }
 
@@ -53,7 +56,12 @@ class DeviceOtaActivity : QuecBaseDeviceActivity<ActivityDeviceOtaBinding>() {
     }
 
     override fun initData() {
-
+        //todo: 临时验证用
+        QuecOtaManager.setBleCustomOtaProgram(
+            device.productKey,
+            device.deviceKey,
+            device.capabilitiesBitmask == 7
+        )
     }
 
     override fun initTestItem() {
