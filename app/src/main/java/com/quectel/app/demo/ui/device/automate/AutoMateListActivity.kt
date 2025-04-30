@@ -1,21 +1,14 @@
 package com.quectel.app.demo.ui.device.automate
 
-import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.quectel.app.demo.adapter.AutoMateAdapter
 import com.quectel.app.demo.base.activity.QuecBaseActivity
 import com.quectel.app.demo.bean.EditListBean
 import com.quectel.app.demo.common.AppVariable
 import com.quectel.app.demo.databinding.ActivityDeviceAutoMateBinding
 import com.quectel.app.demo.dialog.EditListTextPopup
-import com.quectel.app.demo.ui.device.scene.DeviceSceneActivity
-import com.quectel.app.demo.ui.device.scene.DeviceSceneInfoActivity
-import com.quectel.app.demo.utils.MyUtils
 import com.quectel.app.demo.utils.ToastUtils
 import com.quectel.sdk.automate.api.model.QuecAutoListItemModel
 import com.quectel.sdk.automate.api.model.QuecAutomationActionModel
@@ -24,12 +17,9 @@ import com.quectel.sdk.automate.api.model.QuecAutomationModel
 import com.quectel.sdk.automate.api.model.QuecAutomationPreconditionModel
 import com.quectel.sdk.automate.api.model.QuecAutomationTimeModel
 import com.quectel.sdk.automate.service.QuecAutomateService
-import com.quectel.sdk.scene.bean.QuecSceneModel
 
 class AutoMateListActivity : QuecBaseActivity<ActivityDeviceAutoMateBinding>() {
-
-    var mDialog: Dialog? = null
-    var mAdapter: AutoMateAdapter? = null
+    private lateinit var mAdapter: AutoMateAdapter
 
     override fun getViewBinding(): ActivityDeviceAutoMateBinding {
         return ActivityDeviceAutoMateBinding.inflate(layoutInflater)
@@ -39,26 +29,20 @@ class AutoMateListActivity : QuecBaseActivity<ActivityDeviceAutoMateBinding>() {
         mAdapter = AutoMateAdapter(this@AutoMateListActivity, null)
         binding.rvList.setAdapter(mAdapter)
         binding.rvList.setLayoutManager(LinearLayoutManager(this@AutoMateListActivity))
-        binding.ivAdd.setOnClickListener { lt ->
+        binding.ivAdd.setOnClickListener {
             addAutoMate()
         }
-        mAdapter!!.setOnItemClickListener(object : OnItemClickListener {
-            override fun onItemClick(
-                adapter: BaseQuickAdapter<*, *>,
-                view: View,
-                position: Int,
-            ) {
-                val data: QuecAutoListItemModel =
-                    adapter.data[position] as QuecAutoListItemModel
-                var intent = Intent(this@AutoMateListActivity, AutoMateInfoActivity::class.java)
-                intent.putExtra("data", data)
-                startActivity(intent)
-            }
-        })
+        mAdapter.setOnItemClickListener { adapter, _, position ->
+            val data: QuecAutoListItemModel =
+                adapter.data[position] as QuecAutoListItemModel
+            val intent = Intent(this@AutoMateListActivity, AutoMateInfoActivity::class.java)
+            intent.putExtra("data", data)
+            startActivity(intent)
+        }
     }
 
     private fun addAutoMate() {
-        var arrayData: ArrayList<EditListBean> = ArrayList<EditListBean>()
+        val arrayData: ArrayList<EditListBean> = ArrayList()
         //name
         arrayData.add(EditListBean("自动化名称"))
         //出发时间24制 09:07
@@ -70,7 +54,7 @@ class AutoMateListActivity : QuecBaseActivity<ActivityDeviceAutoMateBinding>() {
             setTitle("添加一个新的自动化")
             setSure("添加")
             setDataList(arrayData)
-            setEditTextListener { result ->
+            setEditTextListener {
                 val automationName =
                     arrayData.find { it.name == arrayData[0].name }?.value
                 val automationTime =
@@ -86,7 +70,7 @@ class AutoMateListActivity : QuecBaseActivity<ActivityDeviceAutoMateBinding>() {
                     ToastUtils.showShort(this@AutoMateListActivity, "各种参数不能为空")
                     return@setEditTextListener
                 }
-                startLoading()
+                showOrHideLoading(true)
                 QuecAutomateService.addAutomation(
                     QuecAutomationModel(
                         "",
@@ -120,11 +104,11 @@ class AutoMateListActivity : QuecBaseActivity<ActivityDeviceAutoMateBinding>() {
                             )
                         )
                     )
-                ) { result ->
+                ) { ret ->
                     runOnUiThread {
-                        finishLoading()
-                        handlerResult(result)
-                        if (result.isSuccess) {
+                        showOrHideLoading(true)
+                        handlerResult(ret)
+                        if (ret.isSuccess) {
                             //请求成功
                             dismiss()
                             queryAutoMateList()
@@ -148,33 +132,17 @@ class AutoMateListActivity : QuecBaseActivity<ActivityDeviceAutoMateBinding>() {
     }
 
     private fun queryAutoMateList() {
-        startLoading()
+        showOrHideLoading(true)
         QuecAutomateService.getAutomationList(1, 10) { result ->
             runOnUiThread {
-                finishLoading()
-                handlerResult(result)
+                showOrHideLoading(false)
                 if (result.isSuccess) {
                     val data = result.data //请求成功, 获取到的数据
-                    mAdapter!!.setNewInstance(data.list as MutableList)
+                    mAdapter.setNewInstance(data.list as MutableList)
+                } else {
+                    handlerResult(result)
                 }
             }
         }
     }
-
-
-    fun startLoading() {
-        if (mDialog == null) {
-            mDialog = MyUtils.createDialog(this)
-            mDialog!!.show()
-        } else {
-            mDialog!!.show()
-        }
-    }
-
-    fun finishLoading() {
-        if (mDialog != null) {
-            mDialog!!.dismiss()
-        }
-    }
-
 }

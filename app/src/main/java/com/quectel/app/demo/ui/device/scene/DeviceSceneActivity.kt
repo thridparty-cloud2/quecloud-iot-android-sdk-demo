@@ -3,10 +3,7 @@ package com.quectel.app.demo.ui.device.scene
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.quectel.app.demo.adapter.DeviceSceneAdapter
 import com.quectel.app.demo.base.activity.QuecBaseActivity
 import com.quectel.app.demo.bean.EditListBean
@@ -25,10 +22,7 @@ class DeviceSceneActivity : QuecBaseActivity<ActivityDeviceSceneBinding>() {
     companion object {
         const val TAG = "DeviceSceneActivity"
     }
-
-    var mDialog: Dialog? = null
-    var mAdapter: DeviceSceneAdapter? = null
-    private var data = ArrayList<String>()
+    private lateinit var mAdapter: DeviceSceneAdapter
 
 
     override fun getViewBinding(): ActivityDeviceSceneBinding {
@@ -39,22 +33,16 @@ class DeviceSceneActivity : QuecBaseActivity<ActivityDeviceSceneBinding>() {
         mAdapter = DeviceSceneAdapter(this@DeviceSceneActivity, null)
         binding.rvList.setAdapter(mAdapter)
         binding.rvList.setLayoutManager(LinearLayoutManager(this@DeviceSceneActivity))
-        binding.ivAdd.setOnClickListener { lt ->
+        binding.ivAdd.setOnClickListener {
             addScene()
         }
-        mAdapter!!.setOnItemClickListener(object : OnItemClickListener {
-            override fun onItemClick(
-                adapter: BaseQuickAdapter<*, *>,
-                view: View,
-                position: Int,
-            ) {
-                val data: QuecSceneModel =
-                    adapter.data[position] as QuecSceneModel
-                var intent = Intent(this@DeviceSceneActivity, DeviceSceneInfoActivity::class.java)
-                intent.putExtra("data", data)
-                startActivity(intent)
-            }
-        })
+        mAdapter.setOnItemClickListener { adapter, _, position ->
+            val data: QuecSceneModel =
+                adapter.data[position] as QuecSceneModel
+            val intent = Intent(this@DeviceSceneActivity, DeviceSceneInfoActivity::class.java)
+            intent.putExtra("data", data)
+            startActivity(intent)
+        }
     }
 
     override fun onResume() {
@@ -70,7 +58,7 @@ class DeviceSceneActivity : QuecBaseActivity<ActivityDeviceSceneBinding>() {
     }
 
     private fun addScene() {
-        var arrayData: ArrayList<EditListBean> = ArrayList<EditListBean>()
+        val arrayData: ArrayList<EditListBean> = ArrayList()
         arrayData.add(EditListBean("场景名称"))
         arrayData.add(EditListBean("场景图标"))
         arrayData.add(EditListBean("actionModel.code\r\n物模型标志符"))
@@ -89,7 +77,7 @@ class DeviceSceneActivity : QuecBaseActivity<ActivityDeviceSceneBinding>() {
             setTitle("添加一个新的场景")
             setSure("添加")
             setDataList(arrayData)
-            setEditTextListener { result ->
+            setEditTextListener {
                 val model = QuecSceneModel()
                 val sceneInfoModel = QuecSceneInfoModel()
                 val metaDataModel = QuecMetaDataModel()
@@ -170,9 +158,9 @@ class DeviceSceneActivity : QuecBaseActivity<ActivityDeviceSceneBinding>() {
                 model.sceneInfo = sceneInfoModel
                 sceneInfoModel.metaDataList = listOf(metaDataModel)
                 metaDataModel.actionList = listOf(actionModel)
-                QuecSceneService.addScene(model) { result ->
-                    handlerResult(result)
-                    if (result.isSuccess) {
+                QuecSceneService.addScene(model) { ret ->
+                    handlerResult(ret)
+                    if (ret.isSuccess) {
                         //添加场景成功
                         dismiss()
                         querySceneList()
@@ -183,31 +171,15 @@ class DeviceSceneActivity : QuecBaseActivity<ActivityDeviceSceneBinding>() {
     }
 
     private fun querySceneList() {
-        startLoading()
+        showOrHideLoading(true)
         QuecSceneService.getSceneList(1, 10) { result ->
-            finishLoading()
-            handlerResult(result)
+            showOrHideLoading(false)
             if (result.isSuccess) {
                 val data = result.data
-                mAdapter!!.setNewInstance(data.list)
+                mAdapter.setNewInstance(data.list)
+            } else {
+                handlerResult(result)
             }
         }
     }
-
-
-    fun startLoading() {
-        if (mDialog == null) {
-            mDialog = MyUtils.createDialog(this)
-            mDialog!!.show()
-        } else {
-            mDialog!!.show()
-        }
-    }
-
-    fun finishLoading() {
-        if (mDialog != null) {
-            mDialog!!.dismiss()
-        }
-    }
-
 }
