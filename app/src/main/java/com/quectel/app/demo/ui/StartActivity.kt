@@ -2,6 +2,8 @@ package com.quectel.app.demo.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import com.quectel.app.demo.BuildConfig
+import com.quectel.app.demo.R
 import com.quectel.app.demo.SdkManager
 import com.quectel.app.demo.base.activity.QuecBaseActivity
 import com.quectel.app.demo.databinding.ActivityStartBinding
@@ -10,6 +12,9 @@ import com.quectel.app.demo.ui.account.AuthCodeLoginActivity
 import com.quectel.app.demo.ui.account.LoginExActivity
 import com.quectel.app.demo.ui.account.RegisterExActivity
 import com.quectel.app.demo.ui.account.ResetPwdExActivity
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class StartActivity : QuecBaseActivity<ActivityStartBinding>() {
     override fun getViewBinding(): ActivityStartBinding {
@@ -21,6 +26,13 @@ class StartActivity : QuecBaseActivity<ActivityStartBinding>() {
     }
 
     override fun initData() {
+        val time = BuildConfig.BUILD_TIME.toLong()
+        val timeInfo = getString(R.string.app_build_time) + SimpleDateFormat(
+            "yyyy-MM-dd HH:mm",
+            Locale.ENGLISH
+        ).format(Date(time))
+        binding.tvBuildTime.text = timeInfo
+
         showStatus()
     }
 

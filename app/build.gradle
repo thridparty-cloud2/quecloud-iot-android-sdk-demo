@@ -19,6 +19,8 @@ android {
         buildConfigField("String", "userScrete", "\"" + "${properties.userSecret}" + "\"")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+
+        buildConfigField "String", "BUILD_TIME", String.format("\"%d\"", System.currentTimeMillis())
     }
 
 

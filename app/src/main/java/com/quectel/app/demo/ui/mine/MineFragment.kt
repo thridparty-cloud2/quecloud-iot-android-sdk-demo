@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.quectel.app.demo.BuildConfig
 import com.quectel.app.demo.R
 import com.quectel.app.demo.base.fragment.QuecBaseFragment
 import com.quectel.app.demo.common.AppVariable
@@ -17,20 +18,22 @@ import com.quectel.app.demo.dialog.SurePopup
 import com.quectel.app.demo.dialog.SurePopup.OnSureListener
 import com.quectel.app.demo.ui.StartActivity
 import com.quectel.app.demo.ui.UpdateUserPhoneActivity
-import com.quectel.app.demo.ui.device.scene.DeviceSceneActivity
 import com.quectel.app.demo.utils.DensityUtils
 import com.quectel.app.demo.utils.MyUtils
 import com.quectel.app.demo.utils.ToastUtils
 import com.quectel.app.device.iot.IotChannelController
 import com.quectel.app.usersdk.bean.QuecUserModel
 import com.quectel.app.usersdk.service.QuecUserService
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlin.concurrent.thread
 
-public class MineFragment(
+class MineFragment(
     //1 语言   2 国家   3时区
-    public val lang: Int = 1,
-    public val nationality: Int = 2,
-    public val timezone: Int = 3,
+    private val lang: Int = 1,
+    private val nationality: Int = 2,
+    private val timezone: Int = 3,
 ) : QuecBaseFragment<MineLayoutBinding>() {
 
     var mDialog: Dialog? = null
@@ -44,6 +47,11 @@ public class MineFragment(
     }
 
     override fun initView(savedInstanceState: Bundle?) {
+        val time = BuildConfig.BUILD_TIME.toLong()
+        val timeInfo = getString(R.string.app_build_time) + SimpleDateFormat(
+            "yyyy-MM-dd HH:mm",
+            Locale.ENGLISH
+        ).format(Date(time))
         binding.apply {
             llChangePhone.setOnClickListener { changePhone() }
             llDeleteUser.setOnClickListener { deleteUser() }
@@ -56,11 +64,12 @@ public class MineFragment(
             llLan.setOnClickListener { openLangCountryTimezone(lang) }
             llCountry.setOnClickListener { openLangCountryTimezone(nationality) }
             llTimezone.setOnClickListener { openLangCountryTimezone(timezone) }
+            tvBuildTime.text = timeInfo
         }
     }
 
     private fun openLangCountryTimezone(type: Int) {
-        var intent = Intent(activity, UpdataUserActivity::class.java)
+        val intent = Intent(activity, UpdataUserActivity::class.java)
         intent.putExtra("type", type)
         startActivity(intent)
     }

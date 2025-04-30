@@ -21,5 +21,6 @@
     <string name="start_find">开始发现</string>
     <string name="searching">搜索中…</string>
     <string name="not_search">未搜索</string>
+    <string name="app_build_time">App编译时间: </string>
 
 </resources>

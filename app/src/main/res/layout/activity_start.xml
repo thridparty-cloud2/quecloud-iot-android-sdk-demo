@@ -17,6 +17,15 @@
     <ListView
         android:id="@+id/lv_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
+    <TextView
+        android:id="@+id/tv_build_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:text="@string/app_build_time"
+        android:textAlignment="center"
+        android:textColor="@color/M1" />
 </LinearLayout>
