@@ -76,7 +76,7 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
             }
 
             QuecThreadUtil.RunMainThread {
-                dps.dps.forEach { item ->
+                dps.dps?.forEach { item ->
                     itemList.find { it.id == item.id }?.apply {
                         when (dataType) {
                             QuecIotDataPointDataType.INT, QuecIotDataPointDataType.BOOL,
