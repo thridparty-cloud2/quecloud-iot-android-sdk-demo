@@ -1,6 +1,5 @@
 package com.quectel.app.demo.ui.device.group
 
-import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import com.quectel.app.demo.base.activity.QuecBaseActivity
@@ -10,7 +9,6 @@ import com.quectel.app.demo.dialog.CommonDialog
 import com.quectel.app.demo.dialog.EditDoubleTextPopup
 import com.quectel.app.demo.dialog.EditTextPopup
 import com.quectel.app.demo.ui.SharedGroupOfDevicesActivity
-import com.quectel.app.demo.utils.MyUtils
 import com.quectel.app.demo.utils.ToastUtils
 import com.quectel.app.device.bean.QuecDeviceGroupParamModel
 import com.quectel.app.device.deviceservice.QuecDeviceGroupService
@@ -23,10 +21,9 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
         const val TAG = "DeviceListGroupActivity"
     }
 
-    var dGid: String? = ""
-    var name: String? = ""
-    var shareCode: String? = ""
-    var mDialog: Dialog? = null
+    private var dGid: String = ""
+    private var name: String = ""
+    private var shareCode: String? = ""
 
     override fun getViewBinding(): ActivityListGroupBinding {
         return ActivityListGroupBinding.inflate(layoutInflater)
@@ -37,10 +34,10 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
     }
 
     override fun initData() {
-        dGid = intent.getStringExtra("dGid")
-        name = intent.getStringExtra("name")
+        dGid = intent.getStringExtra("dGid") ?: ""
+        name = intent.getStringExtra("name") ?: ""
         shareCode = intent.getStringExtra("shareCode")
-        if (!name.isNullOrEmpty()) {
+        if (name.isEmpty()) {
             binding.tvStatus.text = name
         }
     }
@@ -75,7 +72,7 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
 
     private fun queryGroup() {
         startLoading()
-        QuecDeviceGroupService.getDeviceGroupInfo(dGid!!) { result ->
+        QuecDeviceGroupService.getDeviceGroupInfo(dGid) { result ->
             finishLoading()
             handlerResult(result)
             if (result.isSuccess) {
@@ -101,7 +98,7 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
                 startLoading()
                 val model = QuecDeviceGroupParamModel()
                 model.name = name
-                QuecDeviceGroupService.updateDeviceGroupInfo(dGid!!, model) { result ->
+                QuecDeviceGroupService.updateDeviceGroupInfo(dGid, model) { result ->
                     finishLoading()
                     handlerResult(result)
                     AppVariable.setGroupChange()
@@ -130,7 +127,7 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
                 val quecDeviceModel = QuecDeviceModel(pk, dk)
                 quecDeviceModels.add(quecDeviceModel)
                 AppVariable.setGroupChange()
-                QuecDeviceGroupService.addDeviceToGroup(dGid!!, quecDeviceModels) { result ->
+                QuecDeviceGroupService.addDeviceToGroup(dGid, quecDeviceModels) { result ->
                     finishLoading()
                     handlerResult(result)
                     if (result.isSuccess) {
@@ -196,7 +193,7 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
                 val quecDeviceModel = QuecDeviceModel(content1, content2)
                 deviceList.add(quecDeviceModel)
                 QuecDeviceGroupService.deleteDeviceFromGroup(
-                    dGid!!, deviceList
+                    dGid, deviceList
                 ) { result ->
                     AppVariable.setGroupChange()
                     finishLoading()
@@ -212,7 +209,7 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
     private fun deleteGroup() {
         startLoading()
         QuecDeviceGroupService.deleteDeviceGroup(
-            dGid!!
+            dGid
         ) { result ->
             finishLoading()
             handlerResult(result)
@@ -224,19 +221,11 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
     }
 
     fun startLoading() {
-        if (mDialog == null) {
-            mDialog = MyUtils.createDialog(this@DeviceListGroupActivity)
-            mDialog!!.show()
-        } else {
-            mDialog!!.show()
-        }
+        showOrHideLoading(true)
     }
 
     fun finishLoading() {
-        if (mDialog != null) {
-            mDialog!!.dismiss()
-        }
+        showOrHideLoading(false)
     }
-
 }
 
