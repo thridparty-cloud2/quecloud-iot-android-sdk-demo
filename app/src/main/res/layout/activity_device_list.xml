@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -35,6 +36,14 @@
 
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/tv_mode"
+        style="@style/CommText"
+        android:padding="12dp"
+        android:textColor="@color/W2"
+        android:visibility="gone"
+        tools:text="家居模式: "
+        tools:visibility="visible" />
 
     <in.srain.cube.views.ptr.PtrClassicFrameLayout
         android:id="@+id/fragment_ptr_home_ptr_frame"

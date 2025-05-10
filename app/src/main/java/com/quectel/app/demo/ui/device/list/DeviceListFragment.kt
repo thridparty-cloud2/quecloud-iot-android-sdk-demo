@@ -16,7 +16,9 @@ import com.quectel.app.demo.ui.device.function.DeviceFunctionActivity
 import com.quectel.app.demo.widget.BottomItemDecorationSystem
 import com.quectel.app.device.bean.QuecDeviceListParamsModel
 import com.quectel.app.device.deviceservice.QuecDeviceService
+import com.quectel.app.smart_home_sdk.service.QuecSmartHomeService
 import com.quectel.basic.common.entity.QuecDeviceModel
+import com.quectel.basic.common.utils.QuecFamilyUtil
 import com.quectel.basic.common.utils.QuecThreadUtil
 import com.quectel.sdk.iot.channel.kit.model.QuecIotDataPointsModel
 import com.quectel.sdk.iot.channel.kit.v2.QuecDeviceClient
@@ -107,12 +109,73 @@ class DeviceListFragment : QuecBaseFragment<ActivityDeviceListBinding>() {
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun getDeviceList(page: Int = 1) {
+        QuecSmartHomeService.getFamilyModeConfig {
+            if (it.isSuccess) {
+                if (it.data.enabledFamilyMode) {
+                    getFamilyList(page)
+                } else {
+                    getNormalDeviceList(page)
+                }
+            } else {
+                handlerError(it)
+            }
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun getNormalDeviceList(page: Int) {
+        binding.tvMode.visibility = View.GONE
         QuecDeviceService.getDeviceList(QuecDeviceListParamsModel().apply {
             this.pageNumber = page
             this.pageSize = 50
         }) {
+            binding.fragmentPtrHomePtrFrame.refreshComplete()
+            if (it.isSuccess) {
+                if (page == 1) {
+                    mDeviceList.clear()
+                }
+                mDeviceList.addAll(it.data.list)
+                mAdapter.notifyDataSetChanged()
+                mDeviceList.forEach { item -> connectDevice(item) }
+            } else {
+                handlerError(it)
+            }
+        }
+    }
+
+    private fun getFamilyList(page: Int) {
+        QuecSmartHomeService.getFamilyList("1", 1, 10) {
+            if (it.isSuccess) {
+                //默认
+                var model = it.data.list.find { item -> item.fid == QuecFamilyUtil.getFamilyId() }
+                if (model == null) {
+                    //选择默认第一个家庭
+                    model = it.data.list.first()
+                    if (model == null) {
+                        binding.fragmentPtrHomePtrFrame.refreshComplete()
+                        showMessage("数据异常")
+                    } else {
+                        QuecSmartHomeService.setCurrentFamilyInfo(it.data.list.first())
+                        startGetFamilyList(page)
+                    }
+                } else {
+                    startGetFamilyList(page)
+                }
+
+                val info = "家居模式 - 显示家庭[${model?.familyName}]下的常用设备"
+                binding.tvMode.text = info
+                binding.tvMode.visibility = View.VISIBLE
+            } else {
+                binding.fragmentPtrHomePtrFrame.refreshComplete()
+                handlerError(it)
+            }
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun startGetFamilyList(page: Int) {
+        QuecSmartHomeService.getCommonUsedDeviceList(QuecFamilyUtil.getFamilyId(), page, 50, true) {
             binding.fragmentPtrHomePtrFrame.refreshComplete()
             if (it.isSuccess) {
                 if (page == 1) {

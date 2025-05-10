@@ -47,11 +47,11 @@
             android:name=".ui.device.group.DeviceListGroupActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.device.group.DeviceGroupActivity"
+            android:exported="false"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme"
-            android:name=".ui.device.group.DeviceGroupActivity"
-            android:exported="false" />
+            android:theme="@style/TranslucentTheme" />
         <activity
             android:name=".ui.account.RegisterExActivity"
             android:exported="false" />
@@ -145,6 +145,14 @@
             android:theme="@style/TranslucentTheme" />
         <activity
             android:name=".ui.device.ota.DeviceOtaActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentTheme" />
+        <activity
+            android:name=".ui.family.list.FamilyListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentTheme" />
+        <activity
+            android:name=".ui.family.function.FamilyFunctionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme" />
     </application>

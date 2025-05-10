@@ -18,6 +18,7 @@ import com.quectel.app.demo.base.QuecBaseView
 import com.quectel.app.demo.base.QuecLoadingDialog
 import com.quectel.app.demo.utils.DisplayUtil
 import com.quectel.basic.common.entity.QuecResult
+import com.quectel.basic.common.utils.QuecFamilyUtil
 import com.quectel.basic.common.utils.QuecStatusBarUtil
 import com.quectel.basic.queclog.QLog
 import kotlinx.coroutines.CoroutineScope
@@ -273,7 +274,7 @@ abstract class QuecBaseCommonActivity : AppCompatActivity(), QuecBaseView {
     }
 
     protected fun getFid(): String? {
-        return null
+        return QuecFamilyUtil.getFamilyId()
     }
 
     protected fun log(info: String?) {
