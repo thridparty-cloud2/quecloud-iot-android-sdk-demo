@@ -1,6 +1,5 @@
 package com.quectel.app.demo.ui.device.group
 
-import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -13,7 +12,6 @@ import com.quectel.app.demo.base.activity.QuecBaseActivity
 import com.quectel.app.demo.common.AppVariable
 import com.quectel.app.demo.databinding.DeviceGroupLayoutBinding
 import com.quectel.app.demo.dialog.EditTextPopup
-import com.quectel.app.demo.utils.MyUtils
 import com.quectel.app.demo.utils.ToastUtils
 import com.quectel.app.demo.widget.BottomItemDecorationSystem
 import com.quectel.app.demo.widget.PayBottomDialog
@@ -33,7 +31,6 @@ class DeviceGroupActivity : QuecBaseActivity<DeviceGroupLayoutBinding>() {
         const val TAG = "DeviceGroupActivity"
     }
 
-    var mDialog: Dialog? = null
     var mList: MutableList<QuecDeviceGroupInfoModel>? = null
     var mAdapter: DeviceGroupAdapter? = null
 
@@ -142,18 +139,11 @@ class DeviceGroupActivity : QuecBaseActivity<DeviceGroupLayoutBinding>() {
     }
 
     fun startLoading() {
-        if (mDialog == null) {
-            mDialog = MyUtils.createDialog(this)
-            mDialog!!.show()
-        } else {
-            mDialog!!.show()
-        }
+        showOrHideLoading(true)
     }
 
     fun finishLoading() {
-        if (mDialog != null) {
-            mDialog!!.dismiss()
-        }
+        showOrHideLoading(false)
     }
 
     private fun createAddGroupDialog() {

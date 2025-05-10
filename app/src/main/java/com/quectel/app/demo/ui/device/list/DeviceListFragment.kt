@@ -103,6 +103,17 @@ class DeviceListFragment : QuecBaseFragment<ActivityDeviceListBinding>() {
 
     override fun onResume() {
         super.onResume()
+        checkChange()
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden) {
+           checkChange()
+        }
+    }
+
+    private fun checkChange() {
         if (AppVariable.isDeviceInfoChange) {
             AppVariable.isDeviceInfoChange = false
             getDeviceList()

@@ -49,6 +49,35 @@
                 android:src="@mipmap/user_head" />
 
             <LinearLayout
+                android:id="@+id/ll_family_mode"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="家居模式"
+                    android:textColor="@color/main1"
+                    android:textSize="16sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/s_family"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/ll_nickname"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
@@ -108,6 +137,11 @@
                     android:textSize="16sp" />
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/gray_line" />
 
             <View
                 android:layout_width="match_parent"

@@ -1,6 +1,5 @@
 package com.quectel.app.demo.ui.mine
 
-import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,11 +18,12 @@ import com.quectel.app.demo.dialog.SurePopup.OnSureListener
 import com.quectel.app.demo.ui.StartActivity
 import com.quectel.app.demo.ui.UpdateUserPhoneActivity
 import com.quectel.app.demo.utils.DensityUtils
-import com.quectel.app.demo.utils.MyUtils
 import com.quectel.app.demo.utils.ToastUtils
 import com.quectel.app.device.iot.IotChannelController
+import com.quectel.app.smart_home_sdk.service.QuecSmartHomeService
 import com.quectel.app.usersdk.bean.QuecUserModel
 import com.quectel.app.usersdk.service.QuecUserService
+import com.quectel.basic.common.utils.QuecFamilyUtil
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -36,7 +36,6 @@ class MineFragment(
     private val timezone: Int = 3,
 ) : QuecBaseFragment<MineLayoutBinding>() {
 
-    var mDialog: Dialog? = null
     lateinit var user: QuecUserModel
 
     override fun getViewBinding(
@@ -65,6 +64,7 @@ class MineFragment(
             llCountry.setOnClickListener { openLangCountryTimezone(nationality) }
             llTimezone.setOnClickListener { openLangCountryTimezone(timezone) }
             tvBuildTime.text = timeInfo
+            sFamily.setOnClickListener { changeFamilyMode() }
         }
     }
 
@@ -116,6 +116,8 @@ class MineFragment(
         if (AppVariable.isMineInfoChange) {
             queryUserInfor()
         }
+
+        binding.sFamily.isChecked = QuecFamilyUtil.getFamilyMode()
     }
 
     private fun queryUserInfor() {
@@ -278,19 +280,22 @@ class MineFragment(
         }
     }
 
-    fun startLoading() {
-        if (mDialog == null) {
-            mDialog = MyUtils.createDialog(context)
-            mDialog!!.show()
-        } else {
-            mDialog!!.show()
+    private fun changeFamilyMode() {
+        showOrHideLoading(true)
+        QuecSmartHomeService.enabledFamilyMode(!QuecFamilyUtil.getFamilyMode()) {
+            showOrHideLoading(false)
+            handlerResult(it)
+            if (it.isSuccess) {
+                AppVariable.setDeviceChange()
+            }
         }
     }
 
-    fun finishLoading() {
-        if (mDialog != null) {
-            mDialog!!.dismiss()
-        }
+    private fun startLoading() {
+        showOrHideLoading(true)
     }
 
+    private fun finishLoading() {
+        showOrHideLoading(false)
+    }
 }
