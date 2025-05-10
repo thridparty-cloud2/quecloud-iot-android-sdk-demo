@@ -5,13 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.quectel.app.demo.databinding.CommonListEmptyBinding
 import com.quectel.app.demo.databinding.CommonListItemBinding
 import com.quectel.app.demo.widget.BottomItemDecorationSystem
 
 class CommonListAdapter(
-    private val list: List<Item>,
+    val list: MutableList<Item>,
     private val onItemClick: (position: Int) -> Unit,
-) : RecyclerView.Adapter<CommonListAdapter.VH>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     data class Item(
         var content: String,
@@ -21,41 +22,52 @@ class CommonListAdapter(
 
     data class VH(val binding: CommonListItemBinding) : RecyclerView.ViewHolder(binding.root)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        return VH(CommonListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+    data class VHE(val binding: CommonListEmptyBinding) : RecyclerView.ViewHolder(binding.root)
+
+    override fun getItemViewType(position: Int): Int {
+        return if (list.isEmpty()) 0 else 1
     }
 
-    override fun onBindViewHolder(holder: VH, position: Int) {
-        val item = list[position]
-        holder.binding.apply {
-            tvContent.text = item.content
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return if (viewType == 1)
+            VH(CommonListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        else
+            VHE(CommonListEmptyBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+    }
 
-            if (item.hint != null) {
-                tvHint.visibility = View.VISIBLE
-                tvHint.text = item.hint
-            } else {
-                tvHint.visibility = View.GONE
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is VH) {
+            val item = list[position]
+            holder.binding.apply {
+                tvContent.text = item.content
+
+                if (item.hint != null) {
+                    tvHint.visibility = View.VISIBLE
+                    tvHint.text = item.hint
+                } else {
+                    tvHint.visibility = View.GONE
+                }
+
+                if (item.status != null) {
+                    tvStatus.visibility = View.VISIBLE
+                    tvStatus.text = item.status
+                } else {
+                    tvStatus.visibility = View.GONE
+                }
+
+                root.setOnClickListener { onItemClick(position) }
             }
-
-            if (item.status != null) {
-                tvStatus.visibility = View.VISIBLE
-                tvStatus.text = item.status
-            } else {
-                tvStatus.visibility = View.GONE
-            }
-
-            root.setOnClickListener { onItemClick(position) }
         }
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return if (list.isEmpty()) 1 else list.size
     }
 
     companion object {
         fun init(
             recyclerView: RecyclerView,
-            list: List<Item>,
+            list: MutableList<Item> = mutableListOf(),
             onItemClick: (position: Int) -> Unit
         ): CommonListAdapter {
             recyclerView.layoutManager = LinearLayoutManager(recyclerView.context)

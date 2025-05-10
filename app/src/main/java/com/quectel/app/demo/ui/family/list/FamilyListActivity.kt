@@ -16,7 +16,6 @@ import com.quectel.app.smart_home_sdk.bean.QuecInviteItemModel
 import com.quectel.app.smart_home_sdk.service.QuecSmartHomeService
 
 class FamilyListActivity : QuecBaseActivity<ActivityFamilyListBinding>() {
-    private val showList = mutableListOf<CommonListAdapter.Item>()
     private val itemList = mutableListOf<QuecFamilyItemModel>()
     private lateinit var adapter: CommonListAdapter
 
@@ -26,7 +25,14 @@ class FamilyListActivity : QuecBaseActivity<ActivityFamilyListBinding>() {
 
     override fun initView(savedInstanceState: Bundle?) {
         binding.apply {
-            adapter = CommonListAdapter.init(rvList, showList) { onItemClick(itemList[it]) }
+            adapter = CommonListAdapter.init(rvList) { onItemClick(itemList[it]) }
+            ivAdd.setOnClickListener {
+                SelectItemDialog(this@FamilyListActivity).apply {
+                    addItem("新增家庭") { addFamily() }
+
+                    addItem("查询待接收分享的家庭列表") { queryInviteList() }
+                }.show()
+            }
         }
     }
 
@@ -39,28 +45,15 @@ class FamilyListActivity : QuecBaseActivity<ActivityFamilyListBinding>() {
         getFamilyList()
     }
 
-    override fun initTestItem() {
-        super.initTestItem()
-
-
-        addItem("新增家庭") {
-            addFamily()
-        }
-
-        addItem("查询待接收分享的家庭列表") {
-            queryInviteList()
-        }
-    }
-
     @SuppressLint("NotifyDataSetChanged")
     private fun getFamilyList() {
         QuecSmartHomeService.getFamilyList(null, 1, 50) {
             if (it.isSuccess) {
                 itemList.clear()
-                showList.clear()
+                adapter.list.clear()
 
                 itemList.addAll(it.data.list)
-                showList.addAll(it.data.list.map { item ->
+                adapter.list.addAll(it.data.list.map { item ->
                     val role = when (item.memberRole) {
                         1 -> "创建者"
                         2 -> "管理员"

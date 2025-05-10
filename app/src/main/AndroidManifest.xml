@@ -155,6 +155,14 @@
             android:name=".ui.family.function.FamilyFunctionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme" />
+        <activity
+            android:name=".ui.family.room.device.FamilyDeviceListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentTheme" />
+        <activity
+            android:name=".ui.family.room.function.FamilyRoomFunctionActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentTheme" />
     </application>
 
 </manifest>

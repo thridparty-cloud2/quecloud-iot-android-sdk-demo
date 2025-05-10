@@ -1,20 +1,23 @@
 package com.quectel.app.demo.ui.family.function
 
+import android.content.Intent
 import android.os.Bundle
-import com.quectel.app.demo.databinding.ActivityFamilyFunctionBinding
+import com.quectel.app.demo.databinding.ActivityCommonListBinding
 import com.quectel.app.demo.dialog.CommonDialog
 import com.quectel.app.demo.dialog.EditDoubleTextPopup
 import com.quectel.app.demo.dialog.EditTextPopup
 import com.quectel.app.demo.dialog.SelectItemDialog
 import com.quectel.app.demo.ui.family.BaseFamilyActivity
+import com.quectel.app.demo.ui.family.room.device.FamilyDeviceListActivity
+import com.quectel.app.demo.ui.family.room.function.FamilyRoomFunctionActivity
 import com.quectel.app.smart_home_sdk.bean.QuecFamilyMemberItemModel
 import com.quectel.app.smart_home_sdk.bean.QuecFamilyParamModel
 import com.quectel.app.smart_home_sdk.bean.QuecInviteFamilyMemberParamModel
 import com.quectel.app.smart_home_sdk.service.QuecSmartHomeService
 
-class FamilyFunctionActivity : BaseFamilyActivity<ActivityFamilyFunctionBinding>() {
-    override fun getViewBinding(): ActivityFamilyFunctionBinding {
-        return ActivityFamilyFunctionBinding.inflate(layoutInflater)
+class FamilyFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding>() {
+    override fun getViewBinding(): ActivityCommonListBinding {
+        return ActivityCommonListBinding.inflate(layoutInflater)
     }
 
     override fun initView(savedInstanceState: Bundle?) {
@@ -27,8 +30,11 @@ class FamilyFunctionActivity : BaseFamilyActivity<ActivityFamilyFunctionBinding>
 
     override fun initTestItem() {
         super.initTestItem()
-        addItem("房间管理") {
+        addItem("查看家庭下常用设备列表") { queryCommonDevice() }
+        addItem("查看家庭下所有设备列表") { queryAllDevice() }
 
+        if (family.memberRole == 1 || family.memberRole == 2) {
+            addItem("房间管理") { manageRoom() }
         }
 
         addItem("修改家庭名称") { modifyFamilyName() }
@@ -43,6 +49,9 @@ class FamilyFunctionActivity : BaseFamilyActivity<ActivityFamilyFunctionBinding>
         addItem("邀请新成员") { shareFamily() }
 
         addItem("成员管理") { manageMember() }
+
+        addItem("添加新房间") { addRoom() }
+
     }
 
     private fun modifyFamilyName() {
@@ -193,5 +202,60 @@ class FamilyFunctionActivity : BaseFamilyActivity<ActivityFamilyFunctionBinding>
         QuecSmartHomeService.setFamilyMemberRole(getCurrentFid(), member.uid ?: "", role) {
             handlerResult(it)
         }
+    }
+
+    private fun addRoom() {
+        EditTextPopup(this).apply {
+            setTitle("请输入房间名")
+            setEditTextListener {
+                dismiss()
+                QuecSmartHomeService.addFamilyRoom(
+                    getCurrentFid(),
+                    it
+                ) { ret ->
+                    handlerResult(ret)
+                }
+            }
+        }.showPopupWindow()
+    }
+
+    private fun manageRoom() {
+        QuecSmartHomeService.getFamilyRoomList(getCurrentFid(), 1, 20) {
+            if (!it.isSuccess) {
+                handlerError(it)
+                return@getFamilyRoomList
+            }
+            if (it.data.list.isEmpty()) {
+                showMessage("无房间")
+                return@getFamilyRoomList
+            }
+
+            SelectItemDialog(this).apply {
+                it.data.list.forEach { item ->
+                    addItem("[${item.roomSort}] ${item.roomName}") {
+                        startActivity(
+                            Intent(
+                                this@FamilyFunctionActivity,
+                                FamilyRoomFunctionActivity::class.java
+                            ).apply {
+                                putExtra(FamilyRoomFunctionActivity.CODE_FRID, item.frid)
+                                putExtra(FamilyRoomFunctionActivity.CODE_NAME, item.roomName)
+                            })
+                    }
+                }
+            }.show()
+        }
+    }
+
+    private fun queryCommonDevice() {
+        startActivity(Intent(this, FamilyDeviceListActivity::class.java).apply {
+            putExtra(FamilyDeviceListActivity.CODE_MODE, FamilyDeviceListActivity.Mode.COMMON)
+        })
+    }
+
+    private fun queryAllDevice() {
+        startActivity(Intent(this, FamilyDeviceListActivity::class.java).apply {
+            putExtra(FamilyDeviceListActivity.CODE_MODE, FamilyDeviceListActivity.Mode.ALL)
+        })
     }
 }
