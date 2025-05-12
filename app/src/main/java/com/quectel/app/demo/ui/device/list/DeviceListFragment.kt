@@ -186,7 +186,7 @@ class DeviceListFragment : QuecBaseFragment<ActivityDeviceListBinding>() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun startGetFamilyList(page: Int) {
-        QuecSmartHomeService.getCommonUsedDeviceList(QuecFamilyUtil.getFamilyId(), page, 50, true) {
+        QuecSmartHomeService.getCommonUsedDeviceList(QuecFamilyUtil.getFamilyId(), page, 50, false) {
             binding.fragmentPtrHomePtrFrame.refreshComplete()
             if (it.isSuccess) {
                 if (page == 1) {

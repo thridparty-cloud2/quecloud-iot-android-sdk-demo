@@ -124,6 +124,9 @@ dependencies {
 
     //家庭sdk
     implementation "com.quectel.app.service:quec-smart-home:2.14.0.009-SNAPSHOT"
+
+    //群组sdk
+    implementation "com.quectel.app.sdk:quec-group-sdk:2.14.0.007-SNAPSHOT"
 }
 
 allprojects {

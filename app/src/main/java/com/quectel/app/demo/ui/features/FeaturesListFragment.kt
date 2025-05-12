@@ -32,13 +32,6 @@ class FeaturesListFragment : QuecBaseFragment<ActivityListFeaturesBinding>() {
                 CommonDialog.showSimpleInfo(context, "温馨提示", "请先打开家居模式")
             }
         }
-        addItem("群组") {
-            if (QuecFamilyUtil.getFamilyMode()) {
-                //todo: 待实现群组管理功能
-            } else {
-                CommonDialog.showSimpleInfo(context, "温馨提示", "请先打开家居模式")
-            }
-        }
     }
 
     private fun openDeviceGroup() {

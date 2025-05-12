@@ -8,6 +8,7 @@ import com.quectel.app.demo.dialog.EditDoubleTextPopup
 import com.quectel.app.demo.dialog.EditTextPopup
 import com.quectel.app.demo.dialog.SelectItemDialog
 import com.quectel.app.demo.ui.family.BaseFamilyActivity
+import com.quectel.app.demo.ui.family.group.list.FamilyGroupListActivity
 import com.quectel.app.demo.ui.family.room.device.FamilyDeviceListActivity
 import com.quectel.app.demo.ui.family.room.function.FamilyRoomFunctionActivity
 import com.quectel.app.smart_home_sdk.bean.QuecFamilyMemberItemModel
@@ -52,6 +53,7 @@ class FamilyFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding>() {
 
         addItem("添加新房间") { addRoom() }
 
+        addItem("群组管理") { managerGroup() }
     }
 
     private fun modifyFamilyName() {
@@ -257,5 +259,9 @@ class FamilyFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding>() {
         startActivity(Intent(this, FamilyDeviceListActivity::class.java).apply {
             putExtra(FamilyDeviceListActivity.CODE_MODE, FamilyDeviceListActivity.Mode.ALL)
         })
+    }
+
+    private fun managerGroup() {
+        startActivity(Intent(this, FamilyGroupListActivity::class.java))
     }
 }
