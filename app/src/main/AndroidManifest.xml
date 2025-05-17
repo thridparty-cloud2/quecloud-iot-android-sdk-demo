@@ -171,6 +171,10 @@
             android:name=".ui.family.group.function.FamilyGroupFunctionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme" />
+        <activity
+            android:name=".ui.family.group.control.FamilyGroupControlActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentTheme" />
     </application>
 
 </manifest>

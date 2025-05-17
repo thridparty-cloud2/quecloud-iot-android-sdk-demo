@@ -1,11 +1,13 @@
 package com.quectel.app.demo.ui.family.group.function
 
+import android.content.Intent
 import android.os.Bundle
 import com.quectel.app.demo.databinding.ActivityCommonListBinding
 import com.quectel.app.demo.dialog.CommonDialog
 import com.quectel.app.demo.dialog.EditTextPopup
 import com.quectel.app.demo.dialog.SelectItemDialog
 import com.quectel.app.demo.ui.family.BaseFamilyActivity
+import com.quectel.app.demo.ui.family.group.control.FamilyGroupControlActivity
 import com.quectel.app.device.deviceservice.QuecDeviceService
 import com.quectel.app.smart_home_sdk.service.QuecSmartHomeService
 import com.quectel.basic.common.entity.QuecDeviceModel
@@ -38,7 +40,7 @@ class FamilyGroupFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding
     }
 
     override fun initTestItem() {
-        addItem("群组控制") {}
+        addItem("群组控制") { groupControl() }
 
         addItem("获取群组信息") { getGroupInfo() }
 
@@ -169,6 +171,12 @@ class FamilyGroupFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding
         }.showPopupWindow()
     }
 
+    private fun groupControl() {
+        startActivity(Intent(this, FamilyGroupControlActivity::class.java).apply {
+            putExtra(KEY_DEVICE, device)
+        })
+    }
+
     private fun getGroupInfo() {
         QuecGroupService.getGroupInfo(device.gdid) {
             if (it.isSuccess) {
@@ -242,9 +250,9 @@ class FamilyGroupFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding
     private fun shareGroup() {
         QuecGroupService.getShareCode(
             device.gdid,
-            System.currentTimeMillis() + 600000,
+            System.currentTimeMillis() + 30 * 60 * 1000,
             true,
-            System.currentTimeMillis() + 600000,
+            System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000,
             1
         ) {
             if (it.isSuccess) {
