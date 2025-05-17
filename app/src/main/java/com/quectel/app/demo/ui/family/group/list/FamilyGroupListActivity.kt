@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import com.quectel.app.demo.base.CommonListAdapter
 import com.quectel.app.demo.databinding.ActivityCommonRvListBinding
+import com.quectel.app.demo.dialog.EditTextPopup
 import com.quectel.app.demo.dialog.SelectItemDialog
 import com.quectel.app.demo.ui.family.BaseFamilyActivity
 import com.quectel.app.demo.ui.family.group.function.FamilyGroupFunctionActivity
@@ -50,6 +51,7 @@ class FamilyGroupListActivity : BaseFamilyActivity<ActivityCommonRvListBinding>(
             QuecFamilyDeviceListParamsModel(
                 fid = getCurrentFid(),
                 isGroupDeviceShow = true,
+                isAddOwnerDevice = true,
                 page = 1,
                 pageSize = 100
             )
@@ -71,7 +73,7 @@ class FamilyGroupListActivity : BaseFamilyActivity<ActivityCommonRvListBinding>(
                     CommonListAdapter.Item(
                         item.deviceName,
                         item.productKey + " - " + item.deviceKey,
-                        null
+                        if (item.isShared) "分享群组" else ""
                     )
                 })
                 adapter.notifyDataSetChanged()
@@ -88,19 +90,36 @@ class FamilyGroupListActivity : BaseFamilyActivity<ActivityCommonRvListBinding>(
     }
 
     private fun addGroup() {
-        QuecGroupService.getAddableList(getCurrentFid(), "", listOf(), 1, 100) {
+        SelectItemDialog(this).apply {
+            addItem("从设备列表创建群组") { createGroup() }
+            addItem("接收群组分享") { acceptShare() }
+        }.show()
+    }
+
+    private fun createGroup() {
+        QuecSmartHomeService.getFamilyDeviceList(
+            QuecFamilyDeviceListParamsModel(
+                fid = getCurrentFid(),
+                isGroupDeviceShow = false,
+                page = 1,
+                pageSize = 100
+            )
+        ) {
             if (!it.isSuccess) {
                 handlerError(it)
-                return@getAddableList
+                return@getFamilyDeviceList
             }
 
-            if (it.data.list.isEmpty()) {
+            val list =
+                it.data.list.filter { item -> item.gdid.isNullOrEmpty() && item.groupState == 1 && item.bindMode != 1 }
+
+            if (list.isEmpty()) {
                 showMessage("当前没有可添加的设备")
-                return@getAddableList
+                return@getFamilyDeviceList
             }
 
             SelectItemDialog(this).apply {
-                for (item in it.data.list) {
+                for (item in list) {
                     addItem(item.deviceName) {
                         QuecGroupService.createGroup(QuecGroupCreateBean().apply {
                             isCommonUsed = true
@@ -121,5 +140,22 @@ class FamilyGroupListActivity : BaseFamilyActivity<ActivityCommonRvListBinding>(
                 }
             }.show()
         }
+    }
+
+    private fun acceptShare() {
+        EditTextPopup(this).apply {
+            setTitle("请输入share code")
+            setEditTextListener {
+                dismiss()
+                QuecGroupService.acceptShare(it) { ret ->
+                    if (ret.isSuccess) {
+                        showMessage("添加成功")
+                        getList()
+                    } else {
+                        handlerError(ret)
+                    }
+                }
+            }
+        }.showPopupWindow()
     }
 }
