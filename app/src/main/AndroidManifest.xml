@@ -112,10 +112,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme" />
         <activity
-            android:name=".ui.DeviceControlActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme" />
-        <activity
             android:name=".ui.device.function.DeviceFunctionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme" />
@@ -133,14 +129,6 @@
             android:theme="@style/TranslucentTheme" />
         <activity
             android:name=".ui.device.share.DeviceShareActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme" />
-        <activity
-            android:name=".ui.SharedGroupOfDevicesActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme" />
-        <activity
-            android:name=".ui.UpdateImageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme" />
         <activity

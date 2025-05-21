@@ -1,178 +1,73 @@
 package com.quectel.app.demo.ui;
 
-import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RelativeLayout;
 
-import com.quectel.app.demo.R;
-import com.quectel.app.demo.base.BaseActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.quectel.app.demo.base.activity.QuecBaseActivity;
+import com.quectel.app.demo.databinding.ActivityUpdateUserPhoneBinding;
 import com.quectel.app.demo.utils.MyUtils;
-import com.quectel.app.demo.utils.ToastUtils;
-import com.quectel.app.quecnetwork.httpservice.IHttpCallBack;
-import com.quectel.app.quecnetwork.httpservice.IResponseCallBack;
 import com.quectel.app.usersdk.constant.UserConstant;
-import com.quectel.app.usersdk.userservice.IUserService;
-import com.quectel.app.usersdk.utils.UserServiceFactory;
+import com.quectel.app.usersdk.service.QuecUserService;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+public class UpdateUserPhoneActivity extends QuecBaseActivity<ActivityUpdateUserPhoneBinding> {
 
-import butterknife.BindView;
-import butterknife.OnClick;
-
-public class UpdateUserPhoneActivity extends BaseActivity {
-
+    @NonNull
     @Override
-    protected int getContentLayout() {
-        return R.layout.activity_update_user_phone;
+    public ActivityUpdateUserPhoneBinding getViewBinding() {
+        return ActivityUpdateUserPhoneBinding.inflate(getLayoutInflater());
     }
 
     @Override
-    protected void addHeadColor() {
-        MyUtils.addStatusBarView(this,R.color.gray_bg);
+    public void initView(@Nullable Bundle savedInstanceState) {
+        binding.btGetCode.setOnClickListener(v -> getCode(true));
+        binding.btGetCode2.setOnClickListener(v -> getCode(false));
+        binding.ivBack.setOnClickListener(v -> finish());
+        binding.btSure.setOnClickListener(v -> confirm());
     }
 
-    @BindView(R.id.edit_new_phone)
-    EditText edit_new_phone;
-
-    @BindView(R.id.edit_old_phone)
-    EditText edit_old_phone;
-
-    @BindView(R.id.edit_yanzheng)
-    EditText edit_yanzheng;
-
-    @BindView(R.id.edit_yanzheng2)
-    EditText edit_yanzheng2;
-
-
-    @Override
-    protected void initData() {
-
+    private void getCode(boolean isNew) {
+        String phone = isNew ? binding.editNewPhone.getText().toString() : binding.editOldPhone.getText().toString();
+        if (TextUtils.isEmpty(phone)) {
+            showMessage("请输入手机号");
+            return;
+        }
+        showOrHideLoading(true);
+        QuecUserService.INSTANCE.sendVerifyCodeByPhone(phone, "86",
+                isNew ? UserConstant.TYPE_SMS_CODE_REGISTER : UserConstant.TYPE_SMS_CODE_LOGOFF, result -> {
+                    showOrHideLoading(false);
+                    handlerResult(result);
+                });
     }
 
-    @OnClick({R.id.iv_back,R.id.bt_getCode,R.id.bt_sure,R.id.bt_getCode2})
-    public void onViewClick(View view) {
-        Intent intent = null;
-        switch (view.getId()) {
-            case R.id.bt_getCode:
-                    String newPhone = MyUtils.getEditTextContent(edit_new_phone);
-                    if (TextUtils.isEmpty(newPhone)) {
-                        ToastUtils.showShort(activity, "请输入手机号");
-                        return;
-                    }
-                    startLoading();
+    private void confirm() {
+        String newPhone = MyUtils.getEditTextContent(binding.editNewPhone);
+        String oldPhone = MyUtils.getEditTextContent(binding.editOldPhone);
+        String newCode = MyUtils.getEditTextContent(binding.editYanzheng);
+        String oldCode = MyUtils.getEditTextContent(binding.editYanzheng2);
 
-                                UserServiceFactory.getInstance().getService(IUserService.class).sendV2PhoneSmsCode(
-                        "86",newPhone, UserConstant.TYPE_SMS_CODE_REGISTER,new IHttpCallBack(){
-                            @Override
-                            public void onSuccess(String result) {
-                                finishLoading();
-                                ToastUtils.showShort(activity,"验证码已经发送");
-                            }
-                            @Override
-                            public void onFail(Throwable e) {
-                                  e.printStackTrace();
-                            }
-                        }
-                );
-                 break;
-            case R.id.bt_getCode2:
-                String oldPhone = MyUtils.getEditTextContent(edit_old_phone);
-                if (TextUtils.isEmpty(oldPhone)) {
-                    ToastUtils.showShort(activity, "请输入手机号");
-                    return;
-                }
-                startLoading();
-
-                UserServiceFactory.getInstance().getService(IUserService.class).sendV2PhoneSmsCode(
-                        "86",oldPhone,UserConstant.TYPE_SMS_CODE_LOGOFF, new IHttpCallBack(){
-                            @Override
-                            public void onSuccess(String result) {
-                                finishLoading();
-                                ToastUtils.showShort(activity,"验证码已经发送");
-                            }
-                            @Override
-                            public void onFail(Throwable e) {
-                                e.printStackTrace();
-                            }
-                        }
-                );
-                break;
-
-
-
-            case R.id.iv_back:
-                finish();
-              break;
-
-            case R.id.bt_sure:
-                String phone1 = MyUtils.getEditTextContent(edit_new_phone);
-                String phone2 = MyUtils.getEditTextContent(edit_old_phone);
-                String code = MyUtils.getEditTextContent(edit_yanzheng);
-                String code2 = MyUtils.getEditTextContent(edit_yanzheng2);
-
-                if(TextUtils.isEmpty(phone1))
-                {
-                    ToastUtils.showLong(activity,"请输入新手机号");
-                    return;
-                }
-                if(TextUtils.isEmpty(phone2))
-                {
-                    ToastUtils.showLong(activity,"请输入手机号");
-                    return;
-                }
-
-                if(TextUtils.isEmpty(code))
-                {
-                    ToastUtils.showLong(activity,"请输入验证码");
-                    return;
-                }
-                if(TextUtils.isEmpty(code2))
-                {
-                    ToastUtils.showLong(activity,"请输入验证码");
-                    return;
-                }
-
-                UserServiceFactory.getInstance().getService(IUserService.class).updatePhone("86", phone1, code,
-                        "86", phone2, code2, new IHttpCallBack() {
-                            @Override
-                            public void onSuccess(String result) {
-                                //{"code":200,"msg":"","data":null}
-                                System.out.println("updatePhone---:" + result);
-
-                                try {
-                                    JSONObject  obj = new JSONObject(result);
-                                    if (obj.getInt("code") == 200) {
-                                        ToastUtils.showLong(activity,"手机号修改成功");
-                                           finish();
-                                    }
-                                    else
-                                    {
-                                        ToastUtils.showLong(activity,obj.getString("msg"));
-                                    }
-
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-
-                            @Override
-                            public void onFail(Throwable e) {
-                                e.printStackTrace();
-                            }
-                        }
-                );
-
-
-
-                break;
-
+        if (TextUtils.isEmpty(newPhone) || TextUtils.isEmpty(oldPhone)) {
+            showMessage("请输入新手机号");
+            return;
         }
 
+        if (TextUtils.isEmpty(newCode) || TextUtils.isEmpty(oldCode)) {
+            showMessage("请输入验证码");
+            return;
+        }
+
+        QuecUserService.INSTANCE.updatePhone(newPhone, "86", newCode, oldPhone, "86", oldCode, result -> {
+            handlerResult(result);
+            if (result.isSuccess()) {
+                finish();
+            }
+        });
     }
 
+    @Override
+    public void initData() {
+
+    }
 }

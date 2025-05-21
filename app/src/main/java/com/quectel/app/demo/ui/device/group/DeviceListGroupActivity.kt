@@ -8,7 +8,6 @@ import com.quectel.app.demo.databinding.ActivityListGroupBinding
 import com.quectel.app.demo.dialog.CommonDialog
 import com.quectel.app.demo.dialog.EditDoubleTextPopup
 import com.quectel.app.demo.dialog.EditTextPopup
-import com.quectel.app.demo.ui.SharedGroupOfDevicesActivity
 import com.quectel.app.demo.utils.ToastUtils
 import com.quectel.app.device.bean.QuecDeviceGroupParamModel
 import com.quectel.app.device.deviceservice.QuecDeviceGroupService
@@ -161,14 +160,6 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
                                 "设备组中的设备列表",
                                 result.toString()
                             )
-                        } else {
-                            val intent = Intent(
-                                this@DeviceListGroupActivity,
-                                SharedGroupOfDevicesActivity::class.java
-                            )
-                            intent.putExtra("content", QuecGsonUtil.gsonString(result.data))
-                            intent.putExtra("shareCode", shareCode)
-                            startActivity(intent)
                         }
                     }
                 }
