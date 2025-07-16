@@ -157,6 +157,9 @@ public class DistributionNetworkActivity extends BaseActivity {
             public void onUpdatePairingStatus(@NonNull QuecPairDeviceBean quecPairDeviceBean, float progress) {
 
                 QLog.i(TAG, "pk:" + quecPairDeviceBean.getBleDevice().getProductKey() + "  dk:" + quecPairDeviceBean.getBleDevice().getDeviceKey() + "  progress:" + progress);
+                if (progress >= 1.0) {
+                    return;
+                }
                 for (int i = 0; i < adapter.getData().size(); i++) {
                     SmartConfigDevice smartConfigDevice = adapter.getData().get(i);
                     if (TextUtils.equals(smartConfigDevice.getDeviceBean().getBleDevice().getProductKey(), quecPairDeviceBean.getBleDevice().getProductKey())
