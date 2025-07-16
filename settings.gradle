@@ -21,3 +21,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "AndroidSDKDemo"
 include ':app'
+
+def importLocalBuild = new File(getRootDir().absolutePath+"/importLocalSettings.gradle")
+if (importLocalBuild.exists()) {
+    apply from: "importLocalSettings.gradle"
+}

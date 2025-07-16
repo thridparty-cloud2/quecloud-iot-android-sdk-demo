@@ -1,4 +1,9 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+def importLocalBuild = rootProject.file("importLocalBuild.gradle")//加载callen开发使用脚本,如有需要可以联系callen
+if (importLocalBuild.exists()) {
+    apply from: "importLocalBuild.gradle"
+}
+
 buildscript {
     ext.kotlin_version = "1.6.10"
     repositories {
