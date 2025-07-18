@@ -16,31 +16,21 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.quectel.app.blesdk.ble.ScanDevice;
-import com.quectel.app.blesdk.bleservice.IBleService;
-import com.quectel.app.blesdk.bleservice.IScanCallBack;
-import com.quectel.app.blesdk.utils.BleServiceLocater;
-import com.quectel.app.blesdk.utils.ManufacturerAnalysisUtils;
 import com.quectel.app.demo.R;
 import com.quectel.app.demo.adapter.SmartConfigDeviceAdapter;
 import com.quectel.app.demo.base.BaseActivity;
 import com.quectel.app.demo.bean.SmartConfigDevice;
 import com.quectel.app.demo.dialog.WifiDataBottomDialog;
-import com.quectel.app.demo.utils.DeviceUtil;
 import com.quectel.app.demo.utils.MyUtils;
 import com.quectel.app.demo.utils.PermissionUtil;
 import com.quectel.app.demo.utils.ToastUtils;
 import com.quectel.app.device.iot.IotChannelController;
-import com.quectel.basic.common.utils.QuecGsonUtil;
 import com.quectel.basic.common.utils.QuecThreadUtil;
 import com.quectel.basic.queclog.QLog;
 import com.quectel.sdk.smart.config.api.QuecDevicePairingServiceManager;
-import com.quectel.sdk.smart.config.api.bean.DeviceBean;
 import com.quectel.sdk.smart.config.api.bean.QuecPairDeviceBean;
 import com.quectel.sdk.smart.config.api.bean.QuecPairErrorCode;
-import com.quectel.sdk.smart.config.api.bean.QuecResult;
 import com.quectel.sdk.smart.config.api.callback.QuecPairingListener;
-import com.quectel.sdk.smart.config.api.callback.QuecSmartConfigListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +38,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.disposables.Disposable;
-import okhttp3.internal.http2.Http2Reader;
 
 
 //wifi配网
@@ -71,6 +60,65 @@ public class DistributionNetworkActivity extends BaseActivity {
 
     private String pwd = "";
 
+    private final QuecPairingListener quecPairingListener = new QuecPairingListener() {
+        @Override
+        public void onScanDevice(@NonNull QuecPairDeviceBean quecPairDeviceBean) {
+
+            //是否已经在列表中
+            for (SmartConfigDevice smartConfigDevice : adapter.getData()) {
+                if (TextUtils.equals(smartConfigDevice.getDeviceBean().getBleDevice().getProductKey(), quecPairDeviceBean.getBleDevice().getProductKey())
+                        && TextUtils.equals(smartConfigDevice.getDeviceBean().getBleDevice().getDeviceKey(), quecPairDeviceBean.getBleDevice().getDeviceKey())) {
+                    return;
+                }
+            }
+            //添加到列表中
+            SmartConfigDevice device = new SmartConfigDevice();
+            device.setDeviceBean(quecPairDeviceBean);
+            adapter.addData(device);
+        }
+
+        @Override
+        public void onUpdatePairingStatus(@NonNull QuecPairDeviceBean quecPairDeviceBean, float progress) {
+
+            QLog.i(TAG, "pk:" + quecPairDeviceBean.getBleDevice().getProductKey() + "  dk:" + quecPairDeviceBean.getBleDevice().getDeviceKey() + "  progress:" + progress);
+            if (progress >= 1.0) {
+                return;
+            }
+            for (int i = 0; i < adapter.getData().size(); i++) {
+                SmartConfigDevice smartConfigDevice = adapter.getData().get(i);
+                if (TextUtils.equals(smartConfigDevice.getDeviceBean().getBleDevice().getProductKey(), quecPairDeviceBean.getBleDevice().getProductKey())
+                        && TextUtils.equals(smartConfigDevice.getDeviceBean().getBleDevice().getDeviceKey(), quecPairDeviceBean.getBleDevice().getDeviceKey())) {
+                    smartConfigDevice.setBindResult(100);
+                    int finalI = i;
+                    QuecThreadUtil.RunMainThread(() -> adapter.notifyItemChanged(finalI));
+                    return;
+                }
+            }
+
+        }
+
+        @Override
+        public void onUpdatePairingResult(@NonNull QuecPairDeviceBean quecPairDeviceBean, boolean isSuccess, @NonNull QuecPairErrorCode errorCode) {
+            for (int i = 0; i < adapter.getData().size(); i++) {
+                SmartConfigDevice smartConfigDevice = adapter.getData().get(i);
+                if (TextUtils.equals(smartConfigDevice.getDeviceBean().getBleDevice().getProductKey(), quecPairDeviceBean.getBleDevice().getProductKey())
+                        && TextUtils.equals(smartConfigDevice.getDeviceBean().getBleDevice().getDeviceKey(), quecPairDeviceBean.getBleDevice().getDeviceKey())) {
+
+                    if (isSuccess) {
+                        smartConfigDevice.setBindResult(200);
+                    } else {
+                        smartConfigDevice.setBindResult(300);
+                        QLog.e(TAG, "pk:" + quecPairDeviceBean.getBleDevice().getProductKey() + "  dk:" + quecPairDeviceBean.getBleDevice().getDeviceKey() + "  配网失败:" + errorCode);
+                    }
+
+                    int finalI = i;
+                    QuecThreadUtil.RunMainThread(() -> adapter.notifyItemChanged(finalI));
+                    return;
+                }
+            }
+
+        }
+    };
 
     @Override
     protected int getContentLayout() {
@@ -136,66 +184,7 @@ public class DistributionNetworkActivity extends BaseActivity {
         recycler.setAdapter(adapter);
 
         QuecDevicePairingServiceManager.INSTANCE.init(this);
-        QuecDevicePairingServiceManager.INSTANCE.addPairingListener(new QuecPairingListener() {
-            @Override
-            public void onScanDevice(@NonNull QuecPairDeviceBean quecPairDeviceBean) {
-
-                //是否已经在列表中
-                for (SmartConfigDevice smartConfigDevice : adapter.getData()) {
-                    if (TextUtils.equals(smartConfigDevice.getDeviceBean().getBleDevice().getProductKey(), quecPairDeviceBean.getBleDevice().getProductKey())
-                            && TextUtils.equals(smartConfigDevice.getDeviceBean().getBleDevice().getDeviceKey(), quecPairDeviceBean.getBleDevice().getDeviceKey())) {
-                        return;
-                    }
-                }
-                //添加到列表中
-                SmartConfigDevice device = new SmartConfigDevice();
-                device.setDeviceBean(quecPairDeviceBean);
-                adapter.addData(device);
-            }
-
-            @Override
-            public void onUpdatePairingStatus(@NonNull QuecPairDeviceBean quecPairDeviceBean, float progress) {
-
-                QLog.i(TAG, "pk:" + quecPairDeviceBean.getBleDevice().getProductKey() + "  dk:" + quecPairDeviceBean.getBleDevice().getDeviceKey() + "  progress:" + progress);
-                if (progress >= 1.0) {
-                    return;
-                }
-                for (int i = 0; i < adapter.getData().size(); i++) {
-                    SmartConfigDevice smartConfigDevice = adapter.getData().get(i);
-                    if (TextUtils.equals(smartConfigDevice.getDeviceBean().getBleDevice().getProductKey(), quecPairDeviceBean.getBleDevice().getProductKey())
-                            && TextUtils.equals(smartConfigDevice.getDeviceBean().getBleDevice().getDeviceKey(), quecPairDeviceBean.getBleDevice().getDeviceKey())) {
-                        smartConfigDevice.setBindResult(100);
-                        int finalI = i;
-                        QuecThreadUtil.RunMainThread(() -> adapter.notifyItemChanged(finalI));
-                        return;
-                    }
-                }
-
-            }
-
-            @Override
-            public void onUpdatePairingResult(@NonNull QuecPairDeviceBean quecPairDeviceBean, boolean isSuccess, @NonNull QuecPairErrorCode errorCode) {
-                for (int i = 0; i < adapter.getData().size(); i++) {
-                    SmartConfigDevice smartConfigDevice = adapter.getData().get(i);
-                    if (TextUtils.equals(smartConfigDevice.getDeviceBean().getBleDevice().getProductKey(), quecPairDeviceBean.getBleDevice().getProductKey())
-                            && TextUtils.equals(smartConfigDevice.getDeviceBean().getBleDevice().getDeviceKey(), quecPairDeviceBean.getBleDevice().getDeviceKey())) {
-
-                        if (isSuccess) {
-                            smartConfigDevice.setBindResult(200);
-                        } else {
-                            smartConfigDevice.setBindResult(300);
-                            QLog.e(TAG, "pk:" + quecPairDeviceBean.getBleDevice().getProductKey() + "  dk:" + quecPairDeviceBean.getBleDevice().getDeviceKey() + "  配网失败:" + errorCode);
-                        }
-
-                        int finalI = i;
-                        QuecThreadUtil.RunMainThread(() -> adapter.notifyItemChanged(finalI));
-                        return;
-                    }
-                }
-
-            }
-        });
-
+        QuecDevicePairingServiceManager.INSTANCE.addPairingListener(quecPairingListener);
     }
 
     private void showDialog(SmartConfigDevice deviceBean, int pos) {
@@ -229,6 +218,7 @@ public class DistributionNetworkActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         QuecDevicePairingServiceManager.INSTANCE.cancelAllDevicePairing();
+        QuecDevicePairingServiceManager.INSTANCE.removePairingListener(quecPairingListener);
     }
 
     private Disposable disposableFirst = null;
