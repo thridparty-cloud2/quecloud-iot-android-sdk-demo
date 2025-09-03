@@ -16,6 +16,7 @@ dependencyResolutionManagement {
             url 'http://106.15.139.220:8081/repository/maven-releases/'
             allowInsecureProtocol = true
         }
+        google()
     }
 }
 

@@ -5,7 +5,7 @@ if (importLocalBuild.exists()) {
 }
 
 buildscript {
-    ext.kotlin_version = "1.6.10"
+    ext.kotlin_version = "1.9.0"
     repositories {
         maven { url 'https://maven.aliyun.com/repository/public'}
         maven { url 'https://maven.aliyun.com/repository/central'}
@@ -14,11 +14,11 @@ buildscript {
         maven { url 'https://developer.huawei.com/repo/' }
         maven { url 'https://maven.aliyun.com/repository/releases' }
         maven { url "https://www.jitpack.io" }
-
+        google()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "com.android.tools.build:gradle:7.0.3"
+        classpath 'com.android.tools.build:gradle:8.11.0'
     }
 }
 
