@@ -118,7 +118,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
 
     //sdk核心库
-    implementation 'com.quectel.app.sdk:quec-iot-sdk:2.0.0'
+    implementation 'com.quectel.app.sdk:quec-iot-sdk:2.19.0'
 
     //场景sdk
     implementation "com.quectel.app.sdk:quec-scene-sdk:2.14.0"
@@ -127,10 +127,10 @@ dependencies {
     implementation "com.quectel.app.sdk:quec-automate-sdk:2.14.0"
 
     //家庭sdk
-    implementation "com.quectel.app.service:quec-smart-home:2.14.0"
+    implementation "com.quectel.app.service:quec-smart-home:2.14.1"
 
     //群组sdk
-    implementation "com.quectel.app.sdk:quec-group-sdk:2.14.0"
+    implementation "com.quectel.app.sdk:quec-group-sdk:2.14.1"
 }
 
 allprojects {
