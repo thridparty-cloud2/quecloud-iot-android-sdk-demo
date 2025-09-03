@@ -16,30 +16,30 @@ import com.quectel.app.device.deviceservice.QuecDeviceService
 import com.quectel.app.device.deviceservice.QuecDeviceShareService
 import com.quectel.basic.common.entity.QuecCallback
 import com.quectel.basic.common.entity.QuecDeviceModel
-import com.quectel.sdk.smart.config.api.api.IQuecDeviceVerifyService
-import com.quectel.sdk.smart.config.service.QuecDeviceVerifyService
+import com.quectel.sdk.smart.config.api.api.IQuecDeviceNetConfigService
+import com.quectel.sdk.smart.config.bean.NetConfigError
+import com.quectel.sdk.smart.config.service.QuecDeviceNetConfigService
 
 class DeviceFunctionActivity : QuecBaseDeviceActivity<ActivityDeviceFunctionBinding>() {
-    private val verifyListener = object : IQuecDeviceVerifyService.QuecVerifyDelegate {
-        override fun didStartVerifyingDevice(device: QuecDeviceModel) {
+    private val netConfigListener = object : IQuecDeviceNetConfigService.QuecNetConfigListener {
+        override fun didStartConfigDevice(device: QuecDeviceModel) {
 
         }
 
-        override fun didUpdateVerifyResult(
+        override fun didUpdateConfigResult(
             device: QuecDeviceModel,
             result: Boolean,
-            error: IQuecDeviceVerifyService.ErrorCode?
+            error: NetConfigError?
         ) {
             showOrHideLoading(false)
             if (result) {
                 AppVariable.setDeviceChange()
-                showMessage("激活成功")
+                showMessage("配网成功")
                 finish()
             } else {
-                showMessage("激活失败")
+                showMessage("配网失败")
             }
         }
-
     }
 
     override fun getViewBinding(): ActivityDeviceFunctionBinding {
@@ -53,12 +53,12 @@ class DeviceFunctionActivity : QuecBaseDeviceActivity<ActivityDeviceFunctionBind
     override fun initData() {
         binding.title.text = device.deviceName
 
-        QuecDeviceVerifyService.addVerifyListener(verifyListener)
+        QuecDeviceNetConfigService.addListener(netConfigListener)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        QuecDeviceVerifyService.removeVerifyListener(verifyListener)
+        QuecDeviceNetConfigService.removeListener(netConfigListener)
     }
 
     override fun initTestItem() {
@@ -107,8 +107,8 @@ class DeviceFunctionActivity : QuecBaseDeviceActivity<ActivityDeviceFunctionBind
             }.show()
         }
 
-        if (!device.isShared && device.isBleBindState) {
-            addItem("设备激活") {
+        if (!device.isShared && device.capabilitiesBitmask != 4) {
+            addItem("设备配网") {
                 EditDoubleTextPopup(mContext).apply {
                     setTitle("请输入设备WiFi信息")
                     setHint1("路由器名称")
@@ -166,6 +166,6 @@ class DeviceFunctionActivity : QuecBaseDeviceActivity<ActivityDeviceFunctionBind
             return
         }
         showOrHideLoading(true)
-        QuecDeviceVerifyService.startVerifyByDevices(listOf(device), ssid, pwd)
+        QuecDeviceNetConfigService.startConfig(listOf(device), ssid, pwd)
     }
 }
