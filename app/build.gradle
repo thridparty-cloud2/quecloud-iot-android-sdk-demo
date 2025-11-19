@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.quectel.app.demo"
         minSdk 24
-        targetSdk 32
+        targetSdk 35
         versionCode 1
         versionName "1.0.0"
         Properties properties = new Properties()
@@ -21,15 +21,24 @@ android {
         multiDexEnabled true
     }
 
+    //兼容butterKnife用
+    tasks.withType(JavaCompile).configureEach{
+        options.fork = true
+        options.forkOptions.jvmArgs +=[
+                '--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED',
+                '--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED',
+                '--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED']
+    }
+
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     sourceSets {
         main {
-            jniLibs.srcDirs = ['libs']
+            jniLibs.srcDirs = ['src/main/libs']
         }
     }
 
@@ -75,6 +84,7 @@ android {
         abortOnError false
     }
 
+    namespace 'com.quectel.app.demo'
 }
 
 dependencies {
