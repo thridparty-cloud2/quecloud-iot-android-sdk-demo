@@ -60,19 +60,11 @@ class MineFragment(
             llAddress.setOnClickListener { changeAddress() }
             civHead.setOnClickListener { changeHead() }
             llSex.setOnClickListener { changeSex() }
-            llLan.setOnClickListener { openLangCountryTimezone(lang) }
-            llCountry.setOnClickListener { openLangCountryTimezone(nationality) }
-            llTimezone.setOnClickListener { openLangCountryTimezone(timezone) }
             tvBuildTime.text = timeInfo
             sFamily.setOnClickListener { changeFamilyMode() }
         }
     }
 
-    private fun openLangCountryTimezone(type: Int) {
-        val intent = Intent(activity, UpdataUserActivity::class.java)
-        intent.putExtra("type", type)
-        startActivity(intent)
-    }
 
     private fun changeSex() {
         SelectItemDialog(requireContext()).apply {
@@ -138,15 +130,6 @@ class MineFragment(
                 }
                 if (!result.data.sex.isNullOrEmpty()) {
                     binding.tvSex.text = result.data.sex
-                }
-                if (!result.data.lang.isNullOrEmpty()) {
-                    binding.tvLan.text = result.data.lang
-                }
-                if (!result.data.nationality.isNullOrEmpty()) {
-                    binding.tvCountry.text = result.data.nationality
-                }
-                if (!result.data.timezone.isNullOrEmpty()) {
-                    binding.tvTimezone.text = result.data.timezone
                 }
                 if (!result.data.headimg.isNullOrEmpty()) {
                     val widthPic = DensityUtils.dp2px(context, 50f)
