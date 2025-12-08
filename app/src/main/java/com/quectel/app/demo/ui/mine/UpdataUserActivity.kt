@@ -12,6 +12,9 @@ import com.quectel.app.demo.databinding.ActivityListUpdateBinding
 import com.quectel.app.usersdk.bean.LangBean
 import com.quectel.app.usersdk.service.QuecUserService
 
+@Deprecated(
+    message = "该页面已废弃，相应接口调用已废弃, 不要再使用此页面",
+)
 class UpdataUserActivity(
     //1 语言   2 国家   3时区
     val lang: Int = 1,
