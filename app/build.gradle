@@ -118,7 +118,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
 
     //sdk核心库
-    implementation 'com.quectel.app.sdk:quec-iot-sdk:2.19.1-beta.5'
+    implementation 'com.quectel.app.sdk:quec-iot-sdk:2.19.1-beta.6'
 
     //场景sdk
     implementation "com.quectel.app.sdk:quec-scene-sdk:2.14.0"
