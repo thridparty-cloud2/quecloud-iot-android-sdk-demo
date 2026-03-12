@@ -20,6 +20,7 @@ import com.quectel.app.smart_home_sdk.service.QuecSmartHomeService
 import com.quectel.basic.common.entity.QuecDeviceModel
 import com.quectel.basic.common.utils.QuecFamilyUtil
 import com.quectel.basic.common.utils.QuecThreadUtil
+import com.quectel.basic.queclog.QLog
 import com.quectel.sdk.iot.channel.kit.model.QuecIotDataPointsModel
 import com.quectel.sdk.iot.channel.kit.v2.QuecDeviceClient
 import com.quectel.sdk.iot.channel.kit.v2.QuecDeviceClientApi
@@ -38,19 +39,19 @@ class DeviceListFragment : QuecBaseFragment<ActivityDeviceListBinding>() {
         }
 
         override fun deviceInfoUpdate(device: QuecDeviceModel) {
-
+            QLog.i(TAG, "deviceInfoUpdate: ${device.channelId}")
         }
 
         override fun deviceRemoved(device: QuecDeviceModel) {
-
+            QLog.i(TAG, "deviceRemoved: ${device.channelId}")
         }
 
         override fun dpsUpdate(device: QuecDeviceModel, dps: QuecIotDataPointsModel) {
-
+            QLog.i(TAG, "dpsUpdate: ${device.channelId} - ${dps.action}")
         }
 
         override fun onlineUpdate(device: QuecDeviceModel, onlineState: Int) {
-            //todo 在主线程回调
+            QLog.i(TAG, "onlineUpdate: ${device.channelId} - $onlineState")
             device.onlineChannelState = onlineState
             notifyItemChange(device)
         }
@@ -109,7 +110,7 @@ class DeviceListFragment : QuecBaseFragment<ActivityDeviceListBinding>() {
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         if (!hidden) {
-           checkChange()
+            checkChange()
         }
     }
 
@@ -186,7 +187,12 @@ class DeviceListFragment : QuecBaseFragment<ActivityDeviceListBinding>() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun startGetFamilyList(page: Int) {
-        QuecSmartHomeService.getCommonUsedDeviceList(QuecFamilyUtil.getFamilyId(), page, 50, false) {
+        QuecSmartHomeService.getCommonUsedDeviceList(
+            QuecFamilyUtil.getFamilyId(),
+            page,
+            50,
+            false
+        ) {
             binding.fragmentPtrHomePtrFrame.refreshComplete()
             if (it.isSuccess) {
                 if (page == 1) {
@@ -222,5 +228,9 @@ class DeviceListFragment : QuecBaseFragment<ActivityDeviceListBinding>() {
         startActivity(Intent(context, DeviceFunctionActivity::class.java).apply {
             putExtra(QuecBaseDeviceActivity.CODE_DEVICE, device)
         })
+    }
+
+    companion object {
+        private const val TAG = "DeviceListFragment"
     }
 }
