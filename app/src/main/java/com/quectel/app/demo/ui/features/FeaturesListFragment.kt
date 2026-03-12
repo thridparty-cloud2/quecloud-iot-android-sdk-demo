@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import com.quectel.app.demo.base.fragment.QuecBaseFragment
 import com.quectel.app.demo.databinding.ActivityListFeaturesBinding
 import com.quectel.app.demo.dialog.CommonDialog
+import com.quectel.app.demo.ui.PayPalActivity
 import com.quectel.app.demo.ui.device.automate.AutoMateListActivity
 import com.quectel.app.demo.ui.device.group.DeviceGroupActivity
 import com.quectel.app.demo.ui.device.scene.DeviceSceneActivity
@@ -32,6 +33,7 @@ class FeaturesListFragment : QuecBaseFragment<ActivityListFeaturesBinding>() {
                 CommonDialog.showSimpleInfo(context, "温馨提示", "请先打开家居模式")
             }
         }
+        addItem("paypal支付") { openPaypal() }
     }
 
     private fun openDeviceGroup() {
@@ -40,6 +42,10 @@ class FeaturesListFragment : QuecBaseFragment<ActivityListFeaturesBinding>() {
 
     private fun openScene() {
         startActivity(Intent(activity, DeviceSceneActivity::class.java))
+    }
+
+    private fun openPaypal() {
+        startActivity(Intent(activity, PayPalActivity::class.java))
     }
 
     private fun openAutoMateList() {

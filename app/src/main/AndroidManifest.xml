@@ -103,6 +103,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme" />
         <activity
+            android:name=".ui.PayPalActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentTheme" />
+        <activity
             android:name=".ui.UpdateUserActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme" />

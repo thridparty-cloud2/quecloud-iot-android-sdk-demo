@@ -131,6 +131,12 @@ dependencies {
 
     //群组sdk
     implementation "com.quectel.app.sdk:quec-group-sdk:2.14.1"
+
+    //paypal 支付sdk
+    implementation "com.quectel.app.sdk:quec-payment-sdk:1.0.0"
+    implementation "com.quectel.app.sdk:quec-pay-sdk-api:1.0.1"
+    implementation "com.quectel.app.sdk:quec-pay-sdk:1.0.1"
+    implementation "com.paypal.android:paypal-web-payments:2.0.0"
 }
 
 allprojects {
