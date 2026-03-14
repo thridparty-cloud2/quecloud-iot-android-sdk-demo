@@ -13,6 +13,7 @@ import com.quectel.app.demo.databinding.ActivityDeviceControlExBinding
 import com.quectel.app.demo.dialog.CommonDialog
 import com.quectel.app.demo.dialog.EditTextPopup
 import com.quectel.app.demo.dialog.SelectItemDialog
+import com.quectel.app.device.bean.ArraySpecs
 import com.quectel.app.device.bean.BooleanSpecs
 import com.quectel.app.device.bean.ModelBasic
 import com.quectel.app.device.bean.NumSpecs
@@ -363,6 +364,49 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
                 }
                 .show()
 
+            return
+        }
+
+        if (item.dataType == QuecIotDataPointDataType.ARRAY) {
+            if (item.specs.isNullOrEmpty()) {
+                showMessage("此类型数据demo中暂不支持控制")
+                return
+            }
+
+            val size = (item.attributeValue as? java.util.ArrayList<*>)?.size ?: 0
+            //确认数组类型
+            val spec = item.specs[0]
+            if (spec is ArraySpecs && size > 0) {
+                when (spec.dataType) {
+                    QuecIotDataPointDataType.INT, QuecIotDataPointDataType.FLOAT, QuecIotDataPointDataType.DOUBLE -> {
+                        QuecScope.safeLaunch {
+                            val list = mutableListOf<QuecIotDataPointsModel.DataModel>()
+                            for (i in 0 until size) {
+                                val ret = getValue(QuecProductTSLPropertyModel<NumSpecs>().apply {
+                                    dataType = spec.dataType
+                                    specs = arrayListOf(NumSpecs().apply {
+                                        min = spec.min
+                                        max = spec.max
+                                        step = spec.step
+                                    })
+                                })
+                                if (ret != null) {
+                                    list.add(QuecIotDataPointsModel.DataModel().apply {
+                                        dataType = dataTypeMap[spec.dataType]
+                                        value = ret
+                                    })
+                                }
+                            }
+                            if (list.isNotEmpty()) {
+                                writeDps(item, list)
+                            }
+                        }
+                        return
+                    }
+                }
+            }
+
+            showMessage("此类型数据demo中暂不支持控制")
             return
         }
 
