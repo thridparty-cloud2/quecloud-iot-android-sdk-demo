@@ -19,6 +19,8 @@ public class EditTextPopup extends BasePopupWindow {
     private QuecBasicUiEditTextPopBinding mBinding;
     private OnEditTextListener mListener;
 
+    public View.OnClickListener onCancelClickListener;
+
     public EditTextPopup(Context context) {
         super(context);
         setContentView(R.layout.quec_basic_ui_edit_text_pop);
@@ -49,7 +51,11 @@ public class EditTextPopup extends BasePopupWindow {
         mBinding.tvCancel.setOnClickListener(new QuecClickListener() {
             @Override
             public void onViewClick(View v) {
-                dismiss();
+                if (onCancelClickListener != null) {
+                    onCancelClickListener.onClick(v);
+                } else {
+                    dismiss();
+                }
             }
         });
     }
