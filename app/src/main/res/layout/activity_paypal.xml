@@ -34,7 +34,6 @@
             android:background="@android:drawable/edit_text"
             android:hint="bssClientAppId - bss账号id"
             android:padding="12dp"
-            android:text="TAPPQJdCG2W3e9"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_title" />
@@ -47,7 +46,6 @@
             android:layout_marginHorizontal="16dp"
             android:background="@android:drawable/edit_text"
             android:hint="orderNo - 订单编号"
-            android:text="4GpR6000000339441834"
             android:padding="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +59,6 @@
             android:background="@android:drawable/edit_text"
             android:hint="merchantNo - 商户号"
             android:padding="12dp"
-            android:text="4GpRHiuqxXT"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_order_no" />
@@ -73,7 +70,6 @@
             android:layout_marginHorizontal="16dp"
             android:background="@android:drawable/edit_text"
             android:hint="title - 商品标题"
-            android:text="AITalk Service"
             android:padding="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
