@@ -10,8 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.quectel.app.demo.R
 import com.quectel.app.demo.base.activity.QuecBaseDeviceActivity
 import com.quectel.app.demo.databinding.ActivityDeviceControlExBinding
+import com.quectel.app.demo.dialog.CommonDialog
 import com.quectel.app.demo.dialog.EditTextPopup
 import com.quectel.app.demo.dialog.SelectItemDialog
+import com.quectel.app.device.bean.ArraySpecs
 import com.quectel.app.device.bean.BooleanSpecs
 import com.quectel.app.device.bean.ModelBasic
 import com.quectel.app.device.bean.NumSpecs
@@ -23,6 +25,7 @@ import com.quectel.app.device.callback.IDeviceTSLCallBack
 import com.quectel.app.device.callback.IDeviceTSLModelCallback
 import com.quectel.app.device.deviceservice.QuecDeviceService
 import com.quectel.basic.common.entity.QuecDeviceModel
+import com.quectel.basic.common.scope.QuecScope
 import com.quectel.basic.common.utils.QuecThreadUtil
 import com.quectel.basic.queclog.QLog
 import com.quectel.sdk.iot.channel.kit.chanel.bean.QuecDeviceStatus.Type
@@ -32,7 +35,9 @@ import com.quectel.sdk.iot.channel.kit.model.QuecIotDataPointsModel
 import com.quectel.sdk.iot.channel.kit.model.QuecIotDataPointsModel.DataModel.QuecIotDataPointDataType
 import com.quectel.sdk.iot.channel.kit.v2.QuecDeviceClient
 import com.quectel.sdk.iot.channel.kit.v2.QuecDeviceClientApi
+import kotlinx.coroutines.suspendCancellableCoroutine
 import java.util.Calendar
+import kotlin.coroutines.resume
 
 class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBinding>() {
     private lateinit var deviceClient: QuecDeviceClientApi
@@ -325,118 +330,238 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
 
     private fun showControlDialog(item: QuecProductTSLPropertyModel<*>) {
         if (!item.subType.contains("W")) {
-            showMessage("该物模型不支持控制")
+            log("该物模型不支持控制")
             return
         }
-        when (item.dataType) {
-            QuecIotDataPointDataType.BOOL -> {
-                val specs = item.specs
-                if (specs is ArrayList<*>) {
-                    SelectItemDialog(mContext).apply {
-                        specs.forEach {
-                            if (it is BooleanSpecs) {
-                                addItem("[${it.name}] ${it.value}") {
-                                    writeDps(item, it.value)
+
+        if (item.dataType == QuecIotDataPointDataType.STRUCT) {
+            CommonDialog(this@DeviceControlActivity)
+                .apply {
+                    setTitle("即将按结构体定义顺序输入数据")
+                    setYesOnclickListener("确认") {
+                        dismiss()
+
+                        QuecScope.safeLaunch {
+                            val list = mutableListOf<QuecIotDataPointsModel.DataModel>()
+                            item.specs?.forEach { item ->
+                                if (item is QuecProductTSLPropertyModel<*>) {
+                                    val ret = getValue(item)
+                                    if (ret != null) {
+                                        list.add(QuecIotDataPointsModel.DataModel().apply {
+                                            id = item.id
+                                            code = item.code
+                                            dataType = dataTypeMap[item.dataType]
+                                            value = ret
+                                        })
+                                    }
                                 }
+                            }
+                            if (list.isNotEmpty()) {
+                                writeDps(item, list)
                             }
                         }
-                    }.show()
-                } else {
-                    showMessage("数据异常")
-                }
-            }
-
-            QuecIotDataPointDataType.TEXT -> {
-                val specs = item.specs
-                if (specs is ArrayList<*> && specs.isNotEmpty()) {
-                    val info = specs[0]
-                    if (info is TextSpecs) {
-                        EditTextPopup(mContext).apply {
-                            setTitle("请输入内容, 长度限制: ${info.length}")
-                            if (item.attributeValue != null) {
-                                setContent(item.attributeValue.toString())
-                            }
-                            setEditTextListener {
-                                if (it.length > (info.length.toIntOrNull() ?: Int.MAX_VALUE)) {
-                                    showMessage("输入内容长度不能超过${info.length}")
-                                } else {
-                                    writeDps(item, it)
-                                }
-                            }
-                        }.showPopupWindow()
-                    } else {
-                        showMessage("数据异常")
                     }
-                } else {
-                    showMessage("数据异常")
                 }
+                .show()
+
+            return
+        }
+
+        if (item.dataType == QuecIotDataPointDataType.ARRAY) {
+            if (item.specs.isNullOrEmpty()) {
+                showMessage("此类型数据demo中暂不支持控制")
+                return
             }
 
-            QuecIotDataPointDataType.ENUM -> {
-                val specs = item.specs
-                if (specs is ArrayList<*>) {
-                    SelectItemDialog(mContext).apply {
-                        specs.forEach {
-                            if (it is BooleanSpecs) {
-                                addItem("[${it.name}] ${it.value}") {
-                                    writeDps(item, it.value)
+            val size = (item.attributeValue as? java.util.ArrayList<*>)?.size ?: 0
+            //确认数组类型
+            val spec = item.specs[0]
+            if (spec is ArraySpecs && size > 0) {
+                when (spec.dataType) {
+                    QuecIotDataPointDataType.INT, QuecIotDataPointDataType.FLOAT, QuecIotDataPointDataType.DOUBLE -> {
+                        QuecScope.safeLaunch {
+                            val list = mutableListOf<QuecIotDataPointsModel.DataModel>()
+                            for (i in 0 until size) {
+                                val ret = getValue(QuecProductTSLPropertyModel<NumSpecs>().apply {
+                                    dataType = spec.dataType
+                                    specs = arrayListOf(NumSpecs().apply {
+                                        min = spec.min
+                                        max = spec.max
+                                        step = spec.step
+                                    })
+                                })
+                                if (ret != null) {
+                                    list.add(QuecIotDataPointsModel.DataModel().apply {
+                                        dataType = dataTypeMap[spec.dataType]
+                                        value = ret
+                                    })
                                 }
+                            }
+                            if (list.isNotEmpty()) {
+                                writeDps(item, list)
                             }
                         }
-                    }.show()
-                } else {
-                    showMessage("数据异常")
-                }
-            }
-
-            QuecIotDataPointDataType.INT, QuecIotDataPointDataType.FLOAT, QuecIotDataPointDataType.DOUBLE -> {
-                val specs = item.specs
-                if (specs is ArrayList<*> && specs.isNotEmpty()) {
-                    val info = specs[0]
-                    if (info is NumSpecs) {
-                        EditTextPopup(mContext).apply {
-                            setTitle("请输入${item.dataType}类型数据, 最小值: ${info.min} ,最大值:${info.max}")
-                            if (item.attributeValue != null) {
-                                setContent(item.attributeValue.toString())
-                            }
-                            setEditTextListener {
-                                dismiss()
-                                when (item.dataType) {
-                                    QuecIotDataPointDataType.INT -> if (it.toIntOrNull() != null) writeDps(
-                                        item,
-                                        it.toLong()
-                                    ) else showMessage("请输入Int类型数据")
-
-                                    QuecIotDataPointDataType.FLOAT -> if (it.toFloatOrNull() != null) writeDps(
-                                        item,
-                                        it.toDouble()
-                                    ) else showMessage("请输入FLOAT类型数据")
-
-                                    QuecIotDataPointDataType.DOUBLE -> if (it.toDoubleOrNull() != null) writeDps(
-                                        item,
-                                        it.toDouble()
-                                    ) else showMessage("请输入DOUBLE类型数据")
-                                }
-                            }
-                        }.showPopupWindow()
-                    } else {
-                        showMessage("数据异常")
+                        return
                     }
-                } else {
-                    showMessage("数据异常")
                 }
             }
 
-            QuecIotDataPointDataType.DATE -> {
-                showDateTimePicker {
-                    val date = it.time.time
-                    writeDps(item, date)
-                }
-            }
+            showMessage("此类型数据demo中暂不支持控制")
+            return
+        }
 
-            else -> showMessage("此类型数据demo中暂不支持控制")
+        QuecScope.safeLaunch {
+            val value = getValue(item)
+            if (value != null) {
+                writeDps(item, value)
+            }
         }
     }
+
+    private suspend fun getValue(item: QuecProductTSLPropertyModel<*>): Any? {
+        return suspendCancellableCoroutine { handler ->
+            when (item.dataType) {
+                QuecIotDataPointDataType.BOOL -> {
+                    val specs = item.specs
+                    if (specs is ArrayList<*>) {
+                        SelectItemDialog(mContext).apply {
+                            specs.forEach {
+                                if (it is BooleanSpecs) {
+                                    addItem("[${it.name}] ${it.value}") {
+                                        handler.resume(it.value)
+                                    }
+                                }
+                            }
+                            setCanceledOnTouchOutside(false)
+                            setOnCancelListener {
+                                handler.resume(null)
+                            }
+                        }.show()
+                    } else {
+                        handler.resume(null)
+                        showMessage("数据异常")
+                    }
+                }
+
+                QuecIotDataPointDataType.TEXT -> {
+                    val specs = item.specs
+                    if (specs is ArrayList<*> && specs.isNotEmpty()) {
+                        val info = specs[0]
+                        if (info is TextSpecs) {
+                            EditTextPopup(mContext).apply {
+                                setTitle("请输入内容, 长度限制: ${info.length}")
+                                if (item.attributeValue != null) {
+                                    setContent(item.attributeValue.toString())
+                                }
+                                setEditTextListener {
+                                    if (it.length > (info.length.toIntOrNull() ?: Int.MAX_VALUE)) {
+                                        showMessage("输入内容长度不能超过${info.length}")
+                                    } else {
+                                        dismiss()
+                                        handler.resume(it)
+                                    }
+                                }
+
+                                isOutSideTouchable = false
+                                onCancelClickListener = View.OnClickListener {
+                                    dismiss()
+                                    handler.resume(null)
+                                }
+
+                            }.showPopupWindow()
+                        } else {
+                            handler.resume(null)
+                            showMessage("数据异常")
+                        }
+                    } else {
+                        handler.resume(null)
+                        showMessage("数据异常")
+                    }
+                }
+
+                QuecIotDataPointDataType.ENUM -> {
+                    val specs = item.specs
+                    if (specs is ArrayList<*>) {
+                        SelectItemDialog(mContext).apply {
+                            specs.forEach {
+                                if (it is BooleanSpecs) {
+                                    addItem("[${it.name}] ${it.value}") {
+                                        handler.resume(it.value)
+                                    }
+                                }
+                            }
+                            setCanceledOnTouchOutside(false)
+                            setOnCancelListener {
+                                handler.resume(null)
+                            }
+                        }.show()
+                    } else {
+                        handler.resume(null)
+                        showMessage("数据异常")
+                    }
+                }
+
+                QuecIotDataPointDataType.INT, QuecIotDataPointDataType.FLOAT, QuecIotDataPointDataType.DOUBLE -> {
+                    val specs = item.specs
+                    if (specs is ArrayList<*> && specs.isNotEmpty()) {
+                        val info = specs[0]
+                        if (info is NumSpecs) {
+                            EditTextPopup(mContext).apply {
+                                setTitle("请输入${item.dataType}类型数据, 最小值: ${info.min} ,最大值:${info.max}")
+                                if (item.attributeValue != null) {
+                                    setContent(item.attributeValue.toString())
+                                }
+                                setEditTextListener {
+                                    when (item.dataType) {
+                                        QuecIotDataPointDataType.INT -> if (it.toIntOrNull() != null) {
+                                            dismiss()
+                                            handler.resume(it.toLong())
+                                        } else showMessage("请输入Int类型数据")
+
+                                        QuecIotDataPointDataType.FLOAT -> if (it.toFloatOrNull() != null) {
+                                            dismiss()
+                                            handler.resume(it.toDouble())
+                                        } else showMessage("请输入FLOAT类型数据")
+
+                                        QuecIotDataPointDataType.DOUBLE -> if (it.toDoubleOrNull() != null) {
+                                            dismiss()
+                                            handler.resume(it.toDouble())
+                                        } else showMessage("请输入DOUBLE类型数据")
+                                    }
+                                }
+
+                                isOutSideTouchable = false
+                                onCancelClickListener = View.OnClickListener {
+                                    dismiss()
+                                }
+                            }.showPopupWindow()
+                        } else {
+                            handler.resume(null)
+                            showMessage("数据异常")
+                        }
+                    } else {
+                        handler.resume(null)
+                        showMessage("数据异常")
+                    }
+                }
+
+                QuecIotDataPointDataType.DATE -> {
+                    showDateTimePicker({
+                        val date = it.time.time
+                        handler.resume(date)
+                    }, {
+                        handler.resume(null)
+                    })
+                }
+
+                else -> {
+                    showMessage("此类型数据demo中暂不支持控制")
+                    handler.resume(null)
+                }
+            }
+        }
+    }
+
 
     private fun writeDps(item: QuecProductTSLPropertyModel<*>, input: Any) {
         deviceClient.writeDps(listOf(QuecIotDataPointsModel.DataModel().apply {
@@ -496,7 +621,10 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
         return onlineState and type.mask != 0
     }
 
-    private fun showDateTimePicker(onDateTimeSelected: (Calendar) -> Unit) {
+    private fun showDateTimePicker(
+        onDateTimeSelected: (Calendar) -> Unit,
+        onCancel: (() -> Unit)? = null
+    ) {
         val currentDate = Calendar.getInstance()
 
         DatePickerDialog(
@@ -518,7 +646,9 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
             currentDate.get(Calendar.YEAR),
             currentDate.get(Calendar.MONTH),
             currentDate.get(Calendar.DAY_OF_MONTH)
-        ).show()
+        ).apply {
+            setOnCancelListener { onCancel?.invoke() }
+        }.show()
     }
 
     companion object {
