@@ -27,6 +27,11 @@ class DeviceNearbyAddActivity : QuecBaseActivity<ActivityNearbyAddBinding>() {
     private lateinit var adapter: DeviceNearbyAdapter
 
     private val listener = object : QuecPairingListener {
+
+        override fun onNeedSsid(deviceBean: QuecPairDeviceBean) {
+            log("onNeedSsid: [${deviceBean.bleDevice.getChannelId()}]")
+        }
+
         override fun onScanDevice(deviceBean: QuecPairDeviceBean) {
             if (mList.find {
                     it.bleDevice.productKey == deviceBean.bleDevice.productKey

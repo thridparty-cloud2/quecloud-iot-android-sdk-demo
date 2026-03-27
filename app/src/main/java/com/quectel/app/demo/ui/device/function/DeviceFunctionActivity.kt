@@ -2,6 +2,7 @@ package com.quectel.app.demo.ui.device.function
 
 import android.content.Intent
 import android.os.Bundle
+import com.quectel.app.blesdk.v2.api.QuecBleClientApi
 import com.quectel.app.demo.R
 import com.quectel.app.demo.base.activity.QuecBaseDeviceActivity
 import com.quectel.app.demo.common.AppVariable
@@ -39,6 +40,13 @@ class DeviceFunctionActivity : QuecBaseDeviceActivity<ActivityDeviceFunctionBind
             } else {
                 showMessage("配网失败")
             }
+        }
+
+        override fun onNeedSsid(
+            device: QuecDeviceModel,
+            client: QuecBleClientApi
+        ) {
+            log("onNeedSsid: [${device.channelId}]")
         }
     }
 
