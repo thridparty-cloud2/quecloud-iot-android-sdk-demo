@@ -29,7 +29,19 @@ class DeviceNearbyAdapter(
         holder.binding.apply {
             tvDeviceName.text = bean.deviceName
             tvInfo.text = bean.bleDevice.productKey + " - " + bean.bleDevice.deviceKey
-            tvStatus.text = if (bean.activeBluetooth) "蓝牙优先绑定" else ""
+            when (bean.activeBindingMode) {
+                QuecPairDeviceBean.ACTIVE_BINDING_MODE_BIND -> {
+                    tvStatus.text = "仅蓝牙激活绑定"
+
+                }
+                QuecPairDeviceBean.ACTIVE_BINDING_MODE_BIND_AND_CONFIG -> {
+                    tvStatus.text = "优先蓝牙激活绑定"
+                }
+
+                QuecPairDeviceBean.ACTIVE_BINDING_MODE_CONFIG_AND_BIND -> {
+                    tvStatus.text = "优先WiFI配网激活绑定"
+                }
+            }
 
             root.setOnClickListener { onItemClick(bean) }
         }

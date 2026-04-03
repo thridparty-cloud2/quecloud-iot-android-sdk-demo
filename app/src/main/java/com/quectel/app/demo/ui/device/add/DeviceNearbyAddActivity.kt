@@ -30,6 +30,21 @@ class DeviceNearbyAddActivity : QuecBaseActivity<ActivityNearbyAddBinding>() {
 
         override fun onNeedSsid(deviceBean: QuecPairDeviceBean) {
             log("onNeedSsid: [${deviceBean.bleDevice.getChannelId()}]")
+            val title =
+                if (deviceBean.activeBindingMode == 2) {
+                    "请输入设备WiFi信息(可为空)"
+                } else {
+                    "请输入设备WiFi信息(为空添加会失败)"
+                }
+            EditDoubleTextPopup(mContext).apply {
+                setTitle(title)
+                setHint1("路由器名称")
+                setHint2("密码密码")
+                setEditTextListener { content1, content2 ->
+                    dismiss()
+                    QuecDevicePairingService.setSsidInfo(content1, content2)
+                }
+            }.showPopupWindow()
         }
 
         override fun onScanDevice(deviceBean: QuecPairDeviceBean) {
