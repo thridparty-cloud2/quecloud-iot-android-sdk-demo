@@ -1,30 +1,42 @@
-
 ## iot-android-sdk-demo
 
-### 一、此demo演示如何使用QuecIoTAppSDK从头开始构建物联网应用程序。QuecIoTAppSDK分为几个功能组，让开发人员清楚地了解不同功能的实现，包括用户注册过程、设备绑定和控制、设备群组设置。可绑定蜂窝设备或者WIFI/蓝牙设备。对于设备控制，可基于HTTP和WebSocket进行控制。
+> 📖 中文文档请参阅 [readme_zh.md](./readme_zh.md)
 
-### 二、设计接口/属性
+---
 
-### 初始化
+### 1. Overview
+
+This demo demonstrates how to build an IoT application from scratch using **QuecIoTAppSDK**. The SDK is organized into several functional modules, giving developers a clear understanding of how different features are implemented, including:
+
+- User registration flow
+- Device binding and control
+- Device group management
+
+Supported device types: **Cellular devices** and **Wi-Fi / Bluetooth devices**.  
+Device control is supported over both **HTTP** and **WebSocket**.
+
+---
+
+### 2. API / Properties
+
+### Initialization
+
+```java
+// Call this inside your Application's onCreate() method when the app starts.
+QuecSDKMergeManager.getInstance().init(this);
 ```
-  需要在一进入应用的 Application onCreate方法里面QuecSDKMergeManager.getInstance().init(this);
 
+### Configure User Domain, Domain Secret & Cloud Service Type
+
+```java
+public void initProject(int serviceType, String userDomain, String domainSecret)
+
+// Example — call inside Application onCreate():
+QuecSDKMergeManager.getInstance().initProject(0, userDomain, domainSecret);
 ```
 
-### 配置用户域、用户域秘钥、云服务类型
-```
-  public void initProject(int serviceType, String userDomain, String domainSecret)
-  在Application onCreate方法里调用 QuecSDKMergeManager.getInstance().initProject(0,userDomain,domainSecret);
-
-```
-
-|参数	|是否必传	|说明	|
-| --- | --- | --- | 
-|serviceType| 是|	0 国内   非0国际	|
-|userDomain| 是|	用户域，DMP平台创建APP生成	|
-|domainSecret| 是|	用户域秘钥，DMP平台创建APP生成	|
-
-
-
-
-
+| Parameter      | Required | Description                                                       |
+| -------------- | -------- | ----------------------------------------------------------------- |
+| `serviceType`  | Yes      | `0` — Domestic (China); non-`0` — International                  |
+| `userDomain`   | Yes      | User domain, generated when creating an App on the DMP platform   |
+| `domainSecret` | Yes      | User domain secret, generated when creating an App on the DMP platform |
