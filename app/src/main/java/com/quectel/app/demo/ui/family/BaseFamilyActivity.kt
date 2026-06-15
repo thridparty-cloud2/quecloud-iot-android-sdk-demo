@@ -3,6 +3,7 @@ package com.quectel.app.demo.ui.family
 import android.content.Intent
 import android.os.Bundle
 import androidx.viewbinding.ViewBinding
+import com.quectel.app.demo.R
 import com.quectel.app.demo.base.activity.QuecBaseActivity
 import com.quectel.app.smart_home_sdk.bean.QuecFamilyItemModel
 
@@ -13,7 +14,7 @@ abstract class BaseFamilyActivity<T : ViewBinding> : QuecBaseActivity<T>() {
         val family = intent.getSerializableExtra(CODE_FAMILY) as? QuecFamilyItemModel
 
         if (family == null) {
-            showMessage("数据异常")
+            showMessage(getString(R.string.data_exception))
             finish()
             return
         }

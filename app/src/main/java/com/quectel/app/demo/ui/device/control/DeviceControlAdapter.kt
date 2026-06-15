@@ -3,6 +3,7 @@ package com.quectel.app.demo.ui.device.control
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.quectel.app.demo.R
 import com.quectel.app.demo.databinding.ItemControlLayoutBinding
 import com.quectel.app.device.bean.QuecProductTSLPropertyModel
 import com.quectel.sdk.iot.channel.kit.model.QuecIotDataPointsModel.DataModel.QuecIotDataPointDataType
@@ -31,16 +32,20 @@ class DeviceControlAdapter(
 
     override fun onBindViewHolder(holder: VH, position: Int) {
         val item = list[position]
-        holder.binding.tvName.text = getItemInfo(item, true)
+        holder.binding.tvName.text = getItemInfo(item, true, holder.binding.root.context)
         holder.binding.root.setOnClickListener { onItemClick(item) }
     }
 
-    private fun getItemInfo(item: QuecProductTSLPropertyModel<*>, isTop: Boolean): String {
+    private fun getItemInfo(
+        item: QuecProductTSLPropertyModel<*>,
+        isTop: Boolean,
+        context: android.content.Context
+    ): String {
         val state = StringBuilder()
         if (item.subType != null) {
-            state.append("读写类型: ").append(item.subType)
+            state.append(context.getString(R.string.rw_type_prefix)).append(item.subType)
         }
-        state.append(" 数据类型: ").append(item.dataType)
+        state.append(context.getString(R.string.data_type_prefix)).append(item.dataType)
         state.append("\nid: ").append(item.id)
         state.append(" ,code: ").append(item.code)
         state.append("\nname: ").append(item.name)
@@ -55,14 +60,14 @@ class DeviceControlAdapter(
             if (item.specs != null && item.specs.isNotEmpty()) {
                 item.specs.forEach {
                     if (it is QuecProductTSLPropertyModel<*>) {
-                        state.append("\n").append(getItemInfo(it, false)).append("\n")
+                        state.append("\n").append(getItemInfo(it, false, context)).append("\n")
                     }
                 }
             } else {
-                state.append("无数据")
+                state.append(context.getString(R.string.no_data))
             }
         } else if (attributeValue == null) {
-            state.append("无数据")
+            state.append(context.getString(R.string.no_data))
         } else if (attributeValue is ArrayList<*>) {
             attributeValue.forEach {
                 state.append("\n").append(it.toString())

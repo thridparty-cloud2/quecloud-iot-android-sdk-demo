@@ -2,6 +2,7 @@ package com.quectel.app.demo.ui.family.room.device
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import com.quectel.app.demo.R
 import com.quectel.app.demo.base.CommonListAdapter
 import com.quectel.app.demo.databinding.ActivityFamilyDeviceListBinding
 import com.quectel.app.demo.dialog.EditTextPopup
@@ -37,9 +38,9 @@ class FamilyDeviceListActivity : BaseFamilyActivity<ActivityFamilyDeviceListBind
         mode = intent.getSerializableExtra(CODE_MODE) as? Mode ?: Mode.COMMON
 
         binding.title.text = when (mode) {
-            Mode.COMMON -> "常用设备"
-            Mode.ALL -> "家庭下所有设备"
-            Mode.ROOM -> "房间[${name}]中设备"
+            Mode.COMMON -> getString(R.string.common_devices)
+            Mode.ALL -> getString(R.string.all_family_devices)
+            Mode.ROOM -> getString(R.string.room_devices, name ?: "")
         }
 
         getDeviceList()
@@ -98,12 +99,12 @@ class FamilyDeviceListActivity : BaseFamilyActivity<ActivityFamilyDeviceListBind
     private fun clickItem(item: QuecDeviceModel) {
         SelectItemDialog(this).apply {
             if (item.isCommonUsed) {
-                addItem("移出常用") { modifyDevice(item, isCommon = false) }
+                addItem(getString(R.string.remove_from_common)) { modifyDevice(item, isCommon = false) }
             } else {
-                addItem("移入常用") { modifyDevice(item, isCommon = true) }
+                addItem(getString(R.string.add_to_common)) { modifyDevice(item, isCommon = true) }
             }
-            addItem("移动至其他房间") { moveDeviceRoom(item) }
-            addItem("修改设备名") { modifyDeviceName(item) }
+            addItem(getString(R.string.move_to_other_room)) { moveDeviceRoom(item) }
+            addItem(getString(R.string.rename_device)) { modifyDeviceName(item) }
         }.show()
     }
 
@@ -125,7 +126,7 @@ class FamilyDeviceListActivity : BaseFamilyActivity<ActivityFamilyDeviceListBind
 
     private fun modifyDeviceName(item: QuecDeviceModel) {
         EditTextPopup(this).apply {
-            setTitle("修改设备名")
+            setTitle(getString(R.string.rename_device))
             setContent(item.deviceName)
             setEditTextListener {
                 dismiss()

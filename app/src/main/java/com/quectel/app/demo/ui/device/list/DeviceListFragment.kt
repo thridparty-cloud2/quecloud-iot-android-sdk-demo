@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.quectel.app.demo.base.activity.QuecBaseDeviceActivity
+import com.quectel.app.demo.R
 import com.quectel.app.demo.base.fragment.QuecBaseFragment
 import com.quectel.app.demo.common.AppVariable
 import com.quectel.app.demo.databinding.ActivityDeviceListBinding
@@ -166,7 +167,7 @@ class DeviceListFragment : QuecBaseFragment<ActivityDeviceListBinding>() {
                     model = it.data.list.first()
                     if (model == null) {
                         binding.fragmentPtrHomePtrFrame.refreshComplete()
-                        showMessage("数据异常")
+                        showMessage(getString(R.string.data_exception))
                     } else {
                         QuecSmartHomeService.setCurrentFamilyInfo(it.data.list.first())
                         startGetFamilyList(page)
@@ -175,7 +176,7 @@ class DeviceListFragment : QuecBaseFragment<ActivityDeviceListBinding>() {
                     startGetFamilyList(page)
                 }
 
-                val info = "家居模式 - 显示家庭[${model?.familyName}]下的常用设备"
+                val info = getString(R.string.family_mode_info, model?.familyName ?: "")
                 binding.tvMode.text = info
                 binding.tvMode.visibility = View.VISIBLE
             } else {

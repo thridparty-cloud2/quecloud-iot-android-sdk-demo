@@ -234,6 +234,7 @@
     <string name="hint_device_wifi_optional">请输入设备WiFi信息(可为空)</string>
     <string name="hint_device_wifi_required">请输入设备WiFi信息(为空添加会失败)</string>
     <string name="router_name">路由器名称</string>
+    <string name="hint_wifi_password_enter">请输入密码</string>
     <string name="password_label">密码</string>
     <string name="add_success">添加成功</string>
     <string name="add_failed">添加失败: %1$s</string>
@@ -264,6 +265,7 @@
     <string name="struct_input_prompt">即将按结构体定义顺序输入数据</string>
     <string name="type_not_support_control">此类型数据demo中暂不支持控制</string>
     <string name="data_error">数据异常</string>
+    <string name="hint_struct_order">即将按结构体定义顺序输入数据</string>
     <string name="hint_input_content_with_limit">请输入内容, 长度限制: %1$d</string>
     <string name="input_too_long">输入内容长度不能超过%1$d</string>
     <string name="hint_input_range">请输入%1$s类型数据, 最小值: %2$s ,最大值:%3$s</string>
@@ -279,6 +281,7 @@
 
     <!-- Device group -->
     <string name="accept_group_share_title">接受别人设备组分享</string>
+    <string name="hint_share_code_device_group">请输入share_code</string>
     <string name="hint_share_code2">请输入share_code</string>
     <string name="param_cannot_be_empty">参数不能为空</string>
     <string name="device_list_in_group">设备组中的设备列表</string>
@@ -304,6 +307,14 @@
     <string name="device_dk_label">设备dk</string>
     <string name="tsl_data_type_label">物模型数据类型</string>
     <string name="add_new_scene">添加一个新的场景</string>
+    <string name="tsl_code_label">actionModel.code\n物模型标志符</string>
+    <string name="tsl_data_type_field">actionModel.dataType\n物模型数据类型</string>
+    <string name="tsl_id_label">actionModel.id\n物模型功能ID</string>
+    <string name="tsl_func_name_label">actionModel.name\n物模型功能名称</string>
+    <string name="tsl_sub_name_label">actionModel.subName\n物模型值subName</string>
+    <string name="tsl_sub_type_label">actionModel.subType\n物模型subType</string>
+    <string name="tsl_type_label">actionModel.type\n物模型功能类型</string>
+    <string name="tsl_value_label">actionModel.value\n物模型值</string>
     <string name="add_label">添加</string>
     <string name="params_cannot_be_empty">各种参数不能为空</string>
     <string name="tsl_id_must_be_int">物模型功能ID必须输入为int</string>

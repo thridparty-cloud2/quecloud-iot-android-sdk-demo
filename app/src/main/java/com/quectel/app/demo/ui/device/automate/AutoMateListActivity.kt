@@ -17,6 +17,7 @@ import com.quectel.sdk.automate.api.model.QuecAutomationModel
 import com.quectel.sdk.automate.api.model.QuecAutomationPreconditionModel
 import com.quectel.sdk.automate.api.model.QuecAutomationTimeModel
 import com.quectel.sdk.automate.service.QuecAutomateService
+import com.quectel.app.demo.R
 
 class AutoMateListActivity : QuecBaseActivity<ActivityDeviceAutoMateBinding>() {
     private lateinit var mAdapter: AutoMateAdapter
@@ -43,16 +44,14 @@ class AutoMateListActivity : QuecBaseActivity<ActivityDeviceAutoMateBinding>() {
 
     private fun addAutoMate() {
         val arrayData: ArrayList<EditListBean> = ArrayList()
-        //name
-        arrayData.add(EditListBean("自动化名称"))
-        //出发时间24制 09:07
-        arrayData.add(EditListBean("定时时间24制 例如 09:07"))
-        arrayData.add(EditListBean("场景名称"))
-        arrayData.add(EditListBean("场景id"))
+        arrayData.add(EditListBean(getString(R.string.automation_name_label)))
+        arrayData.add(EditListBean(getString(R.string.schedule_time_hint)))
+        arrayData.add(EditListBean(getString(R.string.hint_test_automation_scene_name)))
+        arrayData.add(EditListBean(getString(R.string.hint_test_automation_scene_id)))
 
         EditListTextPopup(mContext).apply {
-            setTitle("添加一个新的自动化")
-            setSure("添加")
+            setTitle(getString(R.string.add_new_automation))
+            setSure(getString(R.string.add_label))
             setDataList(arrayData)
             setEditTextListener {
                 val automationName =
@@ -67,7 +66,7 @@ class AutoMateListActivity : QuecBaseActivity<ActivityDeviceAutoMateBinding>() {
                 if (automationName.isNullOrEmpty() || automationTime.isNullOrEmpty() ||
                     sceneName.isNullOrEmpty() || sceneId.isNullOrEmpty()
                 ) {
-                    ToastUtils.showShort(this@AutoMateListActivity, "各种参数不能为空")
+                    ToastUtils.showShort(this@AutoMateListActivity, getString(R.string.params_cannot_be_empty))
                     return@setEditTextListener
                 }
                 showOrHideLoading(true)

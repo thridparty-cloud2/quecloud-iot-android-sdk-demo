@@ -2,6 +2,6 @@ package com.quectel.app.demo.constant;
 
 public class DeviceConfig {
 
-    public static final String OFFLINE= "离线";
+    public static final String OFFLINE = "offline";
 
 }

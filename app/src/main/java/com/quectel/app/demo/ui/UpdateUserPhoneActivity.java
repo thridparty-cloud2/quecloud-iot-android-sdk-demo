@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.quectel.app.demo.R;
 import com.quectel.app.demo.base.activity.QuecBaseActivity;
 import com.quectel.app.demo.databinding.ActivityUpdateUserPhoneBinding;
 import com.quectel.app.demo.utils.MyUtils;
@@ -31,7 +32,7 @@ public class UpdateUserPhoneActivity extends QuecBaseActivity<ActivityUpdateUser
     private void getCode(boolean isNew) {
         String phone = isNew ? binding.editNewPhone.getText().toString() : binding.editOldPhone.getText().toString();
         if (TextUtils.isEmpty(phone)) {
-            showMessage("请输入手机号");
+            showMessage(getString(R.string.please_input_phone));
             return;
         }
         showOrHideLoading(true);
@@ -49,12 +50,12 @@ public class UpdateUserPhoneActivity extends QuecBaseActivity<ActivityUpdateUser
         String oldCode = MyUtils.getEditTextContent(binding.editYanzheng2);
 
         if (TextUtils.isEmpty(newPhone) || TextUtils.isEmpty(oldPhone)) {
-            showMessage("请输入新手机号");
+            showMessage(getString(R.string.hint_new_phone));
             return;
         }
 
         if (TextUtils.isEmpty(newCode) || TextUtils.isEmpty(oldCode)) {
-            showMessage("请输入验证码");
+            showMessage(getString(R.string.please_input_code));
             return;
         }
 

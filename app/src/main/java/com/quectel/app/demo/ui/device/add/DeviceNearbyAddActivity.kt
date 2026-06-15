@@ -32,14 +32,14 @@ class DeviceNearbyAddActivity : QuecBaseActivity<ActivityNearbyAddBinding>() {
             log("onNeedSsid: [${deviceBean.bleDevice.getChannelId()}]")
             val title =
                 if (deviceBean.activeBindingMode == 2) {
-                    "请输入设备WiFi信息(可为空)"
+                    getString(R.string.hint_device_wifi_optional)
                 } else {
-                    "请输入设备WiFi信息(为空添加会失败)"
+                    getString(R.string.hint_device_wifi_required)
                 }
             EditDoubleTextPopup(mContext).apply {
                 setTitle(title)
-                setHint1("路由器名称")
-                setHint2("密码密码")
+                setHint1(getString(R.string.router_name))
+                setHint2(getString(R.string.hint_wifi_password_enter))
                 setEditTextListener { content1, content2 ->
                     dismiss()
                     QuecDevicePairingService.setSsidInfo(content1, content2)
@@ -67,11 +67,11 @@ class DeviceNearbyAddActivity : QuecBaseActivity<ActivityNearbyAddBinding>() {
             //todo sdk回调应该在主线程执行
             QuecThreadUtil.RunMainThread {
                 if (result) {
-                    showMessage("添加成功")
+                    showMessage(getString(R.string.add_success))
                     AppVariable.setDeviceChange()
                     backMain()
                 } else {
-                    showMessage("添加失败: $errorCode")
+                    showMessage(getString(R.string.add_failed, errorCode.toString()))
                 }
             }
         }
@@ -125,14 +125,12 @@ class DeviceNearbyAddActivity : QuecBaseActivity<ActivityNearbyAddBinding>() {
 
     private fun onItemClick(bean: QuecPairDeviceBean) {
         if (bean.activeBluetooth) {
-            //蓝牙优先激活, 直接绑定设备
             startAdd(bean, null, null)
         } else {
-            // wifi激活, 需输入ssid和pwd
             EditDoubleTextPopup(mContext).apply {
-                setTitle("请输入设备WiFi信息")
-                setHint1("路由器名称")
-                setHint2("密码密码")
+                setTitle(getString(R.string.hint_device_wifi))
+                setHint1(getString(R.string.router_name))
+                setHint2(getString(R.string.hint_wifi_password_enter))
                 setEditTextListener { content1, content2 ->
                     dismiss()
                     startAdd(bean, content1, content2)
@@ -144,7 +142,7 @@ class DeviceNearbyAddActivity : QuecBaseActivity<ActivityNearbyAddBinding>() {
     private fun startAdd(bean: QuecPairDeviceBean, ssid: String?, pwd: String?) {
         if (!bean.activeBluetooth) {
             if (ssid.isNullOrEmpty()) {
-                showMessage("请输入WiFi名称")
+                showMessage(getString(R.string.hint_wifi_name))
                 return
             }
         }
@@ -186,7 +184,7 @@ class DeviceNearbyAddActivity : QuecBaseActivity<ActivityNearbyAddBinding>() {
                     Manifest.permission.BLUETOOTH_CONNECT
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                showMessage("请先授予应用的 蓝牙权限")
+                showMessage(getString(R.string.please_grant_bluetooth_permission))
                 return
             }
             startActivityForResult(intent, 1)

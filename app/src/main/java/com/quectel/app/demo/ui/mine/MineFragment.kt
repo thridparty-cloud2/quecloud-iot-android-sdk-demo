@@ -166,11 +166,11 @@ class MineFragment(
 
     private fun changeAddress() {
         EditTextPopup(context).apply {
-            setTitle("修改地址")
-            setHint("请输入修改的地址")
+            setTitle(getString(R.string.modify_address_title))
+            setHint(getString(R.string.hint_modify_address))
             setEditTextListener { let ->
                 if (let.isNullOrEmpty()) {
-                    ToastUtils.showShort(context, "地址不能为空")
+                    ToastUtils.showShort(context, getString(R.string.address_empty))
                     return@setEditTextListener
                 }
                 dismiss()
@@ -188,11 +188,11 @@ class MineFragment(
 
     private fun changeNickName() {
         EditTextPopup(context).apply {
-            setTitle("修改昵称")
-            setHint("请输入修改的昵称")
+            setTitle(getString(R.string.modify_nickname_title))
+            setHint(getString(R.string.hint_modify_nickname))
             setEditTextListener { let ->
                 if (let.isNullOrEmpty()) {
-                    ToastUtils.showShort(context, "昵称不能为空")
+                    ToastUtils.showShort(context, getString(R.string.nickname_empty))
                     return@setEditTextListener
                 }
                 dismiss()
@@ -210,7 +210,7 @@ class MineFragment(
 
     private fun logout() {
         SurePopup(requireContext()).apply {
-            setTitle("确认退出登录?")
+            setTitle(getString(R.string.confirm_logout))
             setSureListener(object : OnSureListener {
                 override fun sure() {
                     startLoading()
@@ -233,7 +233,7 @@ class MineFragment(
 
     private fun deleteUser() {
         SurePopup(requireContext()).apply {
-            setTitle("确认删除用户?")
+            setTitle(getString(R.string.confirm_delete_user))
             setSureListener(object : OnSureListener {
                 override fun sure() {
                     dismiss()
@@ -253,12 +253,12 @@ class MineFragment(
 
     private fun createChangePasswordDialog() {
         EditDoubleTextPopup(context).apply {
-            setTitle("修改密码")
-            setHint1("请输入新密码")
-            setHint2("请输入旧密码")
+            setTitle(getString(R.string.modify_password_title))
+            setHint1(getString(R.string.hint_new_password))
+            setHint2(getString(R.string.hint_old_password))
             setEditTextListener { newPass, oldPass ->
                 if (newPass.isNullOrEmpty() || oldPass.isNullOrEmpty()) {
-                    ToastUtils.showShort(context, "密码不能为空")
+                    ToastUtils.showShort(context, getString(R.string.password_empty))
                     return@setEditTextListener
                 }
                 dismiss()
@@ -267,7 +267,7 @@ class MineFragment(
                     finishLoading()
                     handlerResult(result)
                     if (result.isSuccess) {
-                        ToastUtils.showShort(context, "密码修改成功")
+                        ToastUtils.showShort(context, getString(R.string.password_modify_success))
                     }
                 }
             }

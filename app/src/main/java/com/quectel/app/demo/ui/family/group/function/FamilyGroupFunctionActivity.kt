@@ -2,6 +2,7 @@ package com.quectel.app.demo.ui.family.group.function
 
 import android.content.Intent
 import android.os.Bundle
+import com.quectel.app.demo.R
 import com.quectel.app.demo.databinding.ActivityCommonListBinding
 import com.quectel.app.demo.dialog.CommonDialog
 import com.quectel.app.demo.dialog.EditTextPopup
@@ -40,31 +41,22 @@ class FamilyGroupFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding
     }
 
     override fun initTestItem() {
-        addItem("群组控制") { groupControl() }
-
-        addItem("获取群组信息") { getGroupInfo() }
-
-        addItem("设置群组是否在常用列表中") { setCommonState() }
-
-        addItem("删除群组") { deleteGroup() }
+        addItem(getString(R.string.group_control)) { groupControl() }
+        addItem(getString(R.string.get_group_info)) { getGroupInfo() }
+        addItem(getString(R.string.set_group_common)) { setCommonState() }
+        addItem(getString(R.string.delete_group)) { deleteGroup() }
 
         if (device.isShared) {
             return
         }
 
-        addItem("修改群组名称") { modifyGroupName() }
-
-        addItem("群组移动房间") { moveRoom() }
-
-        addItem("添加设备") { addDevice() }
-
-        addItem("删除设备") { removeDevice() }
-
-        addItem("群组分享") { shareGroup() }
-
-        addItem("获取群组分享列表") { getShareInfo() }
-
-        addItem("移除分享") { removeShare() }
+        addItem(getString(R.string.rename_group)) { modifyGroupName() }
+        addItem(getString(R.string.move_group_room)) { moveRoom() }
+        addItem(getString(R.string.add_device_to_group)) { addDevice() }
+        addItem(getString(R.string.delete_device_from_group)) { removeDevice() }
+        addItem(getString(R.string.group_share)) { shareGroup() }
+        addItem(getString(R.string.get_group_share_list)) { getShareInfo() }
+        addItem(getString(R.string.remove_share)) { removeShare() }
     }
 
     private fun queryDeviceList(callback: (list: List<QuecGroupDeviceBean>) -> Unit) {
@@ -91,9 +83,8 @@ class FamilyGroupFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding
                     return@getAddableList
                 }
 
-
                 if (it.data.list.isEmpty()) {
-                    showMessage("当前没有可添加的设备")
+                    showMessage(getString(R.string.no_available_device))
                     return@getAddableList
                 }
 
@@ -132,7 +123,7 @@ class FamilyGroupFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding
     private fun removeDevice() {
         queryDeviceList { list ->
             if (list.size == 1) {
-                showMessage("群组下只有一个设备，不能删除")
+                showMessage(getString(R.string.group_has_only_one_device))
                 return@queryDeviceList
             }
 
@@ -161,11 +152,10 @@ class FamilyGroupFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding
 
     private fun modifyGroupName() {
         EditTextPopup(this).apply {
-            setTitle("修改群组名称")
+            setTitle(getString(R.string.rename_group))
             setContent(device.deviceName)
                 .setEditTextListener {
                     dismiss()
-
                     editGroupInfo(name = it)
                 }
         }.showPopupWindow()
@@ -183,13 +173,15 @@ class FamilyGroupFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding
                 val info = it.data
                 CommonDialog.showSimpleInfo(
                     this,
-                    "群组信息",
-                    "群组ID: ${info.gdid}\n" +
-                            "群组名称: ${info.deviceName}\n" +
-                            "是否在常用列表中: ${info.isCommonUsed}\n" +
-                            "在房间: [${info.roomName}]中\n" +
-                            "\n群组中设备列表:\n ${info.deviceList?.joinToString("\n") { item -> item.deviceName }}\n"
-
+                    getString(R.string.get_group_info),
+                    getString(
+                        R.string.group_info_detail,
+                        info.gdid,
+                        info.deviceName,
+                        info.isCommonUsed.toString(),
+                        info.roomName ?: "",
+                        info.deviceList?.joinToString("\n") { item -> item.deviceName } ?: ""
+                    )
                 )
             } else {
                 handlerError(it)
@@ -199,9 +191,8 @@ class FamilyGroupFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding
 
     private fun setCommonState() {
         SelectItemDialog(this).apply {
-            addItem("在常用列表中") { setCommonState(true) }
-
-            addItem("不在常用列表中") { setCommonState(false) }
+            addItem(getString(R.string.in_common_list)) { setCommonState(true) }
+            addItem(getString(R.string.not_in_common_list)) { setCommonState(false) }
         }.show()
     }
 
@@ -215,7 +206,7 @@ class FamilyGroupFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding
         QuecSmartHomeService.getFamilyRoomList(getCurrentFid(), 1, 100) {
             if (it.isSuccess) {
                 if (it.data.list.isEmpty()) {
-                    showMessage("当前家庭没有房间")
+                    showMessage(getString(R.string.no_room_in_family))
                     return@getFamilyRoomList
                 }
 
@@ -234,8 +225,8 @@ class FamilyGroupFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding
 
     private fun deleteGroup() {
         CommonDialog(this).apply {
-            setTitle("确认删除群组?")
-            setYesOnclickListener("确认") {
+            setTitle(getString(R.string.confirm_delete_group))
+            setYesOnclickListener(getString(R.string.confirm)) {
                 dismiss()
                 QuecDeviceService.batchUnbindDevice(false, listOf(device)) {
                     handlerResult(it)
@@ -256,7 +247,7 @@ class FamilyGroupFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding
             1
         ) {
             if (it.isSuccess) {
-                CommonDialog.showSimpleInfo(this, "群组分享码", it.data)
+                CommonDialog.showSimpleInfo(this, getString(R.string.group_share_code), it.data)
                 QLog.i("share code", it.data)
             } else {
                 handlerError(it)
@@ -268,13 +259,13 @@ class FamilyGroupFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding
         QuecGroupService.getSharedLists(device.gdid) {
             if (it.isSuccess) {
                 if (it.data.isEmpty()) {
-                    showMessage("当前群组没有被分享")
+                    showMessage(getString(R.string.group_not_shared))
                     return@getSharedLists
                 }
 
                 CommonDialog.showSimpleInfo(
                     this,
-                    "群组分享信息",
+                    getString(R.string.group_share_info),
                     it.data.joinToString("\n") { item ->
                         "${item.userInfo.nikeName} [${item.shareInfo.shareCode}]"
                     }
@@ -289,7 +280,7 @@ class FamilyGroupFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding
         QuecGroupService.getSharedLists(device.gdid) {
             if (it.isSuccess) {
                 if (it.data.isEmpty()) {
-                    showMessage("当前群组没有被分享")
+                    showMessage(getString(R.string.group_not_shared))
                     return@getSharedLists
                 }
                 SelectItemDialog(this).apply {

@@ -3,6 +3,7 @@ package com.quectel.app.demo.ui.family.list
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import com.quectel.app.demo.R
 import com.quectel.app.demo.base.CommonListAdapter
 import com.quectel.app.demo.base.activity.QuecBaseActivity
 import com.quectel.app.demo.databinding.ActivityFamilyListBinding
@@ -28,9 +29,9 @@ class FamilyListActivity : QuecBaseActivity<ActivityFamilyListBinding>() {
             adapter = CommonListAdapter.init(rvList) { onItemClick(itemList[it]) }
             ivAdd.setOnClickListener {
                 SelectItemDialog(this@FamilyListActivity).apply {
-                    addItem("新增家庭") { addFamily() }
+                    addItem(getString(R.string.add_new_family)) { addFamily() }
 
-                    addItem("查询待接收分享的家庭列表") { queryInviteList() }
+                    addItem(getString(R.string.query_pending_family_shares)) { queryInviteList() }
                 }.show()
             }
         }
@@ -55,9 +56,9 @@ class FamilyListActivity : QuecBaseActivity<ActivityFamilyListBinding>() {
                 itemList.addAll(it.data.list)
                 adapter.list.addAll(it.data.list.map { item ->
                     val role = when (item.memberRole) {
-                        1 -> "创建者"
-                        2 -> "管理员"
-                        else -> "成员"
+                        1 -> getString(R.string.role_creator)
+                        2 -> getString(R.string.role_admin)
+                        else -> getString(R.string.role_member)
                     }
                     CommonListAdapter.Item(item.familyName ?: "", item.fid, role)
                 })
@@ -77,12 +78,12 @@ class FamilyListActivity : QuecBaseActivity<ActivityFamilyListBinding>() {
 
     private fun addFamily() {
         EditTextPopup(this).apply {
-            setTitle("请输入家庭名称")
+            setTitle(getString(R.string.hint_family_name))
             setEditTextListener {
                 dismiss()
                 QuecSmartHomeService.addFamily(QuecFamilyParamModel(familyName = it)) { ret ->
                     if (ret.isSuccess) {
-                        showMessage("创建成功")
+                        showMessage(getString(R.string.create_success))
                         getFamilyList()
                     } else {
                         handlerError(ret)
@@ -96,17 +97,17 @@ class FamilyListActivity : QuecBaseActivity<ActivityFamilyListBinding>() {
         QuecSmartHomeService.getFamilyInviteList(1, 10) {
             if (it.isSuccess) {
                 if (it.data.list.isEmpty()) {
-                    showMessage("没有待接收分享的家庭")
+                    showMessage(getString(R.string.no_pending_family_share))
                 } else {
                     SelectItemDialog(this).apply {
                         for (item in it.data.list) {
                             addItem(item.familyName ?: "") {
                                 SelectItemDialog(this@FamilyListActivity).also { dialog ->
-                                    dialog.addItem("接受") {
+                                    dialog.addItem(getString(R.string.accept_label)) {
                                         setInviteStatus(item, true)
                                     }
 
-                                    dialog.addItem("拒绝") {
+                                    dialog.addItem(getString(R.string.reject_label)) {
                                         setInviteStatus(item, false)
                                     }
                                 }.show()
@@ -126,7 +127,7 @@ class FamilyListActivity : QuecBaseActivity<ActivityFamilyListBinding>() {
             if (isAccept) 1 else 0
         ) {
             if (it.isSuccess) {
-                showMessage("设置成功")
+                showMessage(getString(R.string.set_success))
                 getFamilyList()
             } else {
                 handlerError(it)

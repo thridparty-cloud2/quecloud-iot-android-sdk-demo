@@ -2,6 +2,7 @@ package com.quectel.app.demo.ui.device.add
 
 import android.content.Intent
 import android.os.Bundle
+import com.quectel.app.demo.R
 import com.quectel.app.demo.base.activity.QuecBaseActivity
 import com.quectel.app.demo.common.AppVariable
 import com.quectel.app.demo.databinding.ActivityDeviceAddBinding
@@ -24,30 +25,27 @@ class DeviceAddActivity : QuecBaseActivity<ActivityDeviceAddBinding>() {
     }
 
     override fun initTestItem() {
-        addItem("SN绑定设备") {
+        addItem(getString(R.string.sn_bind_device)) {
             addWithSn()
         }
-
-        addItem("接收设备分享") {
+        addItem(getString(R.string.receive_device_share)) {
             addWithShare()
         }
-
-        addItem("近场搜索添加设备") {
+        addItem(getString(R.string.nearby_add_title)) {
             startActivity(Intent(this, DeviceNearbyAddActivity::class.java))
         }
     }
 
     private fun addWithSn() {
         EditDoubleTextPopup(this).apply {
-            setTitle("SN绑定设备")
-            setHint1("请输入productKey")
-            setHint2("请输入Sn")
+            setTitle(getString(R.string.sn_bind_device))
+            setHint1(getString(R.string.hint_product_key))
+            setHint2(getString(R.string.hint_sn))
             setEditTextListener { content1, content2 ->
-                //可输入自定义的设备名
                 QuecDeviceService.bindDeviceWithSerialNumber(content2, content1, null) {
                     if (it.isSuccess) {
                         AppVariable.setDeviceChange()
-                        showMessage("SN绑定设备成功")
+                        showMessage(getString(R.string.sn_bind_success))
                         finish()
                     } else {
                         handlerError(it)
@@ -59,15 +57,14 @@ class DeviceAddActivity : QuecBaseActivity<ActivityDeviceAddBinding>() {
 
     private fun addWithShare() {
         EditTextPopup(this).apply {
-            setTitle("接受设备分享")
-            setHint("请输入shareCode")
+            setTitle(getString(R.string.accept_device_share))
+            setHint(getString(R.string.hint_share_code))
             setEditTextListener {
                 dismiss()
-                //可输入自定义的设备名
                 QuecDeviceShareService.acceptShareByShareUser(it, null) { ret ->
                     if (ret.isSuccess) {
                         AppVariable.setDeviceChange()
-                        showMessage("接受分享成功")
+                        showMessage(getString(R.string.accept_share_success))
                         finish()
                     } else {
                         handlerError(ret)

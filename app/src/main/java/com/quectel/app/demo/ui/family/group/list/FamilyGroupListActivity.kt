@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import com.quectel.app.demo.R
 import com.quectel.app.demo.base.CommonListAdapter
 import com.quectel.app.demo.databinding.ActivityCommonRvListBinding
 import com.quectel.app.demo.dialog.EditTextPopup
@@ -30,7 +31,7 @@ class FamilyGroupListActivity : BaseFamilyActivity<ActivityCommonRvListBinding>(
         adapter = CommonListAdapter.init(binding.rvList) { onItemClick(list[it]) }
 
         binding.apply {
-            title.text = "群组管理"
+            title.text = getString(R.string.group_management)
             ivAdd.visibility = View.VISIBLE
             ivAdd.setOnClickListener { addGroup() }
         }
@@ -73,7 +74,7 @@ class FamilyGroupListActivity : BaseFamilyActivity<ActivityCommonRvListBinding>(
                     CommonListAdapter.Item(
                         item.deviceName,
                         item.productKey + " - " + item.deviceKey,
-                        if (item.isShared) "分享群组" else ""
+                        if (item.isShared) getString(R.string.share_group) else ""
                     )
                 })
                 adapter.notifyDataSetChanged()
@@ -91,8 +92,8 @@ class FamilyGroupListActivity : BaseFamilyActivity<ActivityCommonRvListBinding>(
 
     private fun addGroup() {
         SelectItemDialog(this).apply {
-            addItem("从设备列表创建群组") { createGroup() }
-            addItem("接收群组分享") { acceptShare() }
+            addItem(getString(R.string.create_group_from_device_list)) { createGroup() }
+            addItem(getString(R.string.receive_group_share)) { acceptShare() }
         }.show()
     }
 
@@ -114,7 +115,7 @@ class FamilyGroupListActivity : BaseFamilyActivity<ActivityCommonRvListBinding>(
                 it.data.list.filter { item -> item.gdid.isNullOrEmpty() && item.groupState == 1 && item.bindMode != 1 }
 
             if (list.isEmpty()) {
-                showMessage("当前没有可添加的设备")
+                showMessage(getString(R.string.no_available_device))
                 return@getFamilyDeviceList
             }
 
@@ -130,7 +131,7 @@ class FamilyGroupListActivity : BaseFamilyActivity<ActivityCommonRvListBinding>(
                             })
                         }) { ret ->
                             if (ret.isSuccess) {
-                                showMessage("添加成功")
+                                showMessage(getString(R.string.add_success))
                                 getList()
                             } else {
                                 handlerError(ret)
@@ -144,12 +145,12 @@ class FamilyGroupListActivity : BaseFamilyActivity<ActivityCommonRvListBinding>(
 
     private fun acceptShare() {
         EditTextPopup(this).apply {
-            setTitle("请输入share code")
+            setTitle(getString(R.string.hint_share_code3))
             setEditTextListener {
                 dismiss()
                 QuecGroupService.acceptShare(it) { ret ->
                     if (ret.isSuccess) {
-                        showMessage("添加成功")
+                        showMessage(getString(R.string.add_success))
                         getList()
                     } else {
                         handlerError(ret)

@@ -2,6 +2,7 @@ package com.quectel.app.demo.ui.device.share
 
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import com.quectel.app.demo.R
 import com.quectel.app.demo.base.activity.QuecBaseDeviceActivity
 import com.quectel.app.demo.databinding.ActivityDeviceShareBinding
 import com.quectel.app.demo.dialog.CommonDialog
@@ -23,28 +24,23 @@ class DeviceShareActivity : QuecBaseDeviceActivity<ActivityDeviceShareBinding>()
     }
 
     override fun initTestItem() {
-        addItem("获取分享列表") {
+        addItem(getString(R.string.get_share_list)) {
             getShareList(true)
         }
-
-        addItem("创建新的分享码") {
+        addItem(getString(R.string.create_share_code)) {
             //30分钟的有效期
             val time = 30 * 60 * 1000 + System.currentTimeMillis()
             QuecDeviceShareService.setShareInfoByOwner(
                 device.deviceKey,
                 device.productKey,
-                time,
-                1,
-                true,
-                0
+                time, 1, true, 0
             ) {
                 handlerResult(it)
                 if (it.isSuccess) {
-                    CommonDialog.showSimpleInfo(this, "分享码", it.data)
+                    CommonDialog.showSimpleInfo(this, getString(R.string.share_code_label), it.data)
                 }
             }
         }
-
     }
 
     private fun getShareList(isShowResult: Boolean) {
@@ -67,7 +63,7 @@ class DeviceShareActivity : QuecBaseDeviceActivity<ActivityDeviceShareBinding>()
 
     private fun showShareDialog(mode: QuecShareUserModel) {
         SelectItemDialog(this).apply {
-            addItem("取消分享") {
+            addItem(getString(R.string.cancel_share)) {
                 QuecDeviceShareService.unShareDeviceByOwner(mode.shareInfo?.shareCode ?: "") {
                     handlerResult(it)
                     if (it.isSuccess) {

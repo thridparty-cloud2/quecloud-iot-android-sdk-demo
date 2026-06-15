@@ -2,6 +2,7 @@ package com.quectel.app.demo.ui.device.scene
 
 import android.app.Dialog
 import android.os.Bundle
+import com.quectel.app.demo.R
 import com.quectel.app.demo.base.activity.QuecBaseActivity
 import com.quectel.app.demo.common.AppVariable
 import com.quectel.app.demo.databinding.ActivityDeviceSceneInfoBinding
@@ -36,17 +37,17 @@ class DeviceSceneInfoActivity : QuecBaseActivity<ActivityDeviceSceneInfoBinding>
 
     override fun initView(savedInstanceState: Bundle?) {
         mModel = intent.getSerializableExtra("data") as QuecSceneModel
-        addItem("修改场景名称") { changeSceneName() }
-        addItem("删除场景") { deleteScene() }
-        addItem("获取场景详情") { getSceneInfo() }
-        addItem("场景执行") { executeScene() }
-        addItem("测试场景") { executeTestScene() }
-        addItem("获取常用场景列表") { getCommonSceneList() }
-        addItem("批量添加常用场景") { batchAddCommonScene() }
-        addItem("批量删除常用场景") { batchDeleteCommonScene() }
-        addItem("获取场景日志列表") { getSceneLogList() }
-        addItem("获取场景日志详情") { getSceneLogDetailInfo() }
-        addItem("清除场景日志") { clearSceneLog() }
+        addItem(getString(R.string.rename_scene)) { changeSceneName() }
+        addItem(getString(R.string.delete_scene)) { deleteScene() }
+        addItem(getString(R.string.get_scene_detail)) { getSceneInfo() }
+        addItem(getString(R.string.execute_scene)) { executeScene() }
+        addItem(getString(R.string.test_scene)) { executeTestScene() }
+        addItem(getString(R.string.get_common_scene_list)) { getCommonSceneList() }
+        addItem(getString(R.string.batch_add_common_scene)) { batchAddCommonScene() }
+        addItem(getString(R.string.batch_delete_common_scene)) { batchDeleteCommonScene() }
+        addItem(getString(R.string.get_scene_log_list)) { getSceneLogList() }
+        addItem(getString(R.string.get_scene_log_detail)) { getSceneLogDetailInfo() }
+        addItem(getString(R.string.clear_scene_log)) { clearSceneLog() }
     }
 
     private fun clearSceneLog() {
@@ -61,24 +62,19 @@ class DeviceSceneInfoActivity : QuecBaseActivity<ActivityDeviceSceneInfoBinding>
 
     private fun getSceneLogDetailInfo() {
         EditTextPopup(this).apply {
-            setTitle("获取场景日志详情")
-            setHint("输入场景日志id")
+            setTitle(getString(R.string.get_scene_log_detail))
+            setHint(getString(R.string.hint_scene_log_id))
             setEditTextListener { content ->
                 if (content.trim().toLongOrNull() == null) {
-                    ToastUtils.showShort(
-                        this@DeviceSceneInfoActivity,
-                        "必须输入为数字"
-                    )
+                    ToastUtils.showShort(this@DeviceSceneInfoActivity, getString(R.string.must_input_number))
                     return@setEditTextListener
                 }
                 QuecSceneService.getSceneLogDetailInfo(content.trim().toLong()) { result ->
                     handlerResult(result)
                     if (result.isSuccess) {
-                        //查询日志详情成功
-                        //查询日志列表成功
                         CommonDialog.showSimpleInfo(
                             this@DeviceSceneInfoActivity,
-                            "查询设备组详情",
+                            getString(R.string.get_scene_log_detail),
                             QuecGsonUtil.gsonString(result.data)
                         )
                     }
@@ -90,24 +86,20 @@ class DeviceSceneInfoActivity : QuecBaseActivity<ActivityDeviceSceneInfoBinding>
 
     private fun getSceneLogList() {
         EditDoubleTextPopup(this).apply {
-            setTitle("获取场景日志列表")
-            setHint1("请输入最后一条执行日志的id")
-            setHint2("请输入查询的数据数量")
+            setTitle(getString(R.string.get_scene_log_list))
+            setHint1(getString(R.string.hint_last_log_id))
+            setHint2(getString(R.string.hint_query_count))
             setEditTextListener { content1, content2 ->
                 if (content1.toLongOrNull() == null || content2.toIntOrNull() == null) {
-                    ToastUtils.showShort(
-                        this@DeviceSceneInfoActivity,
-                        "必须输入为数字"
-                    )
+                    ToastUtils.showShort(this@DeviceSceneInfoActivity, getString(R.string.must_input_number))
                     return@setEditTextListener
                 }
                 QuecSceneService.getSceneLogList(content1.toLong(), content2.toInt()) { result ->
                     handlerResult(result)
                     if (result.isSuccess) {
-                        //查询日志列表成功
                         CommonDialog.showSimpleInfo(
                             this@DeviceSceneInfoActivity,
-                            "查询设备组详情",
+                            getString(R.string.get_scene_log_list),
                             QuecGsonUtil.gsonString(result.data)
                         )
                     }
@@ -118,24 +110,20 @@ class DeviceSceneInfoActivity : QuecBaseActivity<ActivityDeviceSceneInfoBinding>
 
     private fun batchDeleteCommonScene() {
         EditTextPopup(this).apply {
-            setTitle("批量删除常用场景")
-            setHint("输入场景id列表 用,隔开依次输入\r\n例如:sceneId1,sceneId2")
+            setTitle(getString(R.string.batch_delete_common_scene))
+            setHint(getString(R.string.hint_scene_id_list_comma))
             setEditTextListener { content ->
                 val sceneList = content.split(",")
                     .map { it.trim() }
                     .filter { it.isNotEmpty() }
                     .toList()
                 if (sceneList.isEmpty()) {
-                    ToastUtils.showShort(
-                        this@DeviceSceneInfoActivity,
-                        "输入场景id列表依次，请按用,隔开依次输入\r\n例如:sceneId1,sceneId2"
-                    )
+                    ToastUtils.showShort(this@DeviceSceneInfoActivity, getString(R.string.hint_scene_id_list_comma))
                     return@setEditTextListener
                 }
                 QuecSceneService.batchDeleteCommonScene(sceneList) {
                     handlerResult(it)
                     if (it.isSuccess) {
-                        //删除常用场景成功
                         dismiss()
                         AppVariable.setSceneChange()
                     }
@@ -147,24 +135,20 @@ class DeviceSceneInfoActivity : QuecBaseActivity<ActivityDeviceSceneInfoBinding>
 
     private fun batchAddCommonScene() {
         EditTextPopup(this).apply {
-            setTitle("批量添加常用场景")
-            setHint("输入场景id列表 用,隔开依次输入 例如:sceneId1,sceneId2")
+            setTitle(getString(R.string.batch_add_common_scene))
+            setHint(getString(R.string.hint_scene_id_list_comma2))
             setEditTextListener { content ->
                 val sceneList = content.split(",")
                     .map { it.trim() }
                     .filter { it.isNotEmpty() }
                     .toList()
                 if (sceneList.isEmpty()) {
-                    ToastUtils.showShort(
-                        this@DeviceSceneInfoActivity,
-                        "输入场景id列表依次，请按用,隔开依次输入 例如:sceneId1,sceneId2"
-                    )
+                    ToastUtils.showShort(this@DeviceSceneInfoActivity, getString(R.string.hint_scene_id_list_comma2))
                     return@setEditTextListener
                 }
                 QuecSceneService.batchAddCommonScene(sceneList) {
                     handlerResult(it)
                     if (it.isSuccess) {
-                        //添加常用场景成功
                         dismiss()
                         AppVariable.setSceneChange()
                     }
@@ -178,10 +162,9 @@ class DeviceSceneInfoActivity : QuecBaseActivity<ActivityDeviceSceneInfoBinding>
         QuecSceneService.getCommonSceneList(1, 10) { result ->
             handlerResult(result)
             if (result.isSuccess) {
-                //获取常用场景列表成功
                 CommonDialog.showSimpleInfo(
                     this@DeviceSceneInfoActivity,
-                    "常用场景列表",
+                    getString(R.string.common_scene_list),
                     QuecGsonUtil.gsonString(result.data)
                 )
             }
@@ -212,10 +195,9 @@ class DeviceSceneInfoActivity : QuecBaseActivity<ActivityDeviceSceneInfoBinding>
         QuecSceneService.getSceneInfo(mModel.sceneInfo.sceneId) { result ->
             handlerResult(result)
             if (result.isSuccess) {
-                //获取场景详情成功
                 CommonDialog.showSimpleInfo(
                     this@DeviceSceneInfoActivity,
-                    "${mModel.sceneInfo.name}的场景详情",
+                    getString(R.string.scene_detail_title, mModel.sceneInfo.name),
                     QuecGsonUtil.gsonString(result.data)
                 )
             }
@@ -224,14 +206,13 @@ class DeviceSceneInfoActivity : QuecBaseActivity<ActivityDeviceSceneInfoBinding>
 
     private fun deleteScene() {
         SurePopup(this).apply {
-            setTitle("确定删除该场景?")
+            setTitle(getString(R.string.confirm_delete_scene))
             setSureListener(object : OnSureListener {
                 override fun sure() {
                     startLoading()
                     QuecSceneService.deleteScene(mModel.sceneInfo.sceneId) { result ->
                         handlerResult(result)
                         if (result.isSuccess) {
-                            //删除场景成功
                             AppVariable.setSceneChange()
                             dismiss()
                             finish()
@@ -244,14 +225,13 @@ class DeviceSceneInfoActivity : QuecBaseActivity<ActivityDeviceSceneInfoBinding>
 
     private fun changeSceneName() {
         EditTextPopup(this).apply {
-            setTitle("修改场景名称")
-            setHint("请输入要改的新名称")
+            setTitle(getString(R.string.rename_scene))
+            setHint(getString(R.string.hint_new_name))
             setEditTextListener { content ->
                 mModel.sceneInfo.name = content
                 QuecSceneService.editScene(mModel) { it ->
                     handlerResult(result = it)
                     if (it.isSuccess) {
-                        //修改场景成功
                         AppVariable.setSceneChange()
                         dismiss()
                     }

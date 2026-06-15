@@ -197,7 +197,7 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
     }
 
     override fun initTestItem() {
-        addItem("建立连接") {
+        addItem(getString(R.string.connect)) {
             SelectItemDialog(mContext).apply {
                 addItem("auto") {
                     deviceClient.connect()
@@ -220,7 +220,7 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
             }.show()
         }
 
-        addItem("断开连接") {
+        addItem(getString(R.string.disconnect)) {
             SelectItemDialog(mContext).apply {
                 addItem("all") {
                     deviceClient.disconnect()
@@ -243,7 +243,7 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
             }.show()
         }
 
-        addItem("主动查询数据") {
+        addItem(getString(R.string.query_data_active)) {
             queryDps()
         }
     }
@@ -269,7 +269,7 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
 
                     override fun onFail(throwable: Throwable?) {
                         QLog.e(throwable)
-                        showMessage("查询设备失败: $throwable")
+                        showMessage(getString(R.string.query_device_failed, throwable.toString()))
                     }
 
                 }
@@ -302,7 +302,7 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
 
                 override fun onFail(throwable: Throwable?) {
                     QLog.e(throwable)
-                    showMessage("查询设备失败: $throwable")
+                    showMessage(getString(R.string.query_device_failed, throwable.toString()))
                 }
 
             })
@@ -320,7 +320,7 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
             //todo 主线程切换
             QuecThreadUtil.RunMainThread {
                 if (it.isSuccess) {
-                    showMessage("设备状态查询成功")
+                    showMessage(getString(R.string.device_status_query_success))
                 } else {
                     handlerResult(it)
                 }
@@ -330,15 +330,15 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
 
     private fun showControlDialog(item: QuecProductTSLPropertyModel<*>) {
         if (!item.subType.contains("W")) {
-            log("该物模型不支持控制")
+            log(getString(R.string.tsl_not_support_control))
             return
         }
 
         if (item.dataType == QuecIotDataPointDataType.STRUCT) {
             CommonDialog(this@DeviceControlActivity)
                 .apply {
-                    setTitle("即将按结构体定义顺序输入数据")
-                    setYesOnclickListener("确认") {
+                    setTitle(getString(R.string.hint_struct_order))
+                    setYesOnclickListener(getString(R.string.confirm)) {
                         dismiss()
 
                         QuecScope.safeLaunch {
@@ -369,7 +369,7 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
 
         if (item.dataType == QuecIotDataPointDataType.ARRAY) {
             if (item.specs.isNullOrEmpty()) {
-                showMessage("此类型数据demo中暂不支持控制")
+                showMessage(getString(R.string.type_not_support_control))
                 return
             }
 
@@ -406,7 +406,7 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
                 }
             }
 
-            showMessage("此类型数据demo中暂不支持控制")
+            showMessage(getString(R.string.type_not_support_control))
             return
         }
 
@@ -439,7 +439,7 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
                         }.show()
                     } else {
                         handler.resume(null)
-                        showMessage("数据异常")
+                        showMessage(getString(R.string.data_exception))
                     }
                 }
 
@@ -449,13 +449,13 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
                         val info = specs[0]
                         if (info is TextSpecs) {
                             EditTextPopup(mContext).apply {
-                                setTitle("请输入内容, 长度限制: ${info.length}")
+                                setTitle(getString(R.string.hint_input_content_with_limit, info.length.toIntOrNull() ?: 0))
                                 if (item.attributeValue != null) {
                                     setContent(item.attributeValue.toString())
                                 }
                                 setEditTextListener {
                                     if (it.length > (info.length.toIntOrNull() ?: Int.MAX_VALUE)) {
-                                        showMessage("输入内容长度不能超过${info.length}")
+                                        showMessage(getString(R.string.input_too_long, info.length.toIntOrNull() ?: 0))
                                     } else {
                                         dismiss()
                                         handler.resume(it)
@@ -471,11 +471,11 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
                             }.showPopupWindow()
                         } else {
                             handler.resume(null)
-                            showMessage("数据异常")
+                            showMessage(getString(R.string.data_exception))
                         }
                     } else {
                         handler.resume(null)
-                        showMessage("数据异常")
+                        showMessage(getString(R.string.data_exception))
                     }
                 }
 
@@ -497,7 +497,7 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
                         }.show()
                     } else {
                         handler.resume(null)
-                        showMessage("数据异常")
+                        showMessage(getString(R.string.data_exception))
                     }
                 }
 
@@ -507,7 +507,7 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
                         val info = specs[0]
                         if (info is NumSpecs) {
                             EditTextPopup(mContext).apply {
-                                setTitle("请输入${item.dataType}类型数据, 最小值: ${info.min} ,最大值:${info.max}")
+                                setTitle(getString(R.string.hint_input_range, item.dataType, info.min, info.max))
                                 if (item.attributeValue != null) {
                                     setContent(item.attributeValue.toString())
                                 }
@@ -516,17 +516,17 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
                                         QuecIotDataPointDataType.INT -> if (it.toIntOrNull() != null) {
                                             dismiss()
                                             handler.resume(it.toLong())
-                                        } else showMessage("请输入Int类型数据")
+                                        } else showMessage(getString(R.string.hint_input_int))
 
                                         QuecIotDataPointDataType.FLOAT -> if (it.toFloatOrNull() != null) {
                                             dismiss()
                                             handler.resume(it.toDouble())
-                                        } else showMessage("请输入FLOAT类型数据")
+                                        } else showMessage(getString(R.string.hint_input_float))
 
                                         QuecIotDataPointDataType.DOUBLE -> if (it.toDoubleOrNull() != null) {
                                             dismiss()
                                             handler.resume(it.toDouble())
-                                        } else showMessage("请输入DOUBLE类型数据")
+                                        } else showMessage(getString(R.string.hint_input_double))
                                     }
                                 }
 
@@ -537,11 +537,11 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
                             }.showPopupWindow()
                         } else {
                             handler.resume(null)
-                            showMessage("数据异常")
+                            showMessage(getString(R.string.data_exception))
                         }
                     } else {
                         handler.resume(null)
-                        showMessage("数据异常")
+                        showMessage(getString(R.string.data_exception))
                     }
                 }
 
@@ -555,7 +555,7 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
                 }
 
                 else -> {
-                    showMessage("此类型数据demo中暂不支持控制")
+                    showMessage(getString(R.string.type_not_support_control))
                     handler.resume(null)
                 }
             }
@@ -576,25 +576,25 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
 
     private fun showOnlineStatus(onlineState: Int = deviceClient.getConnectState()) {
         QLog.i(TAG, "showOnlineStatus onlineState: $onlineState ,conning: $isConnecting")
-        val state = (if (isConnecting > 0) "[连接中...] " else "") + if (onlineState == 0) {
-            "离线"
+        val state = (if (isConnecting > 0) getString(R.string.status_connecting) + " " else "") + if (onlineState == 0) {
+            getString(R.string.offline)
         } else {
             "${
                 if (getOnlineStatus(
                         onlineState,
                         Type.WS
                     )
-                ) "ws在线" else ""
+                ) getString(R.string.status_ws_online) else ""
             } ${
                 if (getOnlineStatus(
                         onlineState,
                         Type.WIFI
                     )
-                ) " WiFi在线" else ""
+                ) getString(R.string.status_wifi_online) else ""
             } ${
                 if (
                     getOnlineStatus(onlineState, Type.BLE)
-                ) " ble在线" else ""
+                ) getString(R.string.status_ble_online) else ""
             }"
         }
         binding.apply {

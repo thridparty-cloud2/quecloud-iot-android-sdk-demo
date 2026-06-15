@@ -6,6 +6,7 @@ import android.app.TimePickerDialog
 import android.os.Bundle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.quectel.app.demo.R
 import com.quectel.app.demo.databinding.ActivityCommonRvListBinding
 import com.quectel.app.demo.dialog.EditTextPopup
 import com.quectel.app.demo.dialog.SelectItemDialog
@@ -90,7 +91,7 @@ class FamilyGroupControlActivity : BaseFamilyActivity<ActivityCommonRvListBindin
 
     private fun showControlDialog(item: QuecProductTSLPropertyModel<*>) {
         if (!item.subType.contains("W")) {
-            showMessage("该物模型不支持控制")
+            showMessage(getString(R.string.tsl_not_support_control))
             return
         }
         when (item.dataType) {
@@ -107,7 +108,7 @@ class FamilyGroupControlActivity : BaseFamilyActivity<ActivityCommonRvListBindin
                         }
                     }.show()
                 } else {
-                    showMessage("数据异常")
+                    showMessage(getString(R.string.data_exception))
                 }
             }
 
@@ -117,23 +118,23 @@ class FamilyGroupControlActivity : BaseFamilyActivity<ActivityCommonRvListBindin
                     val info = specs[0]
                     if (info is TextSpecs) {
                         EditTextPopup(mContext).apply {
-                            setTitle("请输入内容, 长度限制: ${info.length}")
+                            setTitle(getString(R.string.hint_input_content_with_limit, info.length.toIntOrNull() ?: 0))
                             if (item.attributeValue != null) {
                                 setContent(item.attributeValue.toString())
                             }
                             setEditTextListener {
                                 if (it.length > (info.length.toIntOrNull() ?: Int.MAX_VALUE)) {
-                                    showMessage("输入内容长度不能超过${info.length}")
+                                    showMessage(getString(R.string.input_too_long, info.length.toIntOrNull() ?: 0))
                                 } else {
                                     writeDps(item, it)
                                 }
                             }
                         }.showPopupWindow()
                     } else {
-                        showMessage("数据异常")
+                        showMessage(getString(R.string.data_exception))
                     }
                 } else {
-                    showMessage("数据异常")
+                    showMessage(getString(R.string.data_exception))
                 }
             }
 
@@ -150,7 +151,7 @@ class FamilyGroupControlActivity : BaseFamilyActivity<ActivityCommonRvListBindin
                         }
                     }.show()
                 } else {
-                    showMessage("数据异常")
+                    showMessage(getString(R.string.data_exception))
                 }
             }
 
@@ -160,7 +161,7 @@ class FamilyGroupControlActivity : BaseFamilyActivity<ActivityCommonRvListBindin
                     val info = specs[0]
                     if (info is NumSpecs) {
                         EditTextPopup(mContext).apply {
-                            setTitle("请输入${item.dataType}类型数据, 最小值: ${info.min} ,最大值:${info.max}")
+                            setTitle(getString(R.string.hint_input_range, item.dataType, info.min, info.max))
                             if (item.attributeValue != null) {
                                 setContent(item.attributeValue.toString())
                             }
@@ -170,25 +171,25 @@ class FamilyGroupControlActivity : BaseFamilyActivity<ActivityCommonRvListBindin
                                     QuecIotDataPointDataType.INT -> if (it.toIntOrNull() != null) writeDps(
                                         item,
                                         it.toLong()
-                                    ) else showMessage("请输入Int类型数据")
+                                    ) else showMessage(getString(R.string.hint_input_int))
 
                                     QuecIotDataPointDataType.FLOAT -> if (it.toFloatOrNull() != null) writeDps(
                                         item,
                                         it.toDouble()
-                                    ) else showMessage("请输入FLOAT类型数据")
+                                    ) else showMessage(getString(R.string.hint_input_float))
 
                                     QuecIotDataPointDataType.DOUBLE -> if (it.toDoubleOrNull() != null) writeDps(
                                         item,
                                         it.toDouble()
-                                    ) else showMessage("请输入DOUBLE类型数据")
+                                    ) else showMessage(getString(R.string.hint_input_double))
                                 }
                             }
                         }.showPopupWindow()
                     } else {
-                        showMessage("数据异常")
+                        showMessage(getString(R.string.data_exception))
                     }
                 } else {
-                    showMessage("数据异常")
+                    showMessage(getString(R.string.data_exception))
                 }
             }
 
@@ -199,7 +200,7 @@ class FamilyGroupControlActivity : BaseFamilyActivity<ActivityCommonRvListBindin
                 }
             }
 
-            else -> showMessage("此类型数据demo中暂不支持控制")
+            else -> showMessage(getString(R.string.type_not_support_control))
         }
     }
 

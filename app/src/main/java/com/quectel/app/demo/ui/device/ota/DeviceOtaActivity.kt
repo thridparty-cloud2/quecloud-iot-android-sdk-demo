@@ -48,7 +48,7 @@ class DeviceOtaActivity : QuecBaseDeviceActivity<ActivityDeviceOtaBinding>() {
             tvClear.setOnClickListener {
                 infoBuild.clear()
                 tvInfo.text = ""
-                showMessage("操作记录已清空")
+                showMessage(getString(R.string.log_cleared))
             }
 
             binding.ivBack.setOnClickListener { finish() }
@@ -65,40 +65,40 @@ class DeviceOtaActivity : QuecBaseDeviceActivity<ActivityDeviceOtaBinding>() {
     }
 
     override fun initTestItem() {
-        addItem("查询设备版本") {
-            showInfo("查询设备版本")
+        addItem(getString(R.string.query_device_version)) {
+            showInfo(getString(R.string.query_device_version))
             QuecOtaManager.queryCurrentVersion(device.productKey, device.deviceKey) {
-                showInfo("查询设备版本结果: $it")
+                showInfo(getString(R.string.query_version_result, it.toString()))
             }
         }
 
-        addItem("查询升级计划") {
-            showInfo("查询升级计划")
+        addItem(getString(R.string.query_upgrade_plan)) {
+            showInfo(getString(R.string.query_upgrade_plan))
             QuecOtaManager.checkVersion(device.productKey, device.deviceKey) {
                 if (it.isSuccess) {
                     otaInfo = it.data
                 }
-                showInfo("查询升级计划结果: $it")
+                showInfo(getString(R.string.query_upgrade_result, it.toString()))
             }
         }
 
-        addItem("开始升级") {
-            showInfo("开始升级")
+        addItem(getString(R.string.start_upgrade)) {
+            showInfo(getString(R.string.start_upgrade))
             val info = otaInfo
             if (info != null) {
                 QuecOtaManager.startOta(info)
             } else {
-                showInfo("请先查询升级计划")
+                showInfo(getString(R.string.please_query_upgrade_plan))
             }
         }
 
-        addItem("停止升级") {
-            showInfo("停止升级")
+        addItem(getString(R.string.stop_upgrade)) {
+            showInfo(getString(R.string.stop_upgrade))
             val info = otaInfo
             if (info != null) {
                 QuecOtaManager.stopOta(info)
             } else {
-                showInfo("请先查询升级计划")
+                showInfo(getString(R.string.please_query_upgrade_plan))
             }
         }
     }

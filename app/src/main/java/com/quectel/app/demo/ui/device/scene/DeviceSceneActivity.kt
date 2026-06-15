@@ -17,6 +17,7 @@ import com.quectel.sdk.scene.bean.QuecSceneActionModel
 import com.quectel.sdk.scene.bean.QuecSceneInfoModel
 import com.quectel.sdk.scene.bean.QuecSceneModel
 import com.quectel.sdk.scene.service.QuecSceneService
+import com.quectel.app.demo.R
 
 class DeviceSceneActivity : QuecBaseActivity<ActivityDeviceSceneBinding>() {
     companion object {
@@ -59,23 +60,23 @@ class DeviceSceneActivity : QuecBaseActivity<ActivityDeviceSceneBinding>() {
 
     private fun addScene() {
         val arrayData: ArrayList<EditListBean> = ArrayList()
-        arrayData.add(EditListBean("场景名称"))
-        arrayData.add(EditListBean("场景图标"))
-        arrayData.add(EditListBean("actionModel.code\r\n物模型标志符"))
-        arrayData.add(EditListBean("actionModel.dataType\r\n物模型数据类型"))
-        arrayData.add(EditListBean("actionModel.id\r\n物模型功能ID"))
-        arrayData.add(EditListBean("actionModel.name\r\n物模型功能名称"))
-        arrayData.add(EditListBean("actionModel.subName\r\n物模型值subName"))
-        arrayData.add(EditListBean("actionModel.subType\r\n物模型subType"))
-        arrayData.add(EditListBean("actionModel.type\r\n物模型功能类型"))
-        arrayData.add(EditListBean("actionModel.value\r\n物模型值"))
-        arrayData.add(EditListBean("设备pk"))
-        arrayData.add(EditListBean("设备dk"))
-        arrayData.add(EditListBean("物模型数据类型"))
+        arrayData.add(EditListBean(getString(R.string.scene_name_label)))
+        arrayData.add(EditListBean(getString(R.string.scene_icon_label)))
+        arrayData.add(EditListBean(getString(R.string.tsl_code_label)))
+        arrayData.add(EditListBean(getString(R.string.tsl_data_type_field)))
+        arrayData.add(EditListBean(getString(R.string.tsl_id_label)))
+        arrayData.add(EditListBean(getString(R.string.tsl_func_name_label)))
+        arrayData.add(EditListBean(getString(R.string.tsl_sub_name_label)))
+        arrayData.add(EditListBean(getString(R.string.tsl_sub_type_label)))
+        arrayData.add(EditListBean(getString(R.string.tsl_type_label)))
+        arrayData.add(EditListBean(getString(R.string.tsl_value_label)))
+        arrayData.add(EditListBean(getString(R.string.device_pk_label)))
+        arrayData.add(EditListBean(getString(R.string.device_dk_label)))
+        arrayData.add(EditListBean(getString(R.string.tsl_data_type_label)))
 
         EditListTextPopup(mContext).apply {
-            setTitle("添加一个新的场景")
-            setSure("添加")
+            setTitle(getString(R.string.add_new_scene))
+            setSure(getString(R.string.add_label))
             setDataList(arrayData)
             setEditTextListener {
                 val model = QuecSceneModel()
@@ -117,7 +118,7 @@ class DeviceSceneActivity : QuecBaseActivity<ActivityDeviceSceneBinding>() {
                     metaDataModelProductKey.isNullOrEmpty() || metaDataModelDeviceKey.isNullOrEmpty() ||
                     metaDataModelDeviceType.isNullOrEmpty()
                 ) {
-                    ToastUtils.showShort(this@DeviceSceneActivity, "各种参数不能为空")
+                    ToastUtils.showShort(this@DeviceSceneActivity, getString(R.string.params_cannot_be_empty))
                     return@setEditTextListener
                 }
 
@@ -126,9 +127,8 @@ class DeviceSceneActivity : QuecBaseActivity<ActivityDeviceSceneBinding>() {
                 sceneInfoModel.icon = sceneInfoModelIcon
                 actionModel.code = actionModelCode
                 actionModel.dataType = actionModelDataType
-                if (actionModelId.toIntOrNull() == null
-                ) {
-                    ToastUtils.showShort(this@DeviceSceneActivity, "物模型功能ID必须输入为int")
+                if (actionModelId.toIntOrNull() == null) {
+                    ToastUtils.showShort(this@DeviceSceneActivity, getString(R.string.tsl_id_must_be_int))
                     return@setEditTextListener
                 }
                 actionModel.id = actionModelId.toInt()
@@ -148,9 +148,8 @@ class DeviceSceneActivity : QuecBaseActivity<ActivityDeviceSceneBinding>() {
 
                 metaDataModel.productKey = metaDataModelProductKey
                 metaDataModel.deviceKey = metaDataModelDeviceKey
-                if (metaDataModelDeviceType.toIntOrNull() == null
-                ) {
-                    ToastUtils.showShort(this@DeviceSceneActivity, "物模型功能类型必须输入为int")
+                if (metaDataModelDeviceType.toIntOrNull() == null) {
+                    ToastUtils.showShort(this@DeviceSceneActivity, getString(R.string.tsl_type_must_be_int))
                     return@setEditTextListener
                 }
                 metaDataModel.deviceType = metaDataModelDeviceType.toInt()
@@ -161,7 +160,6 @@ class DeviceSceneActivity : QuecBaseActivity<ActivityDeviceSceneBinding>() {
                 QuecSceneService.addScene(model) { ret ->
                     handlerResult(ret)
                     if (ret.isSuccess) {
-                        //添加场景成功
                         dismiss()
                         querySceneList()
                     }

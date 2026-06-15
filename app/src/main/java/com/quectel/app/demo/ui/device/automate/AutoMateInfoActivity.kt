@@ -2,6 +2,7 @@ package com.quectel.app.demo.ui.device.automate
 
 import android.app.Dialog
 import android.os.Bundle
+import com.quectel.app.demo.R
 import com.quectel.app.demo.base.activity.QuecBaseActivity
 import com.quectel.app.demo.common.AppVariable
 import com.quectel.app.demo.databinding.ActivityDeviceAutoMateInfoBinding
@@ -37,16 +38,16 @@ class AutoMateInfoActivity : QuecBaseActivity<ActivityDeviceAutoMateInfoBinding>
 
     override fun initView(savedInstanceState: Bundle?) {
         mData = intent.getSerializableExtra("data") as QuecAutoListItemModel
-        addItem("编辑自动化") { changeAutoName() }
-        addItem("删除自动化") { deleteAuto() }
-        addItem("查询设备可作为自动化条件和触发动作的物模型") { getAutomationTSLWithProductKey() }
-        addItem("获取自动化详情") { getAutomationInfo() }
-        addItem("开启关闭自动化") { updateAutomationSwitchStatus() }
-        addItem("测试自动化") { testAutomationInfo() }
-        addItem("获取自动化测试的结果") { getTestAutomationResult() }
-        addItem("获取自动化日志列表") { getAutomationLogList() }
-        addItem("获取日志详情") { getAutomationLogDetail() }
-        addItem("清除自动化日志") { clearAutomationLogs() }
+        addItem(getString(R.string.edit_automation)) { changeAutoName() }
+        addItem(getString(R.string.delete_automation)) { deleteAuto() }
+        addItem(getString(R.string.query_tsl_for_automation)) { getAutomationTSLWithProductKey() }
+        addItem(getString(R.string.get_automation_detail)) { getAutomationInfo() }
+        addItem(getString(R.string.toggle_automation)) { updateAutomationSwitchStatus() }
+        addItem(getString(R.string.test_automation)) { testAutomationInfo() }
+        addItem(getString(R.string.get_automation_test_result)) { getTestAutomationResult() }
+        addItem(getString(R.string.get_automation_log_list)) { getAutomationLogList() }
+        addItem(getString(R.string.get_log_detail)) { getAutomationLogDetail() }
+        addItem(getString(R.string.clear_automation_log)) { clearAutomationLogs() }
     }
 
     private fun clearAutomationLogs() {
@@ -63,11 +64,11 @@ class AutoMateInfoActivity : QuecBaseActivity<ActivityDeviceAutoMateInfoBinding>
 
     private fun getAutomationLogDetail() {
         EditTextPopup(mContext).apply {
-            setTitle("获取日志详情")
-            setHint("请输入自动化日志Id")
+            setTitle(getString(R.string.get_log_detail))
+            setHint(getString(R.string.hint_automation_log_id))
             setEditTextListener { content ->
                 if (content.trim().toLongOrNull() == null) {
-                    ToastUtils.showShort(this@AutoMateInfoActivity, "参数异常")
+                    ToastUtils.showShort(this@AutoMateInfoActivity, getString(R.string.param_exception))
                     return@setEditTextListener
                 }
                 startLoading()
@@ -77,9 +78,8 @@ class AutoMateInfoActivity : QuecBaseActivity<ActivityDeviceAutoMateInfoBinding>
                         finishLoading()
                         handlerResult(it)
                         if (it.isSuccess) {
-                            //请求成功
                             CommonDialog.showSimpleInfo(
-                                this@AutoMateInfoActivity, "获取日志详情",
+                                this@AutoMateInfoActivity, getString(R.string.get_log_detail),
                                 QuecGsonUtil.gsonString(it.data)
                             )
                         }
@@ -91,11 +91,11 @@ class AutoMateInfoActivity : QuecBaseActivity<ActivityDeviceAutoMateInfoBinding>
 
     private fun getAutomationLogList() {
         EditTextPopup(mContext).apply {
-            setTitle("获取自动化日志列表")
-            setHint("请输入最后一条日志Id")
+            setTitle(getString(R.string.get_automation_log_list))
+            setHint(getString(R.string.hint_last_log_id2))
             setEditTextListener { content ->
                 if (content.trim().toLongOrNull() == null) {
-                    ToastUtils.showShort(this@AutoMateInfoActivity, "参数异常")
+                    ToastUtils.showShort(this@AutoMateInfoActivity, getString(R.string.param_exception))
                     return@setEditTextListener
                 }
                 startLoading()
@@ -105,9 +105,8 @@ class AutoMateInfoActivity : QuecBaseActivity<ActivityDeviceAutoMateInfoBinding>
                         finishLoading()
                         handlerResult(it)
                         if (it.isSuccess) {
-                            //请求成功
                             CommonDialog.showSimpleInfo(
-                                this@AutoMateInfoActivity, "获取自动化日志列表",
+                                this@AutoMateInfoActivity, getString(R.string.get_automation_log_list),
                                 QuecGsonUtil.gsonString(it.data)
                             )
                         }
@@ -115,16 +114,15 @@ class AutoMateInfoActivity : QuecBaseActivity<ActivityDeviceAutoMateInfoBinding>
                 }
             }
         }.showPopupWindow()
-
     }
 
     private fun getTestAutomationResult() {
         EditTextPopup(mContext).apply {
-            setTitle("获取自动化测试的结果")
-            setHint("请输入测试自动化结果的id")
+            setTitle(getString(R.string.get_automation_test_result))
+            setHint(getString(R.string.hint_test_result_id))
             setEditTextListener { content ->
                 if (content.trim().toLongOrNull() == null) {
-                    ToastUtils.showShort(this@AutoMateInfoActivity, "参数异常")
+                    ToastUtils.showShort(this@AutoMateInfoActivity, getString(R.string.param_exception))
                     return@setEditTextListener
                 }
                 startLoading()
@@ -134,9 +132,8 @@ class AutoMateInfoActivity : QuecBaseActivity<ActivityDeviceAutoMateInfoBinding>
                         finishLoading()
                         handlerResult(it)
                         if (it.isSuccess) {
-                            //请求成功
                             CommonDialog.showSimpleInfo(
-                                this@AutoMateInfoActivity, "获取自动化测试的结果",
+                                this@AutoMateInfoActivity, getString(R.string.get_automation_test_result),
                                 QuecGsonUtil.gsonString(it.data)
                             )
                         }
@@ -148,12 +145,12 @@ class AutoMateInfoActivity : QuecBaseActivity<ActivityDeviceAutoMateInfoBinding>
 
     private fun testAutomationInfo() {
         EditDoubleTextPopup(mContext).apply {
-            setTitle("测试自动化")
-            setHint1("场景名称")
-            setHint2("场景id")
+            setTitle(getString(R.string.test_automation))
+            setHint1(getString(R.string.hint_test_automation_scene_name))
+            setHint2(getString(R.string.hint_test_automation_scene_id))
             setEditTextListener { content1, content2 ->
                 if (content1.isNullOrEmpty() || content2.isNullOrEmpty()) {
-                    ToastUtils.showShort(this@AutoMateInfoActivity, "参数不可为空")
+                    ToastUtils.showShort(this@AutoMateInfoActivity, getString(R.string.param_cannot_be_null))
                     return@setEditTextListener
                 }
                 startLoading()
@@ -172,9 +169,7 @@ class AutoMateInfoActivity : QuecBaseActivity<ActivityDeviceAutoMateInfoBinding>
                         dismiss()
                         finishLoading()
                         handlerResult(it)
-                        if (it.isSuccess) {
-                            //请求成功
-                        }
+                        if (it.isSuccess) { }
                     }
                 }
             }
@@ -201,9 +196,8 @@ class AutoMateInfoActivity : QuecBaseActivity<ActivityDeviceAutoMateInfoBinding>
                 finishLoading()
                 handlerResult(it)
                 if (it.isSuccess) {
-                    //请求成功
                     CommonDialog.showSimpleInfo(
-                        this@AutoMateInfoActivity, "自动化详情",
+                        this@AutoMateInfoActivity, getString(R.string.automation_detail_title),
                         QuecGsonUtil.gsonString(it.data)
                     )
                 }
@@ -216,7 +210,6 @@ class AutoMateInfoActivity : QuecBaseActivity<ActivityDeviceAutoMateInfoBinding>
             override fun convert(objectJson: JSONArray): List<ModelBasic<*>> {
                 val modelBasics: MutableList<ModelBasic<*>> = ArrayList()
                 try {
-                    //此方法在核心库中有定义
                     return ObjectModelParse.buildModelListContent(objectJson)
                 } catch (e: JSONException) {
                     QLog.e("TslModelUtils", "convert error $e")
@@ -225,11 +218,11 @@ class AutoMateInfoActivity : QuecBaseActivity<ActivityDeviceAutoMateInfoBinding>
             }
         }
         EditTextPopup(mContext).apply {
-            setTitle("查询设备可作为自动化条件和触发动作的物模型")
-            setHint("请输入productKey")
+            setTitle(getString(R.string.query_tsl_for_automation))
+            setHint(getString(R.string.hint_product_key))
             setEditTextListener { content ->
                 if (content.isNullOrEmpty()) {
-                    ToastUtils.showShort(this@AutoMateInfoActivity, "pk不可为空")
+                    ToastUtils.showShort(this@AutoMateInfoActivity, getString(R.string.pk_cannot_be_empty))
                     return@setEditTextListener
                 }
                 startLoading()
@@ -242,10 +235,9 @@ class AutoMateInfoActivity : QuecBaseActivity<ActivityDeviceAutoMateInfoBinding>
                         AppVariable.setAutoMateChange()
                         finishLoading()
                         handlerResult(it)
-                        //请求成功
                         if (it.isSuccess) {
                             CommonDialog.showSimpleInfo(
-                                this@AutoMateInfoActivity, "自动化条件和触发动作的物模型",
+                                this@AutoMateInfoActivity, getString(R.string.tsl_for_automation_result),
                                 QuecGsonUtil.gsonString(it.data)
                             )
                         }
@@ -272,8 +264,8 @@ class AutoMateInfoActivity : QuecBaseActivity<ActivityDeviceAutoMateInfoBinding>
 
     private fun changeAutoName() {
         EditTextPopup(mContext).apply {
-            setTitle("编辑自动化名称")
-            setHint("请输入新名称")
+            setTitle(getString(R.string.edit_automation_name))
+            setHint(getString(R.string.hint_new_name))
             setEditTextListener { content ->
                 startLoading()
                 QuecAutomateService.getAutomationInfo(mData.automationId) { getInfo ->
@@ -285,7 +277,6 @@ class AutoMateInfoActivity : QuecBaseActivity<ActivityDeviceAutoMateInfoBinding>
                                 finishLoading()
                                 handlerResult(it)
                                 if (it.isSuccess) {
-                                    //请求成功
                                     AppVariable.setAutoMateChange()
                                     dismiss()
                                 }

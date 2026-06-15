@@ -15,6 +15,7 @@ import com.quectel.app.smart_home_sdk.bean.QuecFamilyMemberItemModel
 import com.quectel.app.smart_home_sdk.bean.QuecFamilyParamModel
 import com.quectel.app.smart_home_sdk.bean.QuecInviteFamilyMemberParamModel
 import com.quectel.app.smart_home_sdk.service.QuecSmartHomeService
+import com.quectel.app.demo.R
 
 class FamilyFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding>() {
     override fun getViewBinding(): ActivityCommonListBinding {
@@ -31,34 +32,30 @@ class FamilyFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding>() {
 
     override fun initTestItem() {
         super.initTestItem()
-        addItem("查看家庭下常用设备列表") { queryCommonDevice() }
-        addItem("查看家庭下所有设备列表") { queryAllDevice() }
+        addItem(getString(R.string.view_common_devices)) { queryCommonDevice() }
+        addItem(getString(R.string.view_all_devices)) { queryAllDevice() }
 
         if (family.memberRole == 1 || family.memberRole == 2) {
-            addItem("房间管理") { manageRoom() }
+            addItem(getString(R.string.room_management)) { manageRoom() }
         }
 
-        addItem("修改家庭名称") { modifyFamilyName() }
+        addItem(getString(R.string.modify_family_name)) { modifyFamilyName() }
 
         if (family.memberRole != 1) {
-            addItem("离开家庭") { levelFamily() }
+            addItem(getString(R.string.leave_family)) { levelFamily() }
             return
         }
 
-        addItem("移除家庭") { deleteFamily() }
-
-        addItem("邀请新成员") { shareFamily() }
-
-        addItem("成员管理") { manageMember() }
-
-        addItem("添加新房间") { addRoom() }
-
-        addItem("群组管理") { managerGroup() }
+        addItem(getString(R.string.remove_family)) { deleteFamily() }
+        addItem(getString(R.string.invite_new_member)) { shareFamily() }
+        addItem(getString(R.string.member_management)) { manageMember() }
+        addItem(getString(R.string.add_new_room)) { addRoom() }
+        addItem(getString(R.string.group_management)) { managerGroup() }
     }
 
     private fun modifyFamilyName() {
         EditTextPopup(this).apply {
-            setTitle("请输入家庭名称")
+            setTitle(getString(R.string.hint_family_name))
             setContent(family.familyName)
             setEditTextListener {
                 dismiss()
@@ -80,8 +77,8 @@ class FamilyFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding>() {
 
     private fun deleteFamily() {
         CommonDialog(this).apply {
-            setTitle("确认删除家庭？")
-            setYesOnclickListener("确认") {
+            setTitle(getString(R.string.confirm_delete_family))
+            setYesOnclickListener(getString(R.string.confirm)) {
                 dismiss()
                 QuecSmartHomeService.deleteFamily(getCurrentFid()) {
                     handlerResult(it)
@@ -95,8 +92,8 @@ class FamilyFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding>() {
 
     private fun levelFamily() {
         CommonDialog(this).apply {
-            setTitle("确认离开家庭？")
-            setYesOnclickListener("确认") {
+            setTitle(getString(R.string.confirm_leave_family))
+            setYesOnclickListener(getString(R.string.confirm)) {
                 QuecSmartHomeService.leaveFamily(getCurrentFid()) {
                     handlerResult(it)
                     if (it.isSuccess) {
@@ -109,26 +106,20 @@ class FamilyFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding>() {
 
     private fun shareFamily() {
         EditDoubleTextPopup(this).apply {
-            setTitle("邀请新成员")
-            setHint1("请输入对方的账号")
-            setHint2("请输入对方的名称")
+            setTitle(getString(R.string.invite_new_member))
+            setHint1(getString(R.string.hint_member_account))
+            setHint2(getString(R.string.hint_member_name))
             setEditTextListener { account, name ->
                 dismiss()
                 val phone = if (account.contains("@")) null else account
                 val email = if (account.contains("@")) account else null
                 QuecSmartHomeService.inviteFamilyMember(
                     QuecInviteFamilyMemberParamModel(
-                        getCurrentFid(),
-                        "2",
-                        name,
+                        getCurrentFid(), "2", name,
                         System.currentTimeMillis() + 60 * 60 * 1000,
-                        phone,
-                        email,
-                        null
+                        phone, email, null
                     )
-                ) {
-                    handlerResult(it)
-                }
+                ) { handlerResult(it) }
             }
         }.showPopupWindow()
     }
@@ -141,24 +132,24 @@ class FamilyFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding>() {
             }
 
             if (it.data.list.isEmpty()) {
-                showMessage("无家庭成员")
+                showMessage(getString(R.string.no_family_member))
                 return@getFamilyMemberList
             }
 
             SelectItemDialog(this).apply {
                 it.data.list.forEach { item ->
                     val role = when (item.memberRole) {
-                        1 -> "创建者"
-                        2 -> "管理员"
-                        3 -> "成员"
-                        else -> "未知"
+                        1 -> getString(R.string.role_creator)
+                        2 -> getString(R.string.role_admin)
+                        3 -> getString(R.string.role_member)
+                        else -> getString(R.string.role_unknown)
                     }
                     addItem("${item.memberName} : $role") {
                         SelectItemDialog(this@FamilyFunctionActivity).also { dialog ->
-                            dialog.addItem("显示成员信息") { showMemberInfo(item) }
-                            dialog.addItem("修改权限") { modifyMemberRole(item) }
-                            dialog.addItem("移除成员") { removeMember(item) }
-                            dialog.addItem("修改名称") { modifyMemberName(item) }
+                            dialog.addItem(getString(R.string.show_member_info)) { showMemberInfo(item) }
+                            dialog.addItem(getString(R.string.modify_role)) { modifyMemberRole(item) }
+                            dialog.addItem(getString(R.string.remove_member)) { removeMember(item) }
+                            dialog.addItem(getString(R.string.modify_name_label)) { modifyMemberName(item) }
                         }.show()
                     }
                 }
@@ -167,13 +158,13 @@ class FamilyFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding>() {
     }
 
     private fun showMemberInfo(member: QuecFamilyMemberItemModel) {
-        CommonDialog.showSimpleInfo(this, "成员信息", member.toString())
+        CommonDialog.showSimpleInfo(this, getString(R.string.member_info), member.toString())
     }
 
     private fun modifyMemberRole(member: QuecFamilyMemberItemModel) {
         SelectItemDialog(this).apply {
-            addItem("管理员") { setMemberRole(member, "2") }
-            addItem("成员") { setMemberRole(member, "3") }
+            addItem(getString(R.string.role_admin)) { setMemberRole(member, "2") }
+            addItem(getString(R.string.role_member)) { setMemberRole(member, "3") }
         }.show()
     }
 
@@ -185,17 +176,13 @@ class FamilyFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding>() {
 
     private fun modifyMemberName(member: QuecFamilyMemberItemModel) {
         EditTextPopup(this).apply {
-            setTitle("修改成员名称")
+            setTitle(getString(R.string.modify_member_name))
             setContent(member.memberName)
             setEditTextListener {
                 dismiss()
                 QuecSmartHomeService.setFamilyMemberName(
-                    getCurrentFid(),
-                    member.uid ?: "",
-                    it
-                ) { ret ->
-                    handlerResult(ret)
-                }
+                    getCurrentFid(), member.uid ?: "", it
+                ) { ret -> handlerResult(ret) }
             }
         }.showPopupWindow()
     }
@@ -208,13 +195,10 @@ class FamilyFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding>() {
 
     private fun addRoom() {
         EditTextPopup(this).apply {
-            setTitle("请输入房间名")
+            setTitle(getString(R.string.hint_room_name))
             setEditTextListener {
                 dismiss()
-                QuecSmartHomeService.addFamilyRoom(
-                    getCurrentFid(),
-                    it
-                ) { ret ->
+                QuecSmartHomeService.addFamilyRoom(getCurrentFid(), it) { ret ->
                     handlerResult(ret)
                 }
             }
@@ -228,7 +212,7 @@ class FamilyFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding>() {
                 return@getFamilyRoomList
             }
             if (it.data.list.isEmpty()) {
-                showMessage("无房间")
+                showMessage(getString(R.string.no_room))
                 return@getFamilyRoomList
             }
 

@@ -234,6 +234,7 @@
     <string name="hint_device_wifi_optional">Enter device Wi-Fi info (optional)</string>
     <string name="hint_device_wifi_required">Enter device Wi-Fi info (required)</string>
     <string name="router_name">Router name</string>
+    <string name="hint_wifi_password_enter">Enter password</string>
     <string name="password_label">Password</string>
     <string name="add_success">Added successfully</string>
     <string name="add_failed">Add failed: %1$s</string>
@@ -264,6 +265,7 @@
     <string name="struct_input_prompt">Will input data in struct field order</string>
     <string name="type_not_support_control">This data type is not supported in this demo</string>
     <string name="data_error">Data error</string>
+    <string name="hint_struct_order">Will enter data in struct definition order</string>
     <string name="hint_input_content_with_limit">Enter content, length limit: %1$d</string>
     <string name="input_too_long">Input length cannot exceed %1$d</string>
     <string name="hint_input_range">Enter %1$s type data, min: %2$s, max: %3$s</string>
@@ -279,6 +281,7 @@
 
     <!-- Device group -->
     <string name="accept_group_share_title">Accept Others\' Group Share</string>
+    <string name="hint_share_code_device_group">Enter share_code</string>
     <string name="hint_share_code2">Please enter share_code</string>
     <string name="param_cannot_be_empty">Parameters cannot be empty</string>
     <string name="device_list_in_group">Device list in group</string>
@@ -303,7 +306,15 @@
     <string name="device_pk_label">Device pk</string>
     <string name="device_dk_label">Device dk</string>
     <string name="tsl_data_type_label">TSL data type</string>
-    <string name="add_new_scene">Add new scene</string>
+    <string name="add_new_scene">Add a new scene</string>
+    <string name="tsl_code_label">actionModel.code\nTSL identifier</string>
+    <string name="tsl_data_type_field">actionModel.dataType\nTSL data type</string>
+    <string name="tsl_id_label">actionModel.id\nTSL function ID</string>
+    <string name="tsl_func_name_label">actionModel.name\nTSL function name</string>
+    <string name="tsl_sub_name_label">actionModel.subName\nTSL value subName</string>
+    <string name="tsl_sub_type_label">actionModel.subType\nTSL subType</string>
+    <string name="tsl_type_label">actionModel.type\nTSL function type</string>
+    <string name="tsl_value_label">actionModel.value\nTSL value</string>
     <string name="add_label">Add</string>
     <string name="params_cannot_be_empty">All parameters are required</string>
     <string name="tsl_id_must_be_int">TSL function ID must be an integer</string>

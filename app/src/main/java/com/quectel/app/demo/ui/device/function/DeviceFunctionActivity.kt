@@ -35,10 +35,10 @@ class DeviceFunctionActivity : QuecBaseDeviceActivity<ActivityDeviceFunctionBind
             showOrHideLoading(false)
             if (result) {
                 AppVariable.setDeviceChange()
-                showMessage("配网成功")
+                showMessage(getString(R.string.network_config_success))
                 finish()
             } else {
-                showMessage("配网失败")
+                showMessage(getString(R.string.network_config_failed))
             }
         }
 
@@ -70,19 +70,19 @@ class DeviceFunctionActivity : QuecBaseDeviceActivity<ActivityDeviceFunctionBind
     }
 
     override fun initTestItem() {
-        addItem("获取设备信息") {
+        addItem(getString(R.string.get_device_info)) {
             QuecDeviceService.getDeviceInfoByDeviceKey(device.deviceKey, device.productKey) {
                 handlerResult(it)
                 if (it.isSuccess) {
-                    CommonDialog.showSimpleInfo(this, "设备信息", it.data.toString())
+                    CommonDialog.showSimpleInfo(this, getString(R.string.device_info), it.data.toString())
                 }
             }
         }
 
-        addItem("修改设备名") {
+        addItem(getString(R.string.rename_device)) {
             EditTextPopup(this).apply {
-                setTitle("修改设备名")
-                setHint("请输入设备名")
+                setTitle(getString(R.string.rename_device))
+                setHint(getString(R.string.hint_device_name))
                 setContent(device.deviceName)
                 setEditTextListener {
                     dismiss()
@@ -92,22 +92,21 @@ class DeviceFunctionActivity : QuecBaseDeviceActivity<ActivityDeviceFunctionBind
             }
         }
 
-        addItem("设备控制") {
+        addItem(getString(R.string.device_control)) {
             startActivity(Intent(this, DeviceControlActivity::class.java))
         }
 
-        addItem("设备升级") {
+        addItem(getString(R.string.device_upgrade)) {
             startActivity(Intent(this, DeviceOtaActivity::class.java))
         }
 
-
-        addItem("设备分享") {
+        addItem(getString(R.string.device_share)) {
             startActivity(Intent(this, DeviceShareActivity::class.java))
         }
 
-        addItem("设备解绑") {
+        addItem(getString(R.string.device_unbind)) {
             CommonDialog(this).apply {
-                setTitle("确认解绑设备?")
+                setTitle(getString(R.string.confirm_unbind_device))
                 setYesOnclickListener(getString(R.string.confirm)) {
                     dismiss()
                     unbindDevice()
@@ -116,11 +115,11 @@ class DeviceFunctionActivity : QuecBaseDeviceActivity<ActivityDeviceFunctionBind
         }
 
         if (!device.isShared && device.capabilitiesBitmask != 4) {
-            addItem("设备配网") {
+            addItem(getString(R.string.device_net_config)) {
                 EditDoubleTextPopup(mContext).apply {
-                    setTitle("请输入设备WiFi信息")
-                    setHint1("路由器名称")
-                    setHint2("密码密码")
+                    setTitle(getString(R.string.hint_device_wifi))
+                    setHint1(getString(R.string.router_name))
+                    setHint2(getString(R.string.hint_wifi_password_enter))
                     setEditTextListener { content1, content2 ->
                         dismiss()
                         activateDevice(content1, content2)
@@ -132,7 +131,7 @@ class DeviceFunctionActivity : QuecBaseDeviceActivity<ActivityDeviceFunctionBind
 
     private fun editDeviceName(name: String?) {
         if (name.isNullOrEmpty()) {
-            showMessage("设备名不能为空")
+            showMessage(getString(R.string.device_name_empty))
             return
         }
 
@@ -170,7 +169,7 @@ class DeviceFunctionActivity : QuecBaseDeviceActivity<ActivityDeviceFunctionBind
 
     private fun activateDevice(ssid: String, pwd: String) {
         if (ssid.isEmpty()) {
-            showMessage("请输入WiFi名称")
+            showMessage(getString(R.string.hint_wifi_name))
             return
         }
         showOrHideLoading(true)

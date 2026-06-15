@@ -2,6 +2,7 @@ package com.quectel.app.demo.ui.device.group
 
 import android.content.Intent
 import android.os.Bundle
+import com.quectel.app.demo.R
 import com.quectel.app.demo.base.activity.QuecBaseActivity
 import com.quectel.app.demo.common.AppVariable
 import com.quectel.app.demo.databinding.ActivityListGroupBinding
@@ -42,29 +43,25 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
     }
 
     override fun initTestItem() {
-        addItem("查询设备组详情") {
+        addItem(getString(R.string.query_device_group_detail)) {
             queryGroup()
         }
-
-        addItem("修改设备组") {
+        addItem(getString(R.string.modify_device_group)) {
             changeGroupDialog()
         }
-
-        addItem("添加设备到设备组") {
+        addItem(getString(R.string.add_device_to_group_title)) {
             addDeviceToGroup()
         }
-
-        addItem("查询设备组中的设备列表") {
+        addItem(getString(R.string.query_device_list_in_group)) {
             queryDeviceInGroup()
         }
-
-        addItem("移除设备组中的设备") {
+        addItem(getString(R.string.remove_device_in_group)) {
             deleteDeviceFromGroup()
         }
-        addItem("删除设备组") {
+        addItem(getString(R.string.delete_device_group)) {
             deleteGroup()
         }
-        addItem("取消") {
+        addItem(getString(R.string.cancel)) {
             finish()
         }
     }
@@ -77,7 +74,7 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
             if (result.isSuccess) {
                 CommonDialog.showSimpleInfo(
                     this@DeviceListGroupActivity,
-                    "查询设备组详情",
+                    getString(R.string.query_device_group_detail),
                     QuecGsonUtil.gsonString(result.data)
                 )
             }
@@ -86,11 +83,11 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
 
     private fun changeGroupDialog() {
         EditTextPopup(this).apply {
-            setTitle("添加设备组")
-            setHint("请输入group name")
+            setTitle(getString(R.string.add_device_group))
+            setHint(getString(R.string.hint_group_name))
             setEditTextListener { name ->
                 if (name.isNullOrEmpty()) {
-                    ToastUtils.showShort(mContext, "参数不能为空")
+                    ToastUtils.showShort(mContext, getString(R.string.param_cannot_be_empty))
                     return@setEditTextListener
                 }
                 dismiss()
@@ -109,15 +106,14 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
         }.showPopupWindow()
     }
 
-
     private fun addDeviceToGroup() {
         EditDoubleTextPopup(mContext).apply {
-            setTitle("添加设备到设备组")
-            setHint1("请输入pk")
-            setHint2("请输入dk")
+            setTitle(getString(R.string.add_device_to_group_title))
+            setHint1(getString(R.string.hint_pk))
+            setHint2(getString(R.string.hint_dk))
             setEditTextListener { pk, dk ->
                 if (pk.isNullOrEmpty() || dk.isNullOrEmpty()) {
-                    ToastUtils.showShort(mContext, "参数不能为空")
+                    ToastUtils.showShort(mContext, getString(R.string.param_cannot_be_empty))
                     return@setEditTextListener
                 }
                 dismiss()
@@ -139,11 +135,11 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
 
     private fun queryDeviceInGroup() {
         EditTextPopup(this).apply {
-            setTitle("查询设备组中的设备列表")
-            setHint("请输入pk")
+            setTitle(getString(R.string.query_device_list_in_group))
+            setHint(getString(R.string.hint_pk))
             setEditTextListener {
                 if (it.isNullOrEmpty()) {
-                    ToastUtils.showShort(mContext, "参数不能为空")
+                    ToastUtils.showShort(mContext, getString(R.string.param_cannot_be_empty))
                     return@setEditTextListener
                 }
                 dismiss()
@@ -157,7 +153,7 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
                         if (shareCode.isNullOrEmpty()) {
                             CommonDialog.showSimpleInfo(
                                 this@DeviceListGroupActivity,
-                                "设备组中的设备列表",
+                                getString(R.string.query_device_list_in_group),
                                 result.toString()
                             )
                         }
@@ -167,15 +163,14 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
         }.showPopupWindow()
     }
 
-
     private fun deleteDeviceFromGroup() {
         EditDoubleTextPopup(mContext).apply {
-            setTitle("移除设备组中的设备")
-            setHint1("请输入pk")
-            setHint2("请输入dk")
+            setTitle(getString(R.string.remove_device_in_group))
+            setHint1(getString(R.string.hint_pk))
+            setHint2(getString(R.string.hint_dk))
             setEditTextListener { content1, content2 ->
                 if (content1.isNullOrEmpty() || content2.isNullOrEmpty()) {
-                    ToastUtils.showShort(mContext, "参数不能为空")
+                    ToastUtils.showShort(mContext, getString(R.string.param_cannot_be_empty))
                     return@setEditTextListener
                 }
                 dismiss()
@@ -219,4 +214,3 @@ class DeviceListGroupActivity : QuecBaseActivity<ActivityListGroupBinding>() {
         showOrHideLoading(false)
     }
 }
-

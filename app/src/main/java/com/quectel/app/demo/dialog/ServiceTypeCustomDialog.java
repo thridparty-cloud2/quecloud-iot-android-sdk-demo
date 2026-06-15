@@ -80,7 +80,7 @@ public class ServiceTypeCustomDialog extends Dialog {
             String jsonPath = downloadPath + "/cloud_config.jpg";
             File file = new File(jsonPath);
             if (!file.exists()){
-                ToastUtils.showShort(context,"文件：" + jsonPath + " 不存在");
+                ToastUtils.showShort(context, context.getString(R.string.file_not_exist, jsonPath));
                 return;
             }
 

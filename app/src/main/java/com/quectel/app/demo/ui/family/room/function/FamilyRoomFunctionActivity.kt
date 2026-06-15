@@ -9,6 +9,7 @@ import com.quectel.app.demo.ui.family.BaseFamilyActivity
 import com.quectel.app.demo.ui.family.room.device.FamilyDeviceListActivity
 import com.quectel.app.smart_home_sdk.bean.QuecSortDeviceEnterModel
 import com.quectel.app.smart_home_sdk.service.QuecSmartHomeService
+import com.quectel.app.demo.R
 
 class FamilyRoomFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding>() {
     private lateinit var frid: String
@@ -29,19 +30,19 @@ class FamilyRoomFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding>
     override fun initTestItem() {
         super.initTestItem()
 
-        addItem("修改房间名") { modifyName() }
+        addItem(getString(R.string.rename_room)) { modifyName() }
 
-        addItem("修改房间序号") { modifySort() }
+        addItem(getString(R.string.modify_room_order)) { modifySort() }
 
-        addItem("查看房间下设备列表") { queryDeviceList() }
+        addItem(getString(R.string.view_room_devices)) { queryDeviceList() }
 
-        addItem("删除房间") { deleteRoom() }
+        addItem(getString(R.string.delete_room)) { deleteRoom() }
     }
 
     private fun modifyName() {
         EditTextPopup(this).apply {
-            setTitle("修改房间名")
-            setHint("请输入房间名")
+            setTitle(getString(R.string.rename_room))
+            setHint(getString(R.string.hint_room_name))
             setContent(binding.title.text.toString())
             setEditTextListener {
                 dismiss()
@@ -57,9 +58,9 @@ class FamilyRoomFunctionActivity : BaseFamilyActivity<ActivityCommonListBinding>
 
     private fun modifySort() {
         SelectItemDialog(this).apply {
-            addItem("最前") { modifySort(true) }
+            addItem(getString(R.string.order_first)) { modifySort(true) }
 
-            addItem("最后") { modifySort(false) }
+            addItem(getString(R.string.order_last)) { modifySort(false) }
         }.show()
     }
 

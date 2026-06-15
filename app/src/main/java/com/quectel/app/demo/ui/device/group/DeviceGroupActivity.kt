@@ -148,11 +148,11 @@ class DeviceGroupActivity : QuecBaseActivity<DeviceGroupLayoutBinding>() {
 
     private fun createAddGroupDialog() {
         EditTextPopup(this).apply {
-            setTitle("添加设备组")
-            setHint("请输入group name")
+            setTitle(getString(R.string.add_device_group))
+            setHint(getString(R.string.hint_group_name))
             setEditTextListener { name ->
                 if (name.isNullOrEmpty()) {
-                    ToastUtils.showShort(context, "参数不能为空")
+                    ToastUtils.showShort(context, getString(R.string.param_cannot_be_empty))
                     return@setEditTextListener
                 }
                 dismiss()
@@ -172,11 +172,11 @@ class DeviceGroupActivity : QuecBaseActivity<DeviceGroupLayoutBinding>() {
 
     private fun createReceiveGroupShare() {
         EditTextPopup(this).apply {
-            setTitle("接受别人设备组分享")
-            setHint("请输入share_code")
+            setTitle(getString(R.string.accept_group_share_title))
+            setHint(getString(R.string.hint_share_code_device_group))
             setEditTextListener { code ->
                 if (code.isNullOrEmpty()) {
-                    ToastUtils.showShort(context, "参数不能为空")
+                    ToastUtils.showShort(context, getString(R.string.param_cannot_be_empty))
                     return@setEditTextListener
                 }
                 dismiss()
