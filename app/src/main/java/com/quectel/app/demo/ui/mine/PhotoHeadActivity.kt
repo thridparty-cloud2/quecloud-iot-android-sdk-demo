@@ -22,7 +22,7 @@ class PhotoHeadActivity : QuecBaseActivity<ActivityListPhotoBinding>() {
     private var data = ArrayList<String>()
 
     /**
-     * 初始化默认头像列表
+     * Initialize default avatar list
      */
     fun initDefaultAvatarList() {
         data.add(BASE_IMAGE_URL + "head_1.png")

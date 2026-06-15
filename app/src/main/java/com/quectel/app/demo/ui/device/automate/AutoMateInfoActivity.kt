@@ -56,7 +56,7 @@ class AutoMateInfoActivity : QuecBaseActivity<ActivityDeviceAutoMateInfoBinding>
                 dismissLoading()
                 handlerResult(it)
                 if (it.isSuccess) {
-                    //请求成功
+                    // Request successful
                 }
             }
         }
@@ -183,7 +183,7 @@ class AutoMateInfoActivity : QuecBaseActivity<ActivityDeviceAutoMateInfoBinding>
                 finishLoading()
                 handlerResult(it)
                 if (it.isSuccess) {
-                    //请求成功
+                    // Request successful
                 }
             }
         }
@@ -254,7 +254,7 @@ class AutoMateInfoActivity : QuecBaseActivity<ActivityDeviceAutoMateInfoBinding>
                 AppVariable.setAutoMateChange()
                 finishLoading()
                 handlerResult(it)
-                //请求成功
+                // Request successful
                 if (it.isSuccess) {
                     finish()
                 }

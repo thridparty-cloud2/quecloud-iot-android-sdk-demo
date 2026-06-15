@@ -18,10 +18,10 @@ import java.util.Locale;
 
 public class CameraUtils {
     /**
-     * 激活相册操作
+     * Launch photo album picker
      *
-     * @param context     上下文
-     * @param requestCode 请求码
+     * @param context     Application context
+     * @param requestCode Request code
      */
     public static void openPhotoAlbum(@NonNull Activity context, int requestCode) {
         Intent intent = new Intent();
@@ -31,13 +31,13 @@ public class CameraUtils {
     }
 
     /**
-     * 激活相机操作
+     * Launch camera
      *
-     * @param context        上下文
-     * @param requestCode    请求码
-     * @param fileProvider   自定义fileProvider
-     * @param cameraSavePath 保存的文件路径
-     * @return 相片的uri
+     * @param context        Application context
+     * @param requestCode    Request code
+     * @param fileProvider   Custom FileProvider authority
+     * @param cameraSavePath File path to save the photo
+     * @return Photo URI
      */
     public static Uri openCamera(@NonNull Activity context, int requestCode, String fileProvider,
                                  File cameraSavePath) {
@@ -60,14 +60,14 @@ public class CameraUtils {
     }
 
     /**
-     * 创建图片地址uri,用于保存拍照后的照片 Android 10以后使用这种方法
+     * Create image URI for saving captured photo (Android 10+)
      *
-     * @param context 上下文
-     * @return 图片地址uri
+     * @param context Application context
+     * @return Image URI
      */
     private static Uri createImageUri(@NonNull Activity context) {
         String status = Environment.getExternalStorageState();
-        // 判断是否有SD卡,优先使用SD卡存储,当没有SD卡时使用手机存储
+        // Prefer SD card storage; fall back to internal storage when unavailable
         if (status.equals(Environment.MEDIA_MOUNTED)) {
             return context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     new ContentValues());
@@ -78,10 +78,10 @@ public class CameraUtils {
     }
 
     /**
-     * 创建保存图片的文件
+     * Create file for saving photo
      *
-     * @param context 上下文
-     * @return 文件路径
+     * @param context Application context
+     * @return File path
      */
     public static File createImageFile(@NonNull Activity context) throws IOException {
         String imageName = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());

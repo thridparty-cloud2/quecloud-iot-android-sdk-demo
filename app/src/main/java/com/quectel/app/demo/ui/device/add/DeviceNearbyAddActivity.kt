@@ -64,7 +64,7 @@ class DeviceNearbyAddActivity : QuecBaseActivity<ActivityNearbyAddBinding>() {
             result: Boolean,
             errorCode: QuecPairErrorCode
         ) {
-            //todo sdk回调应该在主线程执行
+            //todo sdk callback should be executed on the main thread
             QuecThreadUtil.RunMainThread {
                 if (result) {
                     showMessage(getString(R.string.add_success))
@@ -175,7 +175,7 @@ class DeviceNearbyAddActivity : QuecBaseActivity<ActivityNearbyAddBinding>() {
 
         val bltAdapter = BluetoothAdapter.getDefaultAdapter()
         val enabled = bltAdapter.isEnabled
-        //如果没有打开系统蓝牙，请求打开系统蓝牙
+        // If system Bluetooth is not enabled, request to enable it
         if (!enabled) {
             val intent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
 

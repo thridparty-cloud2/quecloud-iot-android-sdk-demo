@@ -21,35 +21,35 @@ import com.quectel.basic.queclog.QLog;
 
 public class CommonDialog extends Dialog {
 
-    private TextView yes;//确定按钮
-    private View viewLine;//分割竖线
-    private TextView no;//取消按钮
+    private TextView yes; // Confirm button
+    private View viewLine; // Divider line
+    private TextView no; // Cancel button
 
-    private TextView titleTV;//消息标题文本
-    private TextView message;//消息提示文本
+    private TextView titleTV; // Title text
+    private TextView message; // Message text
 
 
-    private String titleStr;//从外界设置的title文本
-    private String messageStr;//从外界设置的消息文本
-    //对话框内容字体 大小
+    private String titleStr; // Title text set externally
+    private String messageStr; // Message text set externally
+    // Dialog content font size
     private int messageTextSize = 0;
-    //对话框内容字体 颜色
+    // Dialog content font color
     private int messageTextColor = 0;
-    //对话框内容字体 收否加粗
+    // Dialog content font bold
     private boolean isBold = false;
 
-    private SpannableString spannableString;//富文本
-    private MovementMethod movementMethod;//拦截事件(可自定义)
+    private SpannableString spannableString; // Rich text
+    private MovementMethod movementMethod; // Touch event interceptor (customizable)
 
 
-    //确定文本和取消文本的显示的内容
+    // Display text for confirm and cancel buttons
     private String yesStr, noStr;
     private int yesTextColor, noTextColor;
 
     private int textGravity = 0;
 
-    private onNoOnclickListener noOnclickListener;//取消按钮被点击了的监听器
-    private onYesOnclickListener yesOnclickListener;//确定按钮被点击了的监听器
+    private onNoOnclickListener noOnclickListener; // Cancel button click listener
+    private onYesOnclickListener yesOnclickListener; // Confirm button click listener
 
     public static final int TITLE_VISIBLE = 0;
     public static final int TITLE_GONE = 1;
@@ -57,7 +57,7 @@ public class CommonDialog extends Dialog {
     public static final int MESSAGE_VISIBLE = 0;
     public static final int MESSAGE_GONE = 1;
 
-    private boolean isEnableBackPressed = true; //默认允许返回关闭Dialog
+    private boolean isEnableBackPressed = true; // Allow back-press to close dialog by default
 
     public static void showSimpleInfo(Context context, String title, String content) {
         CommonDialog commonDialog = new CommonDialog(context);
@@ -92,7 +92,7 @@ public class CommonDialog extends Dialog {
 
 
     /**
-     * 设置取消按钮的显示内容和监听
+     * Set cancel button content and listener
      *
      * @param str
      * @param onNoOnclickListener
@@ -119,7 +119,7 @@ public class CommonDialog extends Dialog {
 
 
     /**
-     * 设置确定按钮的显示内容和监听
+     * Set confirm button content and listener
      *
      * @param str
      * @param yesOnclickListener
@@ -149,20 +149,20 @@ public class CommonDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quec_basic_ui_dialog);
-        //空白处不能取消动画
+        // Cannot cancel dialog by tapping outside
         setCanceledOnTouchOutside(false);
 
-        //初始化界面控件
+        // Initialize UI controls
         initView();
-        //初始化界面数据
+        // Initialize UI data
         initData();
-        //初始化界面控件的事件
+        // Initialize UI control events
         initEvent();
     }
 
 
     /**
-     * 初始化界面控件
+     * Initialize UI controls
      */
     private void initView() {
         yes = findViewById(R.id.yes);
@@ -175,10 +175,10 @@ public class CommonDialog extends Dialog {
     }
 
     /**
-     * 初始化界面控件的显示数据
+     * Initialize display data for UI controls
      */
     private void initData() {
-        //如果用户自定了title和message
+        // If title and message are set by caller
         if (titleStr != null) {
             titleTV.setText(titleStr);
         }
@@ -204,7 +204,7 @@ public class CommonDialog extends Dialog {
                 message.setMovementMethod(movementMethod);
             }
         }
-        //如果设置按钮文字
+        // If button text is set
         if (yesStr != null) {
             yes.setText(yesStr);
         }
@@ -220,10 +220,10 @@ public class CommonDialog extends Dialog {
     }
 
     /**
-     * 初始化界面的确定和取消监听
+     * Initialize confirm and cancel click listeners
      */
     private void initEvent() {
-        //设置确定按钮被点击后，向外界提供监听
+        // Set confirm button click listener callback
         yes.setOnClickListener(new QuecClickListener() {
             @Override
             public void onViewClick(View v) {
@@ -234,7 +234,7 @@ public class CommonDialog extends Dialog {
                 }
             }
         });
-        //设置取消按钮被点击后，向外界提供监听
+        // Set cancel button click listener callback
         no.setOnClickListener(new QuecClickListener() {
             @Override
             public void onViewClick(View v) {
@@ -248,7 +248,7 @@ public class CommonDialog extends Dialog {
     }
 
     /**
-     * 从外界Activity为Dialog设置标题
+     * Set dialog title from the caller Activity
      *
      * @param title
      */
@@ -258,7 +258,7 @@ public class CommonDialog extends Dialog {
     }
 
     /**
-     * 从外界Activity为Dialog设置内容的位置
+     * Set dialog content gravity from the caller Activity
      * @param textGravity
      * @return
      */
@@ -268,7 +268,7 @@ public class CommonDialog extends Dialog {
     }
 
     /**
-     * 从外界Activity为Dialog设置message
+     * Set dialog message from the caller Activity
      *
      * @param message
      */
@@ -278,7 +278,7 @@ public class CommonDialog extends Dialog {
     }
 
     /**
-     * 从外界Activity为Dialog设置message
+     * Set dialog message from the caller Activity
      *
      * @param message
      */
@@ -311,7 +311,7 @@ public class CommonDialog extends Dialog {
     }
 
     /**
-     * 设置富文本和自定义事件
+     * Set rich text and custom touch event
      *
      * @param spannableString
      * @param movementMethod
@@ -324,9 +324,9 @@ public class CommonDialog extends Dialog {
     }
 
     /**
-     * 设置取消按钮的是否可见
+     * Set cancel button visibility
      *
-     * @param visible 可见类型
+     * @param visible Visibility type
      * @return QuecDialog
      */
     public CommonDialog setNoBtnVisible(int visible) {
@@ -350,9 +350,9 @@ public class CommonDialog extends Dialog {
     }
 
     /**
-     * 设置确认按钮的是否可见
+     * Set confirm button visibility
      *
-     * @param visible 可见类型
+     * @param visible Visibility type
      * @return QuecDialog
      */
     public CommonDialog setYesBtnVisible(int visible) {
@@ -377,8 +377,8 @@ public class CommonDialog extends Dialog {
     }
 
     /**
-     * 设置是否可以返回关闭窗口
-     * @param isEnabled true 可以 false 不可以
+     * Set whether back-press can close the dialog
+     * @param isEnabled true = allowed, false = not allowed
      * @return
      */
     public CommonDialog setEnableBackPressed(boolean isEnabled) {

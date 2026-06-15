@@ -227,7 +227,7 @@ class FamilyGroupControlActivity : BaseFamilyActivity<ActivityCommonRvListBindin
         DatePickerDialog(
             this,
             { _, year, month, dayOfMonth ->
-                // 日期选完后，继续弹时间选择器
+                // After date is selected, show time picker
                 TimePickerDialog(
                     this,
                     { _, hourOfDay, minute ->
@@ -237,7 +237,7 @@ class FamilyGroupControlActivity : BaseFamilyActivity<ActivityCommonRvListBindin
                     },
                     currentDate.get(Calendar.HOUR_OF_DAY),
                     currentDate.get(Calendar.MINUTE),
-                    true // 24小时制
+                    true // 24-hour format
                 ).show()
             },
             currentDate.get(Calendar.YEAR),

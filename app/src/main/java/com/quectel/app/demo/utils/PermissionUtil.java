@@ -15,7 +15,7 @@ import androidx.core.content.ContextCompat;
 public class PermissionUtil {
 
     public static final int REQUEST_CODE = 5;
-    //定义三个权限
+    // Define three permissions
     private static final String[] permission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ? new String[]{
             Manifest.permission.BLUETOOTH_SCAN,
             Manifest.permission.BLUETOOTH_ADVERTISE,
@@ -33,15 +33,15 @@ public class PermissionUtil {
             Manifest.permission.BLUETOOTH_CONNECT,
     };
 
-    //每个权限是否已授
+    // Whether each permission has been granted
     public static boolean isPermissionGranted(Activity activity) {
         if (Build.VERSION.SDK_INT >= 23) {
             for (int i = 0; i < permission.length; i++) {
                 int checkPermission = ContextCompat.checkSelfPermission(activity, permission[i]);
                 /***
-                 * checkPermission返回两个值
-                 * 有权限: PackageManager.PERMISSION_GRANTED
-                 * 无权限: PackageManager.PERMISSION_DENIED
+                 * checkPermission returns two values
+                 * Has permission: PackageManager.PERMISSION_GRANTED
+                 * No permission: PackageManager.PERMISSION_DENIED
                  */
                 if (checkPermission != PackageManager.PERMISSION_GRANTED) {
                     return false;
@@ -59,14 +59,14 @@ public class PermissionUtil {
         return false;
     }
 
-    //监测定位权限
+    // Check location permission
     public static boolean isLocationPermissionGranted(Context context) {
         if (Build.VERSION.SDK_INT >= 23) {
                 int checkPermission = ContextCompat.checkSelfPermission(context, locationPermission[0]);
                 /***
-                 * checkPermission返回两个值
-                 * 有权限: PackageManager.PERMISSION_GRANTED
-                 * 无权限: PackageManager.PERMISSION_DENIED
+                 * checkPermission returns two values
+                 * Has permission: PackageManager.PERMISSION_GRANTED
+                 * No permission: PackageManager.PERMISSION_DENIED
                  */
                 if (checkPermission != PackageManager.PERMISSION_GRANTED) {
                     return false;
@@ -76,7 +76,7 @@ public class PermissionUtil {
     }
 
     /**
-     * 监测蓝牙权限是否开启
+     * Check whether Bluetooth permission is granted
      * @param context
      * @return
      */
@@ -84,9 +84,9 @@ public class PermissionUtil {
         if(Build.VERSION.SDK_INT >= 23&&Build.VERSION.SDK_INT<Build.VERSION_CODES.S){
             int checkPermission = ContextCompat.checkSelfPermission(context, locationPermission[0]);
             /***
-             * checkPermission返回两个值
-             * 有权限: PackageManager.PERMISSION_GRANTED
-             * 无权限: PackageManager.PERMISSION_DENIED
+             * checkPermission returns two values
+             * Has permission: PackageManager.PERMISSION_GRANTED
+             * No permission: PackageManager.PERMISSION_DENIED
              */
             if (checkPermission != PackageManager.PERMISSION_GRANTED) {
                 return false;
@@ -110,7 +110,7 @@ public class PermissionUtil {
         if (isPermissionGranted(activity)) {
             return true;
         } else {
-            //如果没有设置过权限许可，则弹出系统的授权窗口
+            // If permission has never been granted, show system permission dialog
             ActivityCompat.requestPermissions(activity, permission, REQUEST_CODE);
             return false;
         }

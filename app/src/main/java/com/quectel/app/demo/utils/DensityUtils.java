@@ -13,7 +13,7 @@ public class DensityUtils
 	}
 
 	/**
-	 * dp转px
+	 * Convert dp to px
 	 * 
 	 * @param context
 	 *
@@ -26,7 +26,7 @@ public class DensityUtils
 	}
 
 	/**
-	 * sp转px
+	 * Convert sp to px
 	 * 
 	 * @param context
 	 *
@@ -39,7 +39,7 @@ public class DensityUtils
 	}
 
 	/**
-	 * px转dp
+	 * Convert px to dp
 	 * 
 	 * @param context
 	 * @param pxVal
@@ -52,7 +52,7 @@ public class DensityUtils
 	}
 
 	/**
-	 * px转sp
+	 * Convert px to sp
 	 * 
 	 *
 	 * @param pxVal

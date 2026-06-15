@@ -34,7 +34,7 @@ public class EditDoubleTextPopup extends BasePopupWindow {
     }
 
     /**
-     * 初始化监听
+     * Initialize listeners
      */
     private void initListener() {
         mBinding.tvSure.setOnClickListener(new QuecClickListener() {
@@ -101,14 +101,14 @@ public class EditDoubleTextPopup extends BasePopupWindow {
     }
 
     /**
-     * 编辑框监听
+     * Input field listener
      */
     public interface OnEditTextListener {
         /**
-         * 输入值变化
+         * Input value changed
          *
-         * @param content1 输入值1
-         * @param content2 输入值2
+         * @param content1 Input value 1
+         * @param content2 Input value 2
          */
         void changeText(String content1, String content2);
 

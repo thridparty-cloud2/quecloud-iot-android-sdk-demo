@@ -30,7 +30,7 @@ import java.util.Locale
 import kotlin.concurrent.thread
 
 class MineFragment(
-    //1 语言   2 国家   3时区
+    // 1 language   2 country   3 timezone
     private val lang: Int = 1,
     private val nationality: Int = 2,
     private val timezone: Int = 3,

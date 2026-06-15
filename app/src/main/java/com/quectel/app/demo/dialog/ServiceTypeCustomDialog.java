@@ -51,7 +51,7 @@ public class ServiceTypeCustomDialog extends Dialog {
 
         binding = QuecServiceTypeCustomDialogBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        //空白处不能取消动画
+        // Cannot cancel dialog by tapping outside
         initLayout();
         initEvent();
     }
@@ -71,7 +71,7 @@ public class ServiceTypeCustomDialog extends Dialog {
     }
 
     /**
-     * 初始化界面的确定和取消监听
+     * Initialize confirm and cancel click listeners
      */
     private void initEvent() {
 

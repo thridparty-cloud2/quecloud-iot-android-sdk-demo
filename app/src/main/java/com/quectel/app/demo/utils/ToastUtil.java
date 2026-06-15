@@ -11,7 +11,7 @@ import com.quectel.basic.common.base.QuecBaseApp;
 
 
 /**
- * Toast 工具类
+ * Toast utility class
  */
 public class ToastUtil {
     public static void showS(CharSequence msg) {
@@ -23,7 +23,7 @@ public class ToastUtil {
     }
 
     /**
-     * 显示toast 短暂
+     * Show short Toast
      */
     public static void showS(Context context, CharSequence msg) {
         showReal(context, msg, Toast.LENGTH_SHORT);
@@ -42,7 +42,7 @@ public class ToastUtil {
     }
 
     /**
-     * 显示toast 较长
+     * Show long Toast
      */
     public static void showL(Context context, CharSequence msg) {
         showReal(context, msg, Toast.LENGTH_LONG);
@@ -54,7 +54,7 @@ public class ToastUtil {
 
 
     /**
-     * 显示toast
+     * Show Toast
      */
     public static void showReal(Context context, CharSequence msg, int duration) {
         Toast toast = Toast.makeText(context, msg, duration);
@@ -66,7 +66,7 @@ public class ToastUtil {
     }
 
     /**
-     * 显示toast
+     * Show Toast
      */
     public static void showReal(Context context, int resId, int duration) {
         Toast toast = Toast.makeText(context, resId, duration);

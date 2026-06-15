@@ -54,8 +54,8 @@ class DeviceSceneInfoActivity : QuecBaseActivity<ActivityDeviceSceneInfoBinding>
         QuecSceneService.clearSceneLog { result ->
             handlerResult(result)
             if (result.isSuccess) {
-                //清除日志成功
-                QLog.i(TAG, "清除日志成功")
+                // Log cleared successfully
+                QLog.i(TAG, "Log cleared successfully")
             }
         }
     }
@@ -175,7 +175,7 @@ class DeviceSceneInfoActivity : QuecBaseActivity<ActivityDeviceSceneInfoBinding>
         QuecSceneService.executeTestScene(mModel) { result ->
             handlerResult(result)
             if (result.isSuccess) {
-                //执行场景测试成功
+                // Scene test executed successfully
                 AppVariable.setSceneChange()
             }
         }
@@ -186,7 +186,7 @@ class DeviceSceneInfoActivity : QuecBaseActivity<ActivityDeviceSceneInfoBinding>
             handlerResult(result)
             if (result.isSuccess) {
                 AppVariable.setSceneChange()
-                //执行场景成功
+                // Scene executed successfully
             }
         }
     }

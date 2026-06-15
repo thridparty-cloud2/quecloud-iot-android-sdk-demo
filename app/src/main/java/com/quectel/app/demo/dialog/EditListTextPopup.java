@@ -47,7 +47,7 @@ public class EditListTextPopup extends BasePopupWindow {
     }
 
     /**
-     * 初始化监听
+     * Initialize listeners
      */
     private void initListener() {
         mBinding.tvSure.setOnClickListener(new QuecClickListener() {
@@ -88,11 +88,11 @@ public class EditListTextPopup extends BasePopupWindow {
     }
 
     /**
-     * 编辑框监听
+     * Input field listener
      */
     public interface OnEditTextListener {
         /**
-         * 输入值结果
+         * Input result
          */
         void changeText(List<EditListBean> dataList);
     }

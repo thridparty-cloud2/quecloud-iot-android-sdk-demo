@@ -9,7 +9,7 @@ import org.json.JSONException
 import org.json.JSONObject
 
 /**
- * 验证码获取
+ * Auth code retrieval
  */
 object AuthCodeManager {
     fun getSmsCode(type: Int, country: String, phone: String): Boolean {

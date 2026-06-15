@@ -30,7 +30,7 @@ abstract class QuecBaseFragment<T : ViewBinding> : QuecBaseCommonFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        //注册监听
+        // Register listener
         if (!EventBus.getDefault().isRegistered(this) && valveEventBus()) {
             EventBus.getDefault().register(this)
         }
@@ -53,14 +53,14 @@ abstract class QuecBaseFragment<T : ViewBinding> : QuecBaseCommonFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        //注册监听
+        // Register listener
         if (EventBus.getDefault().isRegistered(this) && valveEventBus()) {
             EventBus.getDefault().unregister(this);
         }
     }
 
     /**
-     * eventBus注册阀门
+     * EventBus registration flag
      */
     open fun valveEventBus(): Boolean {
         return false

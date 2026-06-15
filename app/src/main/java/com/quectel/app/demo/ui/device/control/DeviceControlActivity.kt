@@ -141,7 +141,7 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
 
         override fun onlineUpdate(device: QuecDeviceModel, onlineState: Int) {
             QLog.i(TAG, "device:${device.channelId} onlineState:$onlineState")
-            //todo 主线程调用
+            //todo call on main thread
             QuecThreadUtil.RunMainThread {
                 showOnlineStatus(onlineState)
             }
@@ -317,7 +317,7 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
                 dataType = dataTypeMap[item.dataType]
             }
         }, sendMode) {
-            //todo 主线程切换
+            //todo switch to main thread
             QuecThreadUtil.RunMainThread {
                 if (it.isSuccess) {
                     showMessage(getString(R.string.device_status_query_success))
@@ -374,7 +374,7 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
             }
 
             val size = (item.attributeValue as? java.util.ArrayList<*>)?.size ?: 0
-            //确认数组类型
+            // Confirm array type
             val spec = item.specs[0]
             if (spec is ArraySpecs && size > 0) {
                 when (spec.dataType) {
@@ -630,7 +630,7 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
         DatePickerDialog(
             this,
             { _, year, month, dayOfMonth ->
-                // 日期选完后，继续弹时间选择器
+                // After date is selected, show time picker
                 TimePickerDialog(
                     this,
                     { _, hourOfDay, minute ->
@@ -640,7 +640,7 @@ class DeviceControlActivity : QuecBaseDeviceActivity<ActivityDeviceControlExBind
                     },
                     currentDate.get(Calendar.HOUR_OF_DAY),
                     currentDate.get(Calendar.MINUTE),
-                    true // 24小时制
+                    true // 24-hour format
                 ).show()
             },
             currentDate.get(Calendar.YEAR),

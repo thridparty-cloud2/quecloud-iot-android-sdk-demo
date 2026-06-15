@@ -41,23 +41,23 @@ abstract class QuecBaseCommonActivity : AppCompatActivity(), QuecBaseView {
         CoroutineScope(Dispatchers.Main)
     }
 
-    //loading框
+    // Loading dialog
     private var loadingDialog: QuecLoadingDialog? = null
 
-    //沉浸式状态栏
+    // Immersive status bar
     open fun openStatusBar(): Boolean {
         return true
     }
 
     /**
-     * eventBus注册阀门
+     * EventBus registration flag
      */
     open fun valveEventBus(): Boolean {
         return false
     }
 
     /**
-     * 显示错误页面
+     * Show error page
      */
     fun showErrorPage() {
 
@@ -165,14 +165,14 @@ abstract class QuecBaseCommonActivity : AppCompatActivity(), QuecBaseView {
     }
 
     /**
-     * 初始化Intent, 可以在子类中传入通用的值
+     * Initialize Intent, can pass common values in subclasses
      */
     open fun initIntent(intent: Intent) {
 
     }
 
     /**
-     * StatusBar默认 透明、沉浸式、反色
+     * StatusBar default: transparent, immersive, inverse color
      */
     open fun initStatusBar() {
         QuecStatusBarUtil.transparentStatusBar(this, true);
@@ -184,7 +184,7 @@ abstract class QuecBaseCommonActivity : AppCompatActivity(), QuecBaseView {
     override fun onDestroy() {
         super.onDestroy()
 
-        //反注册
+        // Unregister
         if (EventBus.getDefault().isRegistered(this) && valveEventBus()) {
             EventBus.getDefault().unregister(this);
         }
@@ -254,7 +254,7 @@ abstract class QuecBaseCommonActivity : AppCompatActivity(), QuecBaseView {
     }
 
     /**
-     * 设置字体大小，同时通知界面重绘
+     * Set font size and notify UI to redraw
      */
     open fun setFontScale(fontScale: Float) {
         //QLog.i(this.toString(), "setFontSize $fontScale")

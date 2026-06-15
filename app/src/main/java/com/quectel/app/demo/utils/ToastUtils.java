@@ -16,7 +16,7 @@ public class ToastUtils
         public static boolean isShow = true;
 
         /**
-         * 短时间显示Toast
+         * Show Toast for a short duration
          *
          * @param context
          * @param message
@@ -28,7 +28,7 @@ public class ToastUtils
         }
 
         /**
-         * 短时间显示Toast
+         * Show Toast for a short duration
          *
          * @param context
          * @param message
@@ -40,7 +40,7 @@ public class ToastUtils
         }
 
         /**
-         * 长时间显示Toast
+         * Show Toast for a long duration
          *
          * @param context
          * @param message
@@ -52,7 +52,7 @@ public class ToastUtils
         }
 
         /**
-         * 长时间显示Toast
+         * Show Toast for a long duration
          *
          * @param context
          * @param message
@@ -64,7 +64,7 @@ public class ToastUtils
         }
 
         /**
-         * 自定义显示Toast时间
+         * Show Toast for a custom duration
          *
          * @param context
          * @param message
@@ -77,7 +77,7 @@ public class ToastUtils
         }
 
         /**
-         * 自定义显示Toast时间
+         * Show Toast for a custom duration
          *
          * @param context
          * @param message

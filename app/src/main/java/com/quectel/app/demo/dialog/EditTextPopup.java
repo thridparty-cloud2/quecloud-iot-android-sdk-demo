@@ -36,7 +36,7 @@ public class EditTextPopup extends BasePopupWindow {
     }
 
     /**
-     * 初始化监听
+     * Initialize listeners
      */
     private void initListener() {
         mBinding.tvSure.setOnClickListener(new QuecClickListener() {
@@ -97,13 +97,13 @@ public class EditTextPopup extends BasePopupWindow {
     }
 
     /**
-     * 编辑框监听
+     * Input field listener
      */
     public interface OnEditTextListener {
         /**
-         * 输入值变化
+         * Input value changed
          *
-         * @param content 输入值
+         * @param content Input value
          */
         void changeText(String content);
 

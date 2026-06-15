@@ -13,7 +13,7 @@ import com.quectel.app.usersdk.bean.LangBean
 import com.quectel.app.usersdk.service.QuecUserService
 
 class UpdataUserActivity(
-    //1 语言   2 国家   3时区
+    // 1 language   2 country   3 timezone
     val lang: Int = 1,
     val nationality: Int = 2,
     val timezone: Int = 3,

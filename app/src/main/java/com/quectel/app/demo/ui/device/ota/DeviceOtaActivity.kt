@@ -56,7 +56,7 @@ class DeviceOtaActivity : QuecBaseDeviceActivity<ActivityDeviceOtaBinding>() {
     }
 
     override fun initData() {
-        //todo: 临时验证用
+        //todo: temporary verification
         QuecOtaManager.setBleCustomOtaProgram(
             device.productKey,
             device.deviceKey,

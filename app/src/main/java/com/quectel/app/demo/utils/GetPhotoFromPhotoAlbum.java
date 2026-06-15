@@ -10,7 +10,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
 /**
- * 从相册内获取照片转化工具类
+ * Utility class for converting photo URIs from the album
  *
  * @author : king.pan
  * @e-mail : king.pan@quectel.com
@@ -18,11 +18,11 @@ import android.provider.MediaStore;
  */
 public class GetPhotoFromPhotoAlbum {
     /**
-     * 根据Uri获取图片的绝对路径
+     * Get absolute path of an image from URI
      *
-     * @param context 上下文对象
-     * @param uri     图片的Uri
-     * @return 如果Uri对应的图片存在, 那么返回该图片的绝对路径, 否则返回null
+     * @param context Application context
+     * @param uri     Image URI
+     * @return Absolute path if the image exists, otherwise null
      */
     public static String getRealPathFromUri(Context context, Uri uri) {
         int sdkVersion = Build.VERSION.SDK_INT;
@@ -34,31 +34,31 @@ public class GetPhotoFromPhotoAlbum {
     }
 
     /**
-     * 适配api19以下(不包括api19),根据uri获取图片的绝对路径
+     * Adapted for API below 19: get absolute path from URI
      *
-     * @param context 上下文对象
-     * @param uri     图片的Uri
-     * @return 如果Uri对应的图片存在, 那么返回该图片的绝对路径, 否则返回null
+     * @param context Application context
+     * @param uri     Image URI
+     * @return Absolute path if the image exists, otherwise null
      */
     private static String getRealPathFromUriBelowAPI19(Context context, Uri uri) {
         return getDataColumn(context, uri, null, null);
     }
 
     /**
-     * 适配api19及以上,根据uri获取图片的绝对路径
+     * Adapted for API 19+: get absolute path from URI
      *
-     * @param context 上下文对象
-     * @param uri     图片的Uri
-     * @return 如果Uri对应的图片存在, 那么返回该图片的绝对路径, 否则返回null
+     * @param context Application context
+     * @param uri     Image URI
+     * @return Absolute path if the image exists, otherwise null
      */
     @SuppressLint("NewApi")
     private static String getRealPathFromUriAboveApi19(Context context, Uri uri) {
         String filePath = null;
         if (DocumentsContract.isDocumentUri(context, uri)) {
-            // 如果是document类型的 uri, 则通过document id来进行处理
+            // If URI is a document type, process via document ID
             String documentId = DocumentsContract.getDocumentId(uri);
             if (isMediaDocument(uri)) {
-                // 使用':'分割
+                // Split by ':'
                 String id = documentId.split(":")[1];
 
                 String selection = MediaStore.Images.Media._ID + "=?";
@@ -71,23 +71,23 @@ public class GetPhotoFromPhotoAlbum {
                 filePath = getDataColumn(context, contentUri, null, null);
             }
         } else if ("content".equalsIgnoreCase(uri.getScheme())) {
-            // 如果是 content 类型的 Uri
+            // If URI is of content type
             filePath = getDataColumn(context, uri, null, null);
         } else if ("file".equals(uri.getScheme())) {
-            // 如果是 file 类型的 Uri,直接获取图片对应的路径
+            // If URI is of file type, get the path directly
             filePath = uri.getPath();
         }
         return filePath;
     }
 
     /**
-     * 获取数据库表中的 _data 列，即返回Uri对应的文件路径
+     * Get the _data column from the media database (i.e. file path for the URI)
      *
-     * @param context       上下文
-     * @param uri           路径
-     * @param selection     筛选的条件
-     * @param selectionArgs 筛选的参数
-     * @return 返回Uri对应的文件路径
+     * @param context       Application context
+     * @param uri           URI path
+     * @param selection     Query selection clause
+     * @param selectionArgs Query selection arguments
+     * @return File path corresponding to the URI
      */
     private static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
         String path = null;

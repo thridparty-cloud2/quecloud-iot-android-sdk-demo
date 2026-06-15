@@ -108,7 +108,7 @@ class AutoMateListActivity : QuecBaseActivity<ActivityDeviceAutoMateBinding>() {
                         showOrHideLoading(true)
                         handlerResult(ret)
                         if (ret.isSuccess) {
-                            //请求成功
+                            // Request successful
                             dismiss()
                             queryAutoMateList()
                         }
@@ -136,7 +136,7 @@ class AutoMateListActivity : QuecBaseActivity<ActivityDeviceAutoMateBinding>() {
             runOnUiThread {
                 showOrHideLoading(false)
                 if (result.isSuccess) {
-                    val data = result.data //请求成功, 获取到的数据
+                    val data = result.data // Request successful, retrieved data
                     mAdapter.setNewInstance(data.list as MutableList)
                 } else {
                     handlerResult(result)

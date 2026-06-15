@@ -9,20 +9,20 @@ public class DisplayUtil {
     private static final String TAG = "DisplayUtil";
 
     /**
-     * 保持字体大小不随系统设置变化（用在界面加载之前）
-     * 要重写Activity的attachBaseContext()
+     * Keep font size unchanged regardless of system settings (call before layout)
+     * Override Activity's attachBaseContext()
      */
     public static Context attachBaseContext(Context context, float fontScale) {
         Configuration config = context.getResources().getConfiguration();
         //QLog.i(TAG, "changeActivityFontScaleA " + config.fontScale + ", " + fontScale);
-        //正确写法
+        // Correct approach
         config.fontScale = fontScale;
         return context.createConfigurationContext(config);
     }
 
     /**
-     * 保持字体大小不随系统设置变化（用在界面加载之前）
-     * 要重写Activity的getResources()
+     * Keep font size unchanged regardless of system settings (call before layout)
+     * Override Activity's getResources()
      */
     public static Resources getResources(Context context, Resources resources, float fontScale) {
         Configuration config = resources.getConfiguration();
@@ -35,10 +35,10 @@ public class DisplayUtil {
         }
     }
     /**
-     * 保存字体大小，后通知界面重建，它会触发attachBaseContext，来改变字号
+     * Save font size then notify UI to rebuild; triggers attachBaseContext to change font size
      */
     public static void recreate(Activity activity) {
-        //只有这句才有效，其它两句都无效
+        // Only this line takes effect; the other two do not
         activity.recreate();
     }
 

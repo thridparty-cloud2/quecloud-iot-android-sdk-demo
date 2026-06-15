@@ -8,7 +8,7 @@ public class DeviceOtaModel {
     private String version;
     private String desc;
     /**
-     * 设备升级状态
+     * Device upgrade status
      * {@link com.quectel.sdk.ota.upgrade.model.OtaUpgradeStatus}
      */
     private int deviceStatus;

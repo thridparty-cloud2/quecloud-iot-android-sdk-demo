@@ -53,7 +53,7 @@ object SdkManager {
     }
 
     fun isCustomService(application: Application): Boolean {
-        //todo: 私有云注册实现
+        //todo: implement private cloud registration
         return false
     }
 }

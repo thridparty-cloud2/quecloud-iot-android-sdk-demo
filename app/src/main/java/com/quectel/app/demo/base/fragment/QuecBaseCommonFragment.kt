@@ -56,7 +56,7 @@ abstract class QuecBaseCommonFragment : SupportFragment(), QuecBaseView {
     }
 
     /**
-     * 处理回退事件
+     * Handle back-press event
      *
      * @return
      */
@@ -85,7 +85,7 @@ abstract class QuecBaseCommonFragment : SupportFragment(), QuecBaseView {
     }
 
     companion object {
-        // 再点一次退出程序时间设置
+        // Time threshold for double-click-to-exit
         private const val WAIT_TIME: Long = 2000L
     }
 }

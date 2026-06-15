@@ -15,11 +15,11 @@ import java.io.File;
 
 public class GetImgFromAlbum {
     /**
-     * 根据Uri获取图片的绝对路径
+     * Get absolute path of an image from URI
      *
-     * @param context 上下文对象
-     * @param uri     图片的Uri
-     * @return 如果Uri对应的图片存在, 那么返回该图片的绝对路径, 否则返回null
+     * @param context Application context
+     * @param uri     Image URI
+     * @return Absolute path if the image exists, otherwise null
      */
 
     @SuppressLint("ObsoleteSdkInt")
@@ -55,11 +55,11 @@ public class GetImgFromAlbum {
     }
 
     /**
-     * 适配 Android 10以上相册选取照片操作
+     * Adapted for photo picking on Android 10+
      *
-     * @param context 上下文
-     * @param uri     图片uri
-     * @return 图片地址
+     * @param context Application context
+     * @param uri     Image URI
+     * @return Image path
      */
     private static String getRealPathFromUriAboveApiAndroidQ(Context context, Uri uri) {
         Cursor cursor = null;
@@ -73,7 +73,7 @@ public class GetImgFromAlbum {
                 Uri baseUri = Uri.parse("content://media/external/images/media");
                 return String.valueOf(Uri.withAppendedPath(baseUri, "" + id));
             } else {
-                // 如果图片不在手机的共享图片数据库，就先把它插入。
+                // If the image is not in the shared media database, insert it first.
                 if (new File(path).exists()) {
                     ContentValues values = new ContentValues();
                     values.put(MediaStore.Images.Media.DATA, path);
@@ -90,11 +90,11 @@ public class GetImgFromAlbum {
     }
 
     /**
-     * 适配Android 4.4以下(不包括api19),根据uri获取图片的绝对路径
+     * Adapted for Android below 4.4 (excl. API 19): get absolute path from URI
      *
-     * @param context 上下文对象
-     * @param uri     图片的Uri
-     * @return 如果Uri对应的图片存在, 那么返回该图片的绝对路径, 否则返回null
+     * @param context Application context
+     * @param uri     Image URI
+     * @return Absolute path if the image exists, otherwise null
      */
     private static String getRealPathFromUriBelowApiAndroidK(Context context, Uri uri) {
         return getDataColumn(context, uri, null, null);
@@ -105,20 +105,20 @@ public class GetImgFromAlbum {
 
 
     /**
-     * 适配Android 4.4及以上,根据uri获取图片的绝对路径
+     * Adapted for Android 4.4+ (API 19+): get absolute path from URI
      *
-     * @param context 上下文对象
-     * @param uri     图片的Uri
-     * @return 如果Uri对应的图片存在, 那么返回该图片的绝对路径, 否则返回null
+     * @param context Application context
+     * @param uri     Image URI
+     * @return Absolute path if the image exists, otherwise null
      */
     @SuppressLint("NewApi")
     private static String getRealPathFromUriAboveApiAndroidK(Context context, Uri uri) {
         String filePath = null;
         if (DocumentsContract.isDocumentUri(context, uri)) {
-            // 如果是document类型的 uri, 则通过document id来进行处理
+            // If URI is a document type, process via document ID
             String documentId = DocumentsContract.getDocumentId(uri);
             if (isMediaDocument(uri)) {
-                // 使用':'分割
+                // Split by ':'
                 String id = documentId.split(":")[1];
                 String selection = MediaStore.Images.Media._ID + "=?";
                 String[] selectionArgs = {id};
@@ -128,10 +128,10 @@ public class GetImgFromAlbum {
                 filePath = getDataColumn(context, contentUri, null, null);
             }
         } else if ("content".equalsIgnoreCase(uri.getScheme())) {
-            // 如果是 content 类型的 Uri
+            // If URI is of content type
             filePath = getDataColumn(context, uri, null, null);
         } else if ("file".equals(uri.getScheme())) {
-            // 如果是 file 类型的 Uri,直接获取图片对应的路径
+            // If URI is of file type, get the path directly
             filePath = uri.getPath();
         }
         return filePath;
@@ -139,7 +139,7 @@ public class GetImgFromAlbum {
 
 
     /**
-     * 获取数据库表中的 _data 列，即返回Uri对应的文件路径
+     * Get the _data column from the media database (i.e. file path for the URI)
      */
     private static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
         String path = null;

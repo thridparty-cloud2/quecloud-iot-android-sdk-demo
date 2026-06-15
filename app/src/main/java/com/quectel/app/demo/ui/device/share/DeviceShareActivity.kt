@@ -28,7 +28,7 @@ class DeviceShareActivity : QuecBaseDeviceActivity<ActivityDeviceShareBinding>()
             getShareList(true)
         }
         addItem(getString(R.string.create_share_code)) {
-            //30分钟的有效期
+            // 30-minute validity
             val time = 30 * 60 * 1000 + System.currentTimeMillis()
             QuecDeviceShareService.setShareInfoByOwner(
                 device.deviceKey,

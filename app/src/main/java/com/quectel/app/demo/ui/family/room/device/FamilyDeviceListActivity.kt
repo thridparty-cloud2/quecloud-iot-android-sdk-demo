@@ -172,17 +172,17 @@ class FamilyDeviceListActivity : BaseFamilyActivity<ActivityFamilyDeviceListBind
 
     enum class Mode {
         /**
-         * 常用设备列表
+         * Common device list
          */
         COMMON,
 
         /**
-         * 家庭下所有设备
+         * All devices under the family
          */
         ALL,
 
         /**
-         * 房间下所有设备
+         * All devices under the room
          */
         ROOM,
     }

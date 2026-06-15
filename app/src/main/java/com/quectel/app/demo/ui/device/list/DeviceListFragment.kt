@@ -35,7 +35,7 @@ class DeviceListFragment : QuecBaseFragment<ActivityDeviceListBinding>() {
     private val deviceStatusListener = object : QuecDeviceClientApi.Listener {
         override fun connectingStateUpdate(device: QuecDeviceModel, connectingState: Int) {
             device.connectStatus = connectingState
-            //todo 在主线程回调
+            //todo callback on main thread
             notifyItemChange(device)
         }
 
@@ -160,10 +160,10 @@ class DeviceListFragment : QuecBaseFragment<ActivityDeviceListBinding>() {
     private fun getFamilyList(page: Int) {
         QuecSmartHomeService.getFamilyList("1", 1, 10) {
             if (it.isSuccess) {
-                //默认
+                // Default
                 var model = it.data.list.find { item -> item.fid == QuecFamilyUtil.getFamilyId() }
                 if (model == null) {
-                    //选择默认第一个家庭
+                    // Select the first family by default
                     model = it.data.list.first()
                     if (model == null) {
                         binding.fragmentPtrHomePtrFrame.refreshComplete()

@@ -8,7 +8,7 @@ import com.quectel.basic.queclog.QLog;
 
 public class DeviceUtil {
     /**
-     * 判断是否是新设备
+     * Check if it is a new device
      *
      * @param scanDevice
      * @return
@@ -32,7 +32,7 @@ public class DeviceUtil {
     }
 
     /**
-     * 获取PK
+     * Get ProductKey (PK)
      *
      * @param scanDevice
      * @return
@@ -47,7 +47,7 @@ public class DeviceUtil {
     }
 
     /**
-     * 获取dk
+     * Get DeviceKey (DK)
      *
      * @param scanDevice
      * @return
@@ -76,7 +76,7 @@ public class DeviceUtil {
     }
 
     /**
-     * 获取
+     * Get
      *
      * @param scanDevice
      * @return
@@ -113,7 +113,7 @@ public class DeviceUtil {
 
 
     /**
-     * 字节数组转int 小端模式
+     * Convert byte array to int (little-endian)
      */
     public static int byteArrayToIntLittleEndian(byte[] bytes) {
         int x = 0;
@@ -125,7 +125,7 @@ public class DeviceUtil {
     }
 
 //    /**
-//     * 校验byte数组的bit 8位上的值 是否为1
+//     * Check whether bit 8 of the byte array is 1
 //     * @param bytes
 //     * @return
 //     */
@@ -138,7 +138,7 @@ public class DeviceUtil {
 
 
     /**
-     * 获取Mac
+     * Get MAC address
      *
      * @param scanDevice
      * @return
@@ -155,7 +155,7 @@ public class DeviceUtil {
         final byte[] byteArray = new byte[hexString.length() / 2];
         int k = 0;
 
-        for (int i = 0; i < byteArray.length; i++) {// 因为是16进制，最多只会占用4位，转换成字节需要两个16进制的字符，高位在先
+        for (int i = 0; i < byteArray.length; i++) { // Hex uses at most 4 bits; 2 hex chars per byte, high nibble first
             byte high = (byte) (Character.digit(hexString.charAt(k), 16) & 0xff);
             byte low = (byte) (Character.digit(hexString.charAt(k + 1), 16) & 0xff);
             byteArray[i] = (byte) (high << 4 | low);
@@ -168,7 +168,7 @@ public class DeviceUtil {
 
 
     /**
-     * byte数组转换成16进制字符串
+     * Convert byte array to hexadecimal string
      *
      * @param src
      * @return
@@ -191,7 +191,7 @@ public class DeviceUtil {
     }
 
     /**
-     * byte数组转换成16进制字符串 并重新组合符合要求的mac地址
+     * Convert byte array to hex string and reformat as a valid MAC address
      *
      * @param src
      * @return
@@ -218,7 +218,7 @@ public class DeviceUtil {
     }
 
     /**
-     * 检查系统蓝牙是否打开
+     * Check whether system Bluetooth is enabled
      *
      * @return
      */
@@ -229,7 +229,7 @@ public class DeviceUtil {
 
 
     /**
-     * 截取dk后四位 并换成小写
+     * Get last four characters of DK and convert to lowercase
      *
      * @param dk
      * @return
@@ -243,7 +243,7 @@ public class DeviceUtil {
     }
 
     /**
-     * 截取mac地址后四位 并换成小写
+     * Get last four characters of MAC address and convert to lowercase
      *
      * @param mac
      * @return
@@ -258,11 +258,11 @@ public class DeviceUtil {
     }
 
     /***
-     *  获取设备与云端的接入类型 0 = 无效，tcp = 1，tcp_psk=2 tls = 3
+     *  Get device-to-cloud connection type: 0=invalid, tcp=1, tcp_psk=2, tls=3
      *  cer = 4 upd = 5,upd_psk = 6;
      *  0b1110_1111_0000_0000
-     *  右移 9 位 获得 0b0111_0111
-     *  &0xF 获得  0b0000_0111
+     *  Right-shift 9 bits to get 0b0111_0111
+     *  &0xF to get 0b0000_0111
      */
     public static int getEndPointType(ScanDevice deviceBean) {
         int bitmask = getFlag(deviceBean);
@@ -271,10 +271,10 @@ public class DeviceUtil {
     }
 
     /**
-     * bit8=1表示dk补了一个"0”再编码，接收方解码后应裁剪最后的"0";
+     * bit8=1: DK is padded with a "0" before encoding; receiver should strip trailing "0" after decoding.
      *
      * @param deviceBean 1110_1111_0000_0000
-     *                   右移 8位 得到 1110_1111
+     *                   Right-shift 8 bits to get 1110_1111
      * @return
      */
     public static int getDkType(ScanDevice deviceBean) {

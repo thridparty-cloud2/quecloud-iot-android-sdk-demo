@@ -3,7 +3,7 @@ package com.quectel.app.demo.bean;
 import com.quectel.basic.common.entity.QuecBaseModel;
 
 /**
- * 用户确认升级设备 返回的设备列表
+ * Device list returned after user confirms firmware upgrade
  */
 public class DeviceOtaResult implements QuecBaseModel {
     private long planId;

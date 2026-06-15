@@ -60,7 +60,7 @@ class FamilyGroupListActivity : BaseFamilyActivity<ActivityCommonRvListBinding>(
             if (it.isSuccess) {
                 list.clear()
                 list.addAll(it.data.list.filter { item ->
-                    //只展示群组设备
+                    // Only show group devices
                     !item.gdid.isNullOrEmpty()
                 })
 

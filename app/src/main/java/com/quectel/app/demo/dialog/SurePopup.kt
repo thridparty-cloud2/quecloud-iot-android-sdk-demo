@@ -24,7 +24,7 @@ class SurePopup(context: Context) : BasePopupWindow(context) {
     }
 
     /**
-     * 初始化监听
+     * Initialize listeners
      */
     private fun initListener() {
         mBinding!!.tvSure.setOnClickListener { view ->
@@ -59,11 +59,11 @@ class SurePopup(context: Context) : BasePopupWindow(context) {
     }
 
     /**
-     * 确定监听
+     * Confirm listener
      */
     interface OnSureListener {
         /**
-         * 确定
+         * Confirm
          */
         fun sure()
     }

@@ -6,13 +6,13 @@ interface QuecBaseView {
 
     fun showMessage(info: String)
 
-    //显示下拉加载框, 使用到的Activity实现该方法
+    // Show pull-to-refresh loader; Activity using this should implement this method
     fun onShowRefresh(isShow: Boolean) {
 
     }
 
     /**
-     * 显示错误页面
+     * Show error page
      */
     fun showErrorView(isShow: Boolean) {
     }

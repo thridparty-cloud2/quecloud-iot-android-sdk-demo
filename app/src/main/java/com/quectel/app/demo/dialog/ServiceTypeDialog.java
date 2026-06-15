@@ -49,7 +49,7 @@ public class ServiceTypeDialog extends Dialog {
 
         binding = QuecServiceTypeDialogBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        //空白处不能取消动画
+        // Cannot cancel dialog by tapping outside
         initLayout();
         initEvent();
     }
@@ -69,10 +69,10 @@ public class ServiceTypeDialog extends Dialog {
     }
 
     /**
-     * 初始化界面的确定和取消监听
+     * Initialize confirm and cancel click listeners
      */
     private void initEvent() {
-        //设置确定按钮被点击后，向外界提供监听
+        // Set confirm button click listener callback
         binding.btnCancel.setOnClickListener(view -> {
             if (isShowing()) {
                 cancel();
