@@ -1,5 +1,6 @@
 package com.quectel.app.demo.common
 
+import com.quectel.app.demo.R
 import com.quectel.app.demo.utils.ToastUtil
 import com.quectel.app.quecnetwork.httpservice.IHttpCallBack
 import com.quectel.app.usersdk.userservice.IUserService
@@ -13,11 +14,11 @@ import org.json.JSONObject
 object AuthCodeManager {
     fun getSmsCode(type: Int, country: String, phone: String): Boolean {
         if (country.isEmpty()) {
-            ToastUtil.showS("请输入国家区号")
+            ToastUtil.showS(R.string.please_input_country_code)
             return false
         }
         if (phone.isEmpty()) {
-            ToastUtil.showS("请输入手机号")
+            ToastUtil.showS(R.string.please_input_phone)
             return false
         }
         UserServiceFactory.getInstance().getService(IUserService::class.java)
@@ -30,7 +31,7 @@ object AuthCodeManager {
                         try {
                             val obj = JSONObject(result)
                             if (obj.getInt("code") == 200) {
-                                ToastUtil.showS("获取验证码成功")
+                                ToastUtil.showS(R.string.get_code_success)
                             }
                         } catch (e: JSONException) {
                             e.printStackTrace()
@@ -47,9 +48,9 @@ object AuthCodeManager {
         return true
     }
 
-    fun getEmailCode(type: Int, email: String) : Boolean{
+    fun getEmailCode(type: Int, email: String): Boolean {
         if (email.isEmpty()) {
-            ToastUtil.showS("请输入邮箱")
+            ToastUtil.showS(R.string.please_input_email)
             return false
         }
         UserServiceFactory.getInstance().getService(IUserService::class.java)
@@ -61,7 +62,7 @@ object AuthCodeManager {
                         try {
                             val obj = JSONObject(result)
                             if (obj.getInt("code") == 200) {
-                                ToastUtil.showS("获取验证码成功")
+                                ToastUtil.showS(R.string.get_code_success)
                             }
                         } catch (e: JSONException) {
                             e.printStackTrace()

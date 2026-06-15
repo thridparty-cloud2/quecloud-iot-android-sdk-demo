@@ -18,7 +18,7 @@
             android:gravity="center"
             android:textColor="@color/main1"
             android:textSize="18sp"
-            android:text="设备添加" />
+            android:text="@string/device_add_title" />
 
         <View
             android:layout_width="match_parent"

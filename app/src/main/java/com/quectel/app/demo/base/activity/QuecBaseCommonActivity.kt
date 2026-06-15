@@ -14,6 +14,7 @@ import android.view.Gravity
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.quectel.app.demo.MainActivity
+import com.quectel.app.demo.R
 import com.quectel.app.demo.base.QuecBaseView
 import com.quectel.app.demo.base.QuecLoadingDialog
 import com.quectel.app.demo.utils.DisplayUtil
@@ -267,7 +268,7 @@ abstract class QuecBaseCommonActivity : AppCompatActivity(), QuecBaseView {
 
     protected fun handlerResult(result: QuecResult<*>) {
         if (result.isSuccess) {
-            showMessage("操作成功")
+            showMessage(getString(R.string.operation_success))
         } else {
             handlerError(result)
         }

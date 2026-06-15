@@ -76,19 +76,19 @@ class MineFragment(
 
     private fun changeSex() {
         SelectItemDialog(requireContext()).apply {
-            addItem("男") {
+            addItem(getString(R.string.male)) {
                 updateSex(0)
                 dismiss()
             }
-            addItem("女") {
+            addItem(getString(R.string.female)) {
                 updateSex(1)
                 dismiss()
             }
-            addItem("保密") {
+            addItem(getString(R.string.secret)) {
                 updateSex(2)
                 dismiss()
             }
-            addItem("取消") {
+            addItem(getString(R.string.cancel)) {
                 dismiss()
             }
         }.show()

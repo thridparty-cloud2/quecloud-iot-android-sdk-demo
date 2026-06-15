@@ -29,7 +29,7 @@ public class DeviceModelAdapter extends BaseQuickAdapter<BusinessValue, BaseView
 
     @Override
     protected void convert(BaseViewHolder helper, final BusinessValue item) {
-        helper.setText(R.id.tv_style, "类型:" + item.getDataType() + " 读写类型:" + item.getSubType());
+        helper.setText(R.id.tv_style, mContext.getString(R.string.model_type_prefix) + item.getDataType() + mContext.getString(R.string.model_rw_type_prefix) + item.getSubType());
 
         SwitchButton switch_button = helper.getView(R.id.switch_button);
         TextView tv_value = helper.getView(R.id.tv_value);

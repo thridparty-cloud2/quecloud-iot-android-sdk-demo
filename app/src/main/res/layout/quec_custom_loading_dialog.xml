@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_15"
         android:gravity="center"
-        android:text="网络连接中..."
+        android:text="@string/network_connecting"
         android:textColor="@color/B2"
         android:textSize="@dimen/T4_F" />
 

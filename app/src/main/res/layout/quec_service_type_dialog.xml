@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            android:text="请选择数据中心"
+            android:text="@string/data_center_select_title"
             android:textColor="@color/W1"
             android:textSize="@dimen/T7_F"
             android:textStyle="bold" />
@@ -44,7 +44,7 @@
             android:id="@+id/tvChina"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:text="中国"
+            android:text="@string/region_china"
             android:textColor="@color/new_lan"
             android:gravity="center"/>
 
@@ -57,7 +57,7 @@
             android:id="@+id/tvEurope"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:text="欧洲"
+            android:text="@string/region_europe"
             android:textColor="@color/new_lan"
             android:gravity="center"/>
 
@@ -70,7 +70,7 @@
             android:id="@+id/tvNorthAmerica"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:text="北美"
+            android:text="@string/region_north_america"
             android:textColor="@color/new_lan"
             android:gravity="center"/>
     </LinearLayout>
@@ -86,7 +86,7 @@
         android:layout_marginRight="@dimen/P4"
         android:background="@drawable/quec_basic_ui_login_button_background"
         android:enabled="true"
-        android:text="取消"
+        android:text="@string/cancel"
 
         android:layout_marginBottom="@dimen/P6"
         android:textColor="@color/white"

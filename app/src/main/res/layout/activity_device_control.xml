@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="设备控制"
+            android:text="@string/device_control_title"
             android:textColor="@color/main1"
             android:textSize="18sp" />
 
@@ -56,7 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="auto"
+            android:text="@string/channel_auto"
             android:textColor="@color/black"
             android:textSize="25sp" />
 
@@ -64,7 +64,7 @@
             android:id="@+id/radio_ws"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ws"
+            android:text="@string/channel_ws"
             android:textColor="@color/black"
             android:textSize="25sp" />
 
@@ -72,7 +72,7 @@
             android:id="@+id/radio_wifi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="wifi"
+            android:text="@string/channel_wifi"
             android:textColor="@color/black"
             android:textSize="25sp" />
 
@@ -80,7 +80,7 @@
             android:id="@+id/radio_ble"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ble"
+            android:text="@string/channel_ble"
             android:textColor="@color/black"
             android:textSize="25sp" />
     </RadioGroup>

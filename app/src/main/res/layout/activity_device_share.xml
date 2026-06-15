@@ -32,7 +32,7 @@
     <TextView
         style="@style/CommText"
         android:padding="12dp"
-        android:text="分享状态" />
+        android:text="@string/device_share_status" />
 
 
     <ListView
@@ -48,7 +48,7 @@
     <TextView
         style="@style/CommText"
         android:padding="12dp"
-        android:text="分享控制" />
+        android:text="@string/device_share_control" />
 
     <ListView
         android:id="@+id/lv_list"

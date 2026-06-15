@@ -23,7 +23,7 @@
                    android:layout_height="wrap_content"
                    android:layout_marginTop="20dp"
                    android:gravity="center"
-                   android:text="下发结构体或基本类型数组"
+                   android:text="@string/struct_title"
                    android:textColor="@color/my_black"
                    android:textSize="18sp" />
 
@@ -32,7 +32,7 @@
                    android:layout_height="wrap_content"
                    android:layout_marginTop="5dp"
                    android:gravity="center"
-                   android:text="结构体:"
+                   android:text="@string/struct_label"
                    android:textColor="@color/my_black"
                    android:textSize="18sp" />
 
@@ -41,7 +41,7 @@
                    android:layout_height="wrap_content"
                    android:layout_marginTop="5dp"
                    android:gravity="center"
-                   android:text="Array: "
+                   android:text="@string/array_label"
                    android:textColor="@color/my_black"
                    android:textSize="18sp" />
 
@@ -50,7 +50,7 @@
                    android:layout_height="wrap_content"
                    android:layout_marginTop="5dp"
                    android:gravity="center"
-                   android:text="Array嵌套结构体STRUCT:"
+                   android:text="@string/array_nested_struct_label"
                    android:textColor="@color/my_black"
                    android:textSize="18sp" />
 
@@ -66,7 +66,7 @@
                               android:layout_marginLeft="10dp"
                               android:layout_marginRight="10dp"
                               android:layout_width="match_parent"
-                              android:text="取消"
+                              android:text="@string/cancel"
                              android:layout_weight="1"
                               android:background="@color/new_lan"
                               android:textColor="@color/white"
@@ -80,7 +80,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_width="match_parent"
-                        android:text="确定"
+                        android:text="@string/confirm"
                         android:background="@color/new_lan"
                         android:textColor="@color/white"
                         android:textSize="16sp"

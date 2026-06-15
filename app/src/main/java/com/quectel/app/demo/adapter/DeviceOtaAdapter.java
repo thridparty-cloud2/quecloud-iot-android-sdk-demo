@@ -22,26 +22,24 @@ public class DeviceOtaAdapter extends BaseQuickAdapter<DeviceOtaModel, BaseViewH
     @Override
     protected void convert(BaseViewHolder helper, final DeviceOtaModel waitUpgradeDevice) {
         helper.setText(R.id.tv_device_name, waitUpgradeDevice.getDeviceName());
-        helper.setText(R.id.tv_version, "版本：" + waitUpgradeDevice.getVersion());
-        helper.setText(R.id.tv_desc, "描述：" + waitUpgradeDevice.getDesc());
+        helper.setText(R.id.tv_version, mContext.getString(R.string.ota_version_prefix) + waitUpgradeDevice.getVersion());
+        helper.setText(R.id.tv_desc, mContext.getString(R.string.ota_desc_prefix) + waitUpgradeDevice.getDesc());
 
         String statusText = "";
         if (waitUpgradeDevice.getDeviceStatus() == OtaUpgradeStatus.UPGRADING
                 || (waitUpgradeDevice.getUserConfirmStatus() == OtaUpgradeStatus.UPGRADING && waitUpgradeDevice.getDeviceStatus() == OtaUpgradeStatus.NOT_UPGRADE)) {
-            statusText = "状态：升级中" + "进度：" + waitUpgradeDevice.getUpgradeProgress() * 100 + "%";
+            statusText = mContext.getString(R.string.ota_status_upgrading) + waitUpgradeDevice.getUpgradeProgress() * 100 + "%";
         } else if (waitUpgradeDevice.getDeviceStatus() == OtaUpgradeStatus.UPGRADE_SUCCESS) {
-            statusText = "状态：升级成功";
-
+            statusText = mContext.getString(R.string.ota_status_success);
         } else if (waitUpgradeDevice.getDeviceStatus() == OtaUpgradeStatus.UPGRADE_FAILED_IN_NOT_UPGRADE) {
-            statusText = "状态：升级失败";
+            statusText = mContext.getString(R.string.ota_status_failed);
         } else if (waitUpgradeDevice.getDeviceStatus() == OtaUpgradeStatus.UPGRADE_FAILED) {
-            statusText = "状态：升级失败，请重试";
+            statusText = mContext.getString(R.string.ota_status_failed_retry);
         } else {
-            statusText = "状态：未升级，请确认升级";
+            statusText = mContext.getString(R.string.ota_status_pending);
         }
 
         helper.setText(R.id.tv_status_text, statusText);
     }
 
 }
-

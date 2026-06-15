@@ -5,6 +5,8 @@
     <string name="please_wait">请稍后</string>
     <string name="operation_record">操作记录</string>
     <string name="clear">清空</string>
+    <string name="operation_success">操作成功</string>
+    <string name="execution_failed">执行失败：%1$s</string>
 
     <string name="quec_no_wifi_permission">开启定位权限，可自动获取 Wi-Fi 名称，</string>
     <string name="quec_open_get_wifi_permission">开启权限</string>
@@ -22,5 +24,460 @@
     <string name="searching">搜索中…</string>
     <string name="not_search">未搜索</string>
     <string name="app_build_time">App编译时间: </string>
+
+    <string name="tab_device">设备</string>
+    <string name="tab_features">功能列表</string>
+    <string name="tab_mine">我的</string>
+
+    <string name="device_add_title">设备添加</string>
+    <string name="device_list_title">设备列表</string>
+    <string name="device_control_title">设备控制</string>
+    <string name="device_upgrade_title">设备升级</string>
+    <string name="device_share_title">设备分享</string>
+    <string name="device_share_status">分享状态</string>
+    <string name="device_share_control">分享控制</string>
+    <string name="device_scene_title">场景列表</string>
+    <string name="device_automation_title">自动化列表</string>
+    <string name="device_automation_detail_title">自动化详情</string>
+    <string name="feature_list_title">功能列表</string>
+    <string name="family_list_title">家庭列表</string>
+    <string name="room_name_title">房间名</string>
+    <string name="nearby_add_title">近场搜索添加设备</string>
+    <string name="photo_change_title">点击图片更换头像</string>
+    <string name="device_group_title">设备组</string>
+    <string name="group_name_label">group name</string>
+    <string name="name_label">name</string>
+    <string name="mac_label">mac</string>
+    <string name="copy_mac">复制mac</string>
+    <string name="status_label">状态：</string>
+    <string name="version_label">版本号</string>
+    <string name="device_name_label">设备名称</string>
+    <string name="repair_now">进行修复</string>
+    <string name="upgrading_progress_demo">升级中：80%%</string>
+
+    <string name="mine_title">我的</string>
+    <string name="home_mode">家居模式</string>
+    <string name="nickname">昵称</string>
+    <string name="phone_number">手机号</string>
+    <string name="email">邮箱</string>
+    <string name="address">地址</string>
+    <string name="gender">性别</string>
+    <string name="language">语言</string>
+    <string name="country">国家</string>
+    <string name="time_zone">时区</string>
+    <string name="change_password">修改密码</string>
+    <string name="reset_password_label">重置密码</string>
+    <string name="update_user_phone">修改用户手机号码</string>
+    <string name="delete_account">注销账号</string>
+    <string name="logout">退出登录</string>
+
+    <string name="hint_country_code">请输入国家码 (例如+86)</string>
+    <string name="hint_phone">请输入手机号</string>
+    <string name="hint_password">请输入密码</string>
+    <string name="hint_email">请输入邮箱</string>
+    <string name="hint_verification_code">请输入验证码</string>
+    <string name="hint_auth_code">请输入authcode</string>
+    <string name="hint_new_phone">请输入新手机号</string>
+    <string name="hint_old_phone">请输入旧手机号</string>
+    <string name="hint_new_password">请输入新密码</string>
+    <string name="hint_old_password">请输入旧密码</string>
+    <string name="hint_group_name">请输入group name</string>
+    <string name="hint_pk">请输入pk</string>
+    <string name="hint_dk">请输入dk</string>
+    <string name="hint_ssid">请输入ssid</string>
+    <string name="hint_wifi_password">请输入wifi密码</string>
+    <string name="hint_wifi_password_short">请输入密码</string>
+    <string name="hint_value">请输入value</string>
+    <string name="hint_text_and_date">请输入text和日期毫秒数</string>
+    <string name="hint_enum_value">请输入上面显示范围的枚举值</string>
+    <string name="hint_update_param">请输入修改参数</string>
+    <string name="hint_mac">请输入设备MAC</string>
+    <string name="hint_user_domain">输入userDomain</string>
+    <string name="hint_user_domain_secret">输入userDomainSecret</string>
+    <string name="hint_base_url">输入baseUrl</string>
+    <string name="hint_websocket_v2_url">输入websocketV2Url</string>
+    <string name="hint_mcc">输入mcc</string>
+    <string name="hint_tcp_addr">输入tcpAdrr</string>
+    <string name="hint_psk_addr">输入pskAddr</string>
+    <string name="hint_tls_addr">输入tlsAddr</string>
+    <string name="hint_cer_addr">输入cerAddr</string>
+
+    <string name="phone_login">手机号登录</string>
+    <string name="phone_code_login">手机号验证码登录</string>
+    <string name="email_login">邮箱登录</string>
+    <string name="get_verification_code">获取验证码</string>
+    <string name="login">登录</string>
+    <string name="phone_register">手机号注册</string>
+    <string name="email_register">邮箱注册</string>
+    <string name="register">注册</string>
+    <string name="phone_reset">手机号找回</string>
+    <string name="email_reset">邮箱找回</string>
+    <string name="set_new_password">设置新密码</string>
+
+    <string name="status_prefix">status:</string>
+    <string name="switch_data_center">切换数据中心</string>
+    <string name="account_login">账号登录</string>
+    <string name="account_login_auth_code">账号登录: 三方AuthCode</string>
+    <string name="account_register">账号注册</string>
+    <string name="retrieve_password">找回密码</string>
+    <string name="current_data_center">当前数据中心: %1$s</string>
+    <string name="unknown_data_center">未知[%1$d]</string>
+    <string name="data_center_select_title">请选择数据中心</string>
+    <string name="custom_data_center_title">请输入数据中心</string>
+    <string name="region_china">中国</string>
+    <string name="region_europe">欧洲</string>
+    <string name="region_north_america">北美</string>
+
+    <string name="control_mode">控制方式</string>
+    <string name="channel_auto">auto</string>
+    <string name="channel_ws">ws</string>
+    <string name="channel_wifi">wifi</string>
+    <string name="channel_ble">ble</string>
+
+    <string name="modify_device_group_name">修改设备组名称</string>
+    <string name="add_device_group">添加设备组</string>
+    <string name="accept_other_group_share">接受其他组的分享</string>
+    <string name="add_device_to_group_title">添加设备到设备组</string>
+    <string name="query_device_group_detail">查询设备组详情</string>
+    <string name="modify_device_group">修改设备组</string>
+    <string name="query_device_list_in_group">查询设备组中的设备列表</string>
+    <string name="remove_device_in_group">移除设备组中的设备</string>
+    <string name="delete_device_group">删除设备组</string>
+    <string name="set_group_share_info">分享人设置设备组分享信息</string>
+    <string name="query_group_shared_users">分享人查询设备组的被分享人列表</string>
+    <string name="modify_shared_group_name">被分享人修改分享的设备组名称</string>
+    <string name="recipient_cancel_group_share">被分享人取消设备组分享</string>
+    <string name="sharer_cancel_group_share">分享人取消设备组分享</string>
+
+    <string name="stop_scan">停止扫描</string>
+    <string name="input_device_mac">请输入设备mac</string>
+    <string name="network_connecting">网络连接中…</string>
+    <string name="start_network_config">开始配网</string>
+    <string name="select_device_wifi_and_password">选择设备工作WIFI并输入密码</string>
+    <string name="default_wifi_name">QUEC_WIFI_TEST</string>
+
+    <string name="wifi_config_title">wifi配网</string>
+    <string name="send_command_title">下发指令</string>
+    <string name="step_label">步长step</string>
+    <string name="date_text_title">写date和文本Text</string>
+    <string name="date_input_millis_hint">日期请输入时间毫秒数</string>
+    <string name="text_length_label">文本长度</string>
+    <string name="enum_title">写枚举值</string>
+    <string name="struct_title">下发结构体或基本类型数组</string>
+    <string name="struct_label">结构体:</string>
+    <string name="array_label">Array:</string>
+    <string name="array_nested_struct_label">Array嵌套结构体STRUCT:</string>
+
+    <string name="user_domain_label">userDomain：</string>
+    <string name="user_domain_secret_label">userDomainSecret：</string>
+    <string name="base_url_label">baseUrl：</string>
+    <string name="websocket_v2_url_label">websocketV2Url：</string>
+    <string name="mcc_label">mcc：</string>
+    <string name="tcp_addr_label">tcpAddr：</string>
+    <string name="psk_addr_label">pskAddr：</string>
+    <string name="tls_addr_label">tlsAddr：</string>
+    <string name="cer_addr_label">cerAddr：</string>
+    <string name="read_cloud_config_file">读取/Download/cloud_config.jpg文件</string>
+    <string name="cloud_config_tip">cloud_config.jpg文件内容为json文本，后缀是jpg是为了兼容Android13及以上访问文件权限</string>
+
+    <string name="update_gender_title">修改性别</string>
+    <string name="male">男</string>
+    <string name="female">女</string>
+    <string name="secret">保密</string>
+    <string name="update_param_title">修改参数</string>
+
+    <string name="please_input_country_code">请输入国家区号</string>
+    <string name="please_input_phone">请输入手机号</string>
+    <string name="please_input_email">请输入邮箱</string>
+    <string name="please_input_password">请输入密码</string>
+    <string name="please_input_code">请输入验证码</string>
+    <string name="please_input_auth_code">请输入authCode</string>
+    <string name="get_code_success">获取验证码成功</string>
+    <string name="login_success">登录成功</string>
+    <string name="login_failed">登录失败: %1$s</string>
+    <string name="register_success">注册成功</string>
+    <string name="register_failed">注册失败: %1$s</string>
+    <string name="reset_password_success">重置密码成功</string>
+    <string name="reset_password_failed">重置密码失败: %1$s</string>
+    <string name="device_info_empty">设备信息为空</string>
+    <string name="online">在线</string>
+    <string name="offline">离线</string>
+    <string name="shared_device_suffix"> - 分享设备</string>
+    <string name="no_data">无数据</string>
+    <string name="own_group">自己分组</string>
+    <string name="received_group">接受别人的分组</string>
+    <string name="network_config_success">配网成功</string>
+    <string name="network_config_failed">配网失败</string>
+    <string name="binding_in_progress">绑定中…</string>
+    <string name="ota_version_prefix">版本：</string>
+    <string name="ota_desc_prefix">描述：</string>
+    <string name="ota_status_upgrading">状态：升级中 进度：</string>
+    <string name="ota_status_success">状态：升级成功</string>
+    <string name="ota_status_failed">状态：升级失败</string>
+    <string name="ota_status_failed_retry">状态：升级失败，请重试</string>
+    <string name="ota_status_pending">状态：未升级，请确认升级</string>
+    <string name="model_type_prefix">类型:</string>
+    <string name="model_rw_type_prefix"> 读写类型:</string>
+
+    <!-- Device add -->
+    <string name="sn_bind_device">SN绑定设备</string>
+    <string name="receive_device_share">接收设备分享</string>
+    <string name="hint_product_key">请输入productKey</string>
+    <string name="hint_sn">请输入Sn</string>
+    <string name="hint_share_code">请输入shareCode</string>
+    <string name="sn_bind_success">SN绑定设备成功</string>
+    <string name="accept_device_share">接受设备分享</string>
+    <string name="accept_share_success">接受分享成功</string>
+    <string name="ble_only_bind">仅蓝牙激活绑定</string>
+    <string name="ble_prefer_bind">优先蓝牙激活绑定</string>
+    <string name="wifi_prefer_bind">优先WiFi配网激活绑定</string>
+    <string name="hint_device_wifi_optional">请输入设备WiFi信息(可为空)</string>
+    <string name="hint_device_wifi_required">请输入设备WiFi信息(为空添加会失败)</string>
+    <string name="router_name">路由器名称</string>
+    <string name="password_label">密码</string>
+    <string name="add_success">添加成功</string>
+    <string name="add_failed">添加失败: %1$s</string>
+    <string name="hint_device_wifi">请输入设备WiFi信息</string>
+    <string name="hint_wifi_name">请输入WiFi名称</string>
+    <string name="please_grant_bluetooth_permission">请先授予应用的 蓝牙权限</string>
+
+    <!-- Device function -->
+    <string name="get_device_info">获取设备信息</string>
+    <string name="device_info">设备信息</string>
+    <string name="rename_device">修改设备名</string>
+    <string name="hint_device_name">请输入设备名</string>
+    <string name="device_control">设备控制</string>
+    <string name="device_upgrade">设备升级</string>
+    <string name="device_share">设备分享</string>
+    <string name="device_unbind">设备解绑</string>
+    <string name="confirm_unbind_device">确认解绑设备?</string>
+    <string name="device_net_config">设备配网</string>
+    <string name="device_name_empty">设备名不能为空</string>
+
+    <!-- Device control -->
+    <string name="connect">建立连接</string>
+    <string name="disconnect">断开连接</string>
+    <string name="query_data_active">主动查询数据</string>
+    <string name="query_device_failed">查询设备失败: %1$s</string>
+    <string name="device_status_query_success">设备状态查询成功</string>
+    <string name="tsl_not_support_control">该物模型不支持控制</string>
+    <string name="struct_input_prompt">即将按结构体定义顺序输入数据</string>
+    <string name="type_not_support_control">此类型数据demo中暂不支持控制</string>
+    <string name="data_error">数据异常</string>
+    <string name="hint_input_content_with_limit">请输入内容, 长度限制: %1$d</string>
+    <string name="input_too_long">输入内容长度不能超过%1$d</string>
+    <string name="hint_input_range">请输入%1$s类型数据, 最小值: %2$s ,最大值:%3$s</string>
+    <string name="hint_input_int">请输入Int类型数据</string>
+    <string name="hint_input_float">请输入FLOAT类型数据</string>
+    <string name="hint_input_double">请输入DOUBLE类型数据</string>
+    <string name="status_connecting">[连接中…]</string>
+    <string name="status_ws_online">ws在线</string>
+    <string name="status_wifi_online"> WiFi在线</string>
+    <string name="status_ble_online"> ble在线</string>
+    <string name="rw_type_prefix">读写类型: </string>
+    <string name="data_type_prefix"> 数据类型: </string>
+
+    <!-- Device group -->
+    <string name="accept_group_share_title">接受别人设备组分享</string>
+    <string name="hint_share_code2">请输入share_code</string>
+    <string name="param_cannot_be_empty">参数不能为空</string>
+    <string name="device_list_in_group">设备组中的设备列表</string>
+
+    <!-- Device list -->
+    <string name="data_exception">数据异常</string>
+    <string name="family_mode_info">家居模式 - 显示家庭[%1$s]下的常用设备</string>
+
+    <!-- Device OTA -->
+    <string name="log_cleared">操作记录已清空</string>
+    <string name="query_device_version">查询设备版本</string>
+    <string name="query_version_result">查询设备版本结果: %1$s</string>
+    <string name="query_upgrade_plan">查询升级计划</string>
+    <string name="query_upgrade_result">查询升级计划结果: %1$s</string>
+    <string name="start_upgrade">开始升级</string>
+    <string name="please_query_upgrade_plan">请先查询升级计划</string>
+    <string name="stop_upgrade">停止升级</string>
+
+    <!-- Device scene -->
+    <string name="scene_name_label">场景名称</string>
+    <string name="scene_icon_label">场景图标</string>
+    <string name="device_pk_label">设备pk</string>
+    <string name="device_dk_label">设备dk</string>
+    <string name="tsl_data_type_label">物模型数据类型</string>
+    <string name="add_new_scene">添加一个新的场景</string>
+    <string name="add_label">添加</string>
+    <string name="params_cannot_be_empty">各种参数不能为空</string>
+    <string name="tsl_id_must_be_int">物模型功能ID必须输入为int</string>
+    <string name="tsl_type_must_be_int">物模型功能类型必须输入为int</string>
+
+    <!-- Scene info -->
+    <string name="rename_scene">修改场景名称</string>
+    <string name="delete_scene">删除场景</string>
+    <string name="get_scene_detail">获取场景详情</string>
+    <string name="execute_scene">场景执行</string>
+    <string name="test_scene">测试场景</string>
+    <string name="get_common_scene_list">获取常用场景列表</string>
+    <string name="batch_add_common_scene">批量添加常用场景</string>
+    <string name="batch_delete_common_scene">批量删除常用场景</string>
+    <string name="get_scene_log_list">获取场景日志列表</string>
+    <string name="get_scene_log_detail">获取场景日志详情</string>
+    <string name="clear_scene_log">清除场景日志</string>
+    <string name="clear_log_success">清除日志成功</string>
+    <string name="hint_scene_log_id">输入场景日志id</string>
+    <string name="must_input_number">必须输入为数字</string>
+    <string name="hint_last_log_id">请输入最后一条执行日志的id</string>
+    <string name="hint_query_count">请输入查询的数据数量</string>
+    <string name="hint_scene_id_list_comma">输入场景id列表 用,隔开依次输入\n例如:sceneId1,sceneId2</string>
+    <string name="hint_scene_id_list_comma2">输入场景id列表 用,隔开依次输入 例如:sceneId1,sceneId2</string>
+    <string name="common_scene_list">常用场景列表</string>
+    <string name="scene_detail_title">%1$s的场景详情</string>
+    <string name="confirm_delete_scene">确定删除该场景?</string>
+    <string name="hint_new_name">请输入要改的新名称</string>
+
+    <!-- Device share -->
+    <string name="get_share_list">获取分享列表</string>
+    <string name="create_share_code">创建新的分享码</string>
+    <string name="share_code_label">分享码</string>
+    <string name="cancel_share">取消分享</string>
+
+    <!-- Family -->
+    <string name="add_new_family">新增家庭</string>
+    <string name="query_pending_family_shares">查询待接收分享的家庭列表</string>
+    <string name="role_creator">创建者</string>
+    <string name="role_admin">管理员</string>
+    <string name="role_member">成员</string>
+    <string name="role_unknown">未知</string>
+    <string name="hint_family_name">请输入家庭名称</string>
+    <string name="create_success">创建成功</string>
+    <string name="no_pending_family_share">没有待接收分享的家庭</string>
+    <string name="accept_label">接受</string>
+    <string name="reject_label">拒绝</string>
+    <string name="set_success">设置成功</string>
+
+    <!-- Family function -->
+    <string name="view_common_devices">查看家庭下常用设备列表</string>
+    <string name="view_all_devices">查看家庭下所有设备列表</string>
+    <string name="room_management">房间管理</string>
+    <string name="modify_family_name">修改家庭名称</string>
+    <string name="leave_family">离开家庭</string>
+    <string name="remove_family">移除家庭</string>
+    <string name="invite_new_member">邀请新成员</string>
+    <string name="member_management">成员管理</string>
+    <string name="add_new_room">添加新房间</string>
+    <string name="group_management">群组管理</string>
+    <string name="confirm_delete_family">确认删除家庭？</string>
+    <string name="confirm_leave_family">确认离开家庭？</string>
+    <string name="hint_member_account">请输入对方的账号</string>
+    <string name="hint_member_name">请输入对方的名称</string>
+    <string name="no_family_member">无家庭成员</string>
+    <string name="show_member_info">显示成员信息</string>
+    <string name="modify_role">修改权限</string>
+    <string name="remove_member">移除成员</string>
+    <string name="modify_name_label">修改名称</string>
+    <string name="member_info">成员信息</string>
+    <string name="modify_member_name">修改成员名称</string>
+    <string name="hint_room_name">请输入房间名</string>
+    <string name="no_room">无房间</string>
+
+    <!-- Family device list -->
+    <string name="common_devices">常用设备</string>
+    <string name="all_family_devices">家庭下所有设备</string>
+    <string name="room_devices">房间[%1$s]中设备</string>
+    <string name="remove_from_common">移出常用</string>
+    <string name="add_to_common">移入常用</string>
+    <string name="move_to_other_room">移动至其他房间</string>
+
+    <!-- Family room function -->
+    <string name="rename_room">修改房间名</string>
+    <string name="modify_room_order">修改房间序号</string>
+    <string name="view_room_devices">查看房间下设备列表</string>
+    <string name="delete_room">删除房间</string>
+    <string name="order_first">最前</string>
+    <string name="order_last">最后</string>
+
+    <!-- Family group -->
+    <string name="group_control">群组控制</string>
+    <string name="get_group_info">获取群组信息</string>
+    <string name="set_group_common">设置群组是否在常用列表中</string>
+    <string name="delete_group">删除群组</string>
+    <string name="rename_group">修改群组名称</string>
+    <string name="move_group_room">群组移动房间</string>
+    <string name="add_device_to_group">添加设备</string>
+    <string name="delete_device_from_group">删除设备</string>
+    <string name="group_share">群组分享</string>
+    <string name="get_group_share_list">获取群组分享列表</string>
+    <string name="remove_share">移除分享</string>
+    <string name="no_available_device">当前没有可添加的设备</string>
+    <string name="group_has_only_one_device">群组下只有一个设备，不能删除</string>
+    <string name="group_info_detail">群组ID: %1$s\n群组名称: %2$s\n是否在常用列表中: %3$s\n在房间: [%4$s]中\n\n群组中设备列表:\n %5$s</string>
+    <string name="in_common_list">在常用列表中</string>
+    <string name="not_in_common_list">不在常用列表中</string>
+    <string name="no_room_in_family">当前家庭没有房间</string>
+    <string name="confirm_delete_group">确认删除群组?</string>
+    <string name="group_share_code">群组分享码</string>
+    <string name="group_not_shared">当前群组没有被分享</string>
+    <string name="group_share_info">群组分享信息</string>
+    <string name="group_management2">群组管理</string>
+    <string name="share_group">分享群组</string>
+    <string name="create_group_from_device_list">从设备列表创建群组</string>
+    <string name="receive_group_share">接收群组分享</string>
+    <string name="hint_share_code3">请输入share code</string>
+
+    <!-- Automation -->
+    <string name="edit_automation">编辑自动化</string>
+    <string name="delete_automation">删除自动化</string>
+    <string name="query_tsl_for_automation">查询设备可作为自动化条件和触发动作的物模型</string>
+    <string name="get_automation_detail">获取自动化详情</string>
+    <string name="toggle_automation">开启关闭自动化</string>
+    <string name="test_automation">测试自动化</string>
+    <string name="get_automation_test_result">获取自动化测试的结果</string>
+    <string name="get_automation_log_list">获取自动化日志列表</string>
+    <string name="get_log_detail">获取日志详情</string>
+    <string name="clear_automation_log">清除自动化日志</string>
+    <string name="hint_automation_log_id">请输入自动化日志Id</string>
+    <string name="param_exception">参数异常</string>
+    <string name="hint_last_log_id2">请输入最后一条日志Id</string>
+    <string name="hint_test_result_id">请输入测试自动化结果的id</string>
+    <string name="hint_test_automation_scene_name">场景名称</string>
+    <string name="hint_test_automation_scene_id">场景id</string>
+    <string name="param_cannot_be_null">参数不可为空</string>
+    <string name="automation_detail_title">自动化详情</string>
+    <string name="hint_product_key2">请输入productKey</string>
+    <string name="pk_cannot_be_empty">pk不可为空</string>
+    <string name="tsl_for_automation_result">自动化条件和触发动作的物模型</string>
+    <string name="edit_automation_name">编辑自动化名称</string>
+    <string name="hint_new_name2">请输入新名称</string>
+    <string name="automation_name_label">自动化名称</string>
+    <string name="schedule_time_hint">定时时间24制 例如 09:07</string>
+    <string name="add_new_automation">添加一个新的自动化</string>
+    <string name="add_automation_label">添加</string>
+
+    <!-- Mine fragment -->
+    <string name="modify_address_title">修改地址</string>
+    <string name="hint_modify_address">请输入修改的地址</string>
+    <string name="address_empty">地址不能为空</string>
+    <string name="modify_nickname_title">修改昵称</string>
+    <string name="hint_modify_nickname">请输入修改的昵称</string>
+    <string name="nickname_empty">昵称不能为空</string>
+    <string name="confirm_logout">确认退出登录?</string>
+    <string name="confirm_delete_user">确认删除用户?</string>
+    <string name="modify_password_title">修改密码</string>
+    <string name="password_empty">密码不能为空</string>
+    <string name="password_modify_success">密码修改成功</string>
+
+    <!-- Features list -->
+    <string name="device_grouping">设备分组</string>
+    <string name="automation_label">自动化</string>
+    <string name="scene_label">场景</string>
+    <string name="family_management">家庭管理</string>
+    <string name="please_open_home_mode">请先打开家居模式</string>
+
+    <!-- ServiceType dialog -->
+    <string name="file_not_exist">文件：%1$s 不存在</string>
+
+    <!-- DeviceConfig -->
+    <string name="status_offline">离线</string>
+
+    <!-- UpdateUserPhoneActivity -->
+    <string name="modify_phone_title">修改手机号</string>
 
 </resources>

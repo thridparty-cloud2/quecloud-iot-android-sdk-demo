@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="设备升级"
+            android:text="@string/device_upgrade_title"
             android:textColor="@color/main1"
             android:textSize="18sp" />
 

@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            android:text="选择设备工作WIFI并输入密码"
+            android:text="@string/select_device_wifi_and_password"
             android:textColor="@color/W1"
             android:textSize="@dimen/T7_F"
             android:textStyle="bold" />
@@ -67,7 +67,7 @@
                 android:ellipsize="end"
                 android:focusable="true"
                 android:maxLines="1"
-                android:text="QUEC_WIFI_TEST"
+                android:text="@string/default_wifi_name"
                 android:textColor="@color/W1"
                 android:textSize="@dimen/T6_F"
                 android:textStyle="bold" />
@@ -129,7 +129,7 @@
                 android:layout_toStartOf="@id/cb_psw_show"
                 android:layout_toEndOf="@+id/iv_lock_icon"
                 android:background="@null"
-                android:hint="请输入密码"
+                android:hint="@string/hint_wifi_password_short"
                 android:text="12332112"
                 android:textColor="@color/W1"
                 android:textColorHint="@color/W5"

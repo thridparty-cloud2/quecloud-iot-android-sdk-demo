@@ -23,7 +23,7 @@
                    android:layout_height="wrap_content"
                    android:layout_marginTop="20dp"
                    android:gravity="center"
-                   android:text="写date和文本Text"
+                   android:text="@string/date_text_title"
                    android:textColor="@color/my_black"
                    android:textSize="18sp" />
 
@@ -32,7 +32,7 @@
                    android:layout_height="wrap_content"
                    android:layout_marginTop="5dp"
                    android:gravity="center"
-                   android:text="日期请输入时间毫秒数"
+                   android:text="@string/date_input_millis_hint"
                    android:textColor="@color/main1"
                    android:textSize="16sp" />
 
@@ -42,7 +42,7 @@
                    android:layout_height="wrap_content"
                    android:layout_marginTop="5dp"
                    android:gravity="center"
-                   android:text="文本长度"
+                   android:text="@string/text_length_label"
                    android:textColor="@color/main1"
                    android:textSize="16sp" />
 
@@ -53,7 +53,7 @@
                    android:layout_marginTop="20dp"
                    android:background="@null"
                    android:gravity="left|center_vertical"
-                   android:hint="请输入text和日期毫秒数"
+                   android:hint="@string/hint_text_and_date"
                    android:paddingLeft="15dp"
                    android:inputType="text"
                    android:singleLine="true"
@@ -75,7 +75,7 @@
                               android:layout_marginLeft="10dp"
                               android:layout_marginRight="10dp"
                               android:layout_width="match_parent"
-                              android:text="取消"
+                              android:text="@string/cancel"
                              android:layout_weight="1"
                               android:background="@color/new_lan"
                               android:textColor="@color/white"
@@ -89,7 +89,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_width="match_parent"
-                        android:text="确定"
+                        android:text="@string/confirm"
                         android:background="@color/new_lan"
                         android:textColor="@color/white"
                         android:textSize="16sp"

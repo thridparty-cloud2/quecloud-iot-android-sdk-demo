@@ -37,23 +37,23 @@ class StartActivity : QuecBaseActivity<ActivityStartBinding>() {
     }
 
     override fun initTestItem() {
-        addItem("切换数据中心") {
+        addItem(getString(R.string.switch_data_center)) {
             selectDataCenter()
         }
 
-        addItem("账号登录") {
+        addItem(getString(R.string.account_login)) {
             startTargetActivity(LoginExActivity::class.java)
         }
 
-        addItem("账号登录: 三方AuthCode") {
+        addItem(getString(R.string.account_login_auth_code)) {
             startTargetActivity(AuthCodeLoginActivity::class.java)
         }
 
-        addItem("账号注册") {
+        addItem(getString(R.string.account_register)) {
             startTargetActivity(RegisterExActivity::class.java)
         }
 
-        addItem("找回密码") {
+        addItem(getString(R.string.retrieve_password)) {
             startTargetActivity(ResetPwdExActivity::class.java)
         }
     }
@@ -61,28 +61,28 @@ class StartActivity : QuecBaseActivity<ActivityStartBinding>() {
     @SuppressLint("SetTextI18n")
     private fun showStatus() {
         val type = when (SdkManager.getServiceType(application)) {
-            SdkManager.TYPE_CHINA -> "中国"
-            SdkManager.TYPE_EUROPE -> "欧洲"
-            SdkManager.TYPE_NORTH_AMERICA -> "北美"
-            else -> "未知[${SdkManager.getServiceType(application)}]"
+            SdkManager.TYPE_CHINA -> getString(R.string.region_china)
+            SdkManager.TYPE_EUROPE -> getString(R.string.region_europe)
+            SdkManager.TYPE_NORTH_AMERICA -> getString(R.string.region_north_america)
+            else -> getString(R.string.unknown_data_center, SdkManager.getServiceType(application))
         }
 
-        binding.tvStatus.text = "当前数据中心: $type"
+        binding.tvStatus.text = getString(R.string.current_data_center, type)
     }
 
     private fun selectDataCenter() {
         SelectItemDialog(this).apply {
-            addItem("中国") {
+            addItem(getString(R.string.region_china)) {
                 SdkManager.selectService(application, SdkManager.TYPE_CHINA)
                 showStatus()
             }
 
-            addItem("欧洲") {
+            addItem(getString(R.string.region_europe)) {
                 SdkManager.selectService(application, SdkManager.TYPE_EUROPE)
                 showStatus()
             }
 
-            addItem("北美") {
+            addItem(getString(R.string.region_north_america)) {
                 SdkManager.selectService(application, SdkManager.TYPE_NORTH_AMERICA)
                 showStatus()
             }

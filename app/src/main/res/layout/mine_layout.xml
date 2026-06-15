@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="我的"
+            android:text="@string/mine_title"
             android:textColor="@color/main1"
             android:textSize="18sp" />
 
@@ -60,7 +60,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="家居模式"
+                    android:text="@string/home_mode"
                     android:textColor="@color/main1"
                     android:textSize="16sp" />
 
@@ -89,7 +89,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="昵称"
+                    android:text="@string/nickname"
                     android:textColor="@color/main1"
                     android:textSize="16sp" />
 
@@ -122,7 +122,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="手机号"
+                    android:text="@string/phone_number"
                     android:textColor="@color/main1"
                     android:textSize="16sp" />
 
@@ -161,7 +161,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="邮箱"
+                    android:text="@string/email"
                     android:textColor="@color/main1"
                     android:textSize="16sp" />
 
@@ -196,7 +196,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="地址"
+                    android:text="@string/address"
                     android:textColor="@color/main1"
                     android:textSize="16sp" />
 
@@ -230,7 +230,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="性别"
+                    android:text="@string/gender"
                     android:textColor="@color/main1"
                     android:textSize="16sp" />
 
@@ -263,7 +263,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="语言"
+                    android:text="@string/language"
                     android:textColor="@color/main1"
                     android:textSize="16sp" />
 
@@ -296,7 +296,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="国家"
+                    android:text="@string/country"
                     android:textColor="@color/main1"
                     android:textSize="16sp" />
 
@@ -330,7 +330,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="时区"
+                    android:text="@string/time_zone"
                     android:textColor="@color/main1"
                     android:textSize="16sp" />
 
@@ -365,7 +365,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="修改密码"
+                    android:text="@string/change_password"
                     android:textColor="@color/main1"
                     android:textSize="16sp" />
 
@@ -399,7 +399,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="重置密码"
+                    android:text="@string/reset_password_label"
                     android:textColor="@color/main1"
                     android:textSize="16sp" />
 
@@ -434,7 +434,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="修改用户手机号码"
+                    android:text="@string/update_user_phone"
                     android:textColor="@color/main1"
                     android:textSize="16sp" />
 
@@ -468,7 +468,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="注销账号"
+                    android:text="@string/delete_account"
                     android:textColor="@color/main1"
                     android:textSize="16sp" />
 
@@ -499,7 +499,7 @@
                 android:layout_marginRight="20dp"
                 android:background="@color/new_lan"
                 android:gravity="center"
-                android:text="退出登录"
+                android:text="@string/logout"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
 

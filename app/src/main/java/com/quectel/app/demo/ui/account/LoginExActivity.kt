@@ -71,20 +71,20 @@ class LoginExActivity : QuecBaseActivity<ActivityLoginExBinding>() {
         currentMode = mode
         when (mode) {
             Mode.PHONE -> {
-                binding.etAccount.hint = "请输入手机号"
-                binding.etPwd.hint = "请输入密码"
+                binding.etAccount.hint = getString(R.string.hint_phone)
+                binding.etPwd.hint = getString(R.string.hint_password)
                 binding.btGetCode.visibility = View.INVISIBLE
             }
 
             Mode.EMAIL -> {
-                binding.etAccount.hint = "请输入邮箱"
-                binding.etPwd.hint = "请输入密码"
+                binding.etAccount.hint = getString(R.string.hint_email)
+                binding.etPwd.hint = getString(R.string.hint_password)
                 binding.btGetCode.visibility = View.INVISIBLE
             }
 
             Mode.PHONE_CODE -> {
-                binding.etAccount.hint = "请输入手机号"
-                binding.etPwd.hint = "请输入验证码"
+                binding.etAccount.hint = getString(R.string.hint_phone)
+                binding.etPwd.hint = getString(R.string.hint_verification_code)
                 binding.btGetCode.visibility = View.VISIBLE
 
             }
@@ -100,15 +100,15 @@ class LoginExActivity : QuecBaseActivity<ActivityLoginExBinding>() {
 
     private fun loginWithPhonePwd(country: String, phone: String, pwd: String) {
         if (country.isEmpty()) {
-            showMessage("请输入国家区号")
+            showMessage(getString(R.string.please_input_country_code))
             return
         }
         if (phone.isEmpty()) {
-            showMessage("请输入手机号")
+            showMessage(getString(R.string.please_input_phone))
             return
         }
         if (pwd.isEmpty()) {
-            showMessage("请输入密码")
+            showMessage(getString(R.string.please_input_password))
             return
         }
         showOrHideLoading(true)
@@ -117,22 +117,22 @@ class LoginExActivity : QuecBaseActivity<ActivityLoginExBinding>() {
             if (it.isSuccess) {
                 setLoginSuccess(country)
             } else {
-                showMessage("登录失败: ${it.msg}")
+                showMessage(getString(R.string.login_failed, it.msg))
             }
         }
     }
 
     private fun loginWithPhoneCode(country: String, phone: String, code: String) {
         if (country.isEmpty()) {
-            showMessage("请输入国家区号")
+            showMessage(getString(R.string.please_input_country_code))
             return
         }
         if (phone.isEmpty()) {
-            showMessage("请输入手机号")
+            showMessage(getString(R.string.please_input_phone))
             return
         }
         if (code.isEmpty()) {
-            showMessage("请输入验证码")
+            showMessage(getString(R.string.please_input_code))
             return
         }
         showOrHideLoading(true)
@@ -141,22 +141,22 @@ class LoginExActivity : QuecBaseActivity<ActivityLoginExBinding>() {
             if (it.isSuccess) {
                 setLoginSuccess(country)
             } else {
-                showMessage("登录失败: ${it.msg}")
+                showMessage(getString(R.string.login_failed, it.msg))
             }
         }
     }
 
     private fun loginWithEmailPwd(country: String, email: String, pwd: String) {
         if (country.isEmpty()) {
-            showMessage("请输入国家区号")
+            showMessage(getString(R.string.please_input_country_code))
             return
         }
         if (email.isEmpty()) {
-            showMessage("请输入邮箱")
+            showMessage(getString(R.string.please_input_email))
             return
         }
         if (pwd.isEmpty()) {
-            showMessage("请输入密码")
+            showMessage(getString(R.string.please_input_password))
             return
         }
         showOrHideLoading(true)
@@ -165,13 +165,13 @@ class LoginExActivity : QuecBaseActivity<ActivityLoginExBinding>() {
             if (it.isSuccess) {
                 setLoginSuccess(country)
             } else {
-                showMessage("登录失败: ${it.msg}")
+                showMessage(getString(R.string.login_failed, it.msg))
             }
         }
     }
 
     private fun setLoginSuccess(country: String?) {
-        showMessage("登录成功")
+        showMessage(getString(R.string.login_success))
         if (!SdkManager.isCustomService(application) && country != null
         ) {
             QuecIotSdk.setCountryCode(country)

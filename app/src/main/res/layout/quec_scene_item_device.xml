@@ -27,7 +27,7 @@
 
     <TextView
         android:id="@+id/tv_start"
-        android:text="开始配网"
+        android:text="@string/start_network_config"
         android:padding="5dp"
         android:textColor="@color/W1"
         android:background="@drawable/quec_smart_config_start"

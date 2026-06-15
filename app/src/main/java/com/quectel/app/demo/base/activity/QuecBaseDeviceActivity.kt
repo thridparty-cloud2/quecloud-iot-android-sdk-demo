@@ -3,6 +3,7 @@ package com.quectel.app.demo.base.activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.viewbinding.ViewBinding
+import com.quectel.app.demo.R
 import com.quectel.basic.common.entity.QuecDeviceModel
 
 abstract class QuecBaseDeviceActivity<T : ViewBinding> : QuecBaseActivity<T>() {
@@ -12,7 +13,7 @@ abstract class QuecBaseDeviceActivity<T : ViewBinding> : QuecBaseActivity<T>() {
         val device = intent.getSerializableExtra(CODE_DEVICE) as? QuecDeviceModel
 
         if (device == null) {
-            showMessage("设备信息为空")
+            showMessage(getString(R.string.device_info_empty))
             finish()
             return
         }

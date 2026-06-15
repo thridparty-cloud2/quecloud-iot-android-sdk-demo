@@ -62,7 +62,7 @@ abstract class QuecBaseActivity<T : ViewBinding> : QuecBaseCommonActivity() {
                 block()
             } catch (e: Exception) {
                 QLog.e(e)
-                QuecToastUtil.showL("执行失败: $e")
+                QuecToastUtil.showL(getString(R.string.execution_failed, e.toString()))
             }
         }
     }

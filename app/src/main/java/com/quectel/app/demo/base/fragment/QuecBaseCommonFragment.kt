@@ -49,7 +49,7 @@ abstract class QuecBaseCommonFragment : SupportFragment(), QuecBaseView {
 
     protected fun handlerResult(result: QuecResult<*>) {
         if (result.isSuccess) {
-            showMessage("操作成功")
+            context?.let { showMessage(it.getString(R.string.operation_success)) }
         } else {
             handlerError(result)
         }

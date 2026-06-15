@@ -78,12 +78,12 @@ class ResetPwdExActivity : QuecBaseActivity<ActivityResetPwdExBinding>() {
         when (mode) {
             Mode.PHONE -> {
                 binding.etCountry.visibility = View.VISIBLE
-                binding.etAccount.hint = "请输入手机号"
+                binding.etAccount.hint = getString(R.string.hint_phone)
             }
 
             Mode.EMAIL -> {
                 binding.etCountry.visibility = View.INVISIBLE
-                binding.etAccount.hint = "请输入邮箱"
+                binding.etAccount.hint = getString(R.string.hint_email)
             }
         }
         binding.rgMode.check(
@@ -96,54 +96,54 @@ class ResetPwdExActivity : QuecBaseActivity<ActivityResetPwdExBinding>() {
 
     private fun resetPwdWithPhone(country: String, phone: String, code: String, pwd: String) {
         if (country.isEmpty()) {
-            showMessage("请输入国家区号")
+            showMessage(getString(R.string.please_input_country_code))
             return
         }
         if (phone.isEmpty()) {
-            showMessage("请输入手机号")
+            showMessage(getString(R.string.please_input_phone))
             return
         }
         if (code.isEmpty()) {
-            showMessage("请输入验证码")
+            showMessage(getString(R.string.please_input_code))
             return
         }
         if (pwd.isEmpty()) {
-            showMessage("请输入密码")
+            showMessage(getString(R.string.please_input_password))
             return
         }
         QuecUserService.resetPasswordByPhone(phone, code, country, pwd) {
             if (it.isSuccess) {
                 setSuccess()
             } else {
-                showMessage("重置密码失败: ${it.msg}")
+                showMessage(getString(R.string.reset_password_failed, it.msg))
             }
         }
     }
 
     private fun resetPwdWithEmail(email: String, code: String, pwd: String) {
         if (email.isEmpty()) {
-            showMessage("请输入邮箱")
+            showMessage(getString(R.string.please_input_email))
             return
         }
         if (code.isEmpty()) {
-            showMessage("请输入验证码")
+            showMessage(getString(R.string.please_input_code))
             return
         }
         if (pwd.isEmpty()) {
-            showMessage("请输入密码")
+            showMessage(getString(R.string.please_input_password))
             return
         }
         QuecUserService.resetPasswordByEmail(code, email, null, pwd) {
             if (it.isSuccess) {
                 setSuccess()
             } else {
-                showMessage("重置密码失败: ${it.msg}")
+                showMessage(getString(R.string.reset_password_failed, it.msg))
             }
         }
     }
 
     private fun setSuccess() {
-        showMessage("重置密码成功")
+        showMessage(getString(R.string.reset_password_success))
         finish()
     }
 

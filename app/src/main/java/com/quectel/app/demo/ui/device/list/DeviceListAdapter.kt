@@ -21,14 +21,14 @@ class DeviceListAdapter(
         val device = list[position]
         val context = holder.binding.root.context
         holder.binding.tvDeviceName.text = device.deviceName
-        holder.binding.tvStatus.text = if (device.onlineChannelState > 0) "在线" else "离线"
+        holder.binding.tvStatus.text = if (device.onlineChannelState > 0) context.getString(R.string.online) else context.getString(R.string.offline)
         holder.binding.tvStatus.setTextColor(
             if (device.onlineChannelState > 0)
                 context.resources.getColor(R.color.M1, null)
             else context.resources.getColor(R.color.W2, null)
         )
         holder.binding.tvInfo.text =
-            "${device.productKey} - ${device.deviceKey}${if (device.isShared) " - 分享设备" else ""}"
+            "${device.productKey} - ${device.deviceKey}${if (device.isShared) context.getString(R.string.shared_device_suffix) else ""}"
 
         holder.binding.root.setOnClickListener { onItemClick(device) }
     }

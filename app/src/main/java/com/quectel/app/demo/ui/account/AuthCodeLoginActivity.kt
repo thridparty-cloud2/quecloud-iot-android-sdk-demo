@@ -1,6 +1,7 @@
 package com.quectel.app.demo.ui.account
 
 import android.os.Bundle
+import com.quectel.app.demo.R
 import com.quectel.app.demo.base.activity.QuecBaseActivity
 import com.quectel.app.demo.databinding.ActivityAuthCodeLoginBinding
 import com.quectel.app.demo.ui.HomeActivity
@@ -23,16 +24,16 @@ class AuthCodeLoginActivity : QuecBaseActivity<ActivityAuthCodeLoginBinding>() {
 
     private fun login(authCode: String) {
         if (authCode.isEmpty()) {
-            showMessage("请输入authCode")
+            showMessage(getString(R.string.please_input_auth_code))
             return
         }
         QuecUserService.loginByAuthCode(authCode) {
             if (it.isSuccess) {
-                showMessage("登录成功")
+                showMessage(getString(R.string.login_success))
                 startTargetActivity(HomeActivity::class.java)
                 finish()
             } else {
-                showMessage("登录失败: " + it.msg)
+                showMessage(getString(R.string.login_failed, it.msg))
             }
         }
     }

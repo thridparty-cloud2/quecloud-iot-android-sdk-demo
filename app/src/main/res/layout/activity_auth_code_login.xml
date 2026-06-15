@@ -12,11 +12,11 @@
         android:id="@+id/et_code"
         style="@style/CommEdit"
         android:layout_marginTop="120dp"
-        android:hint="请输入authcode" />
+        android:hint="@string/hint_auth_code" />
 
     <Button
         android:id="@+id/bt_login"
         style="@style/CommButton"
         android:layout_marginTop="150dp"
-        android:text="登录" />
+        android:text="@string/login" />
 </LinearLayout>

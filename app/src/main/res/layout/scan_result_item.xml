@@ -12,7 +12,7 @@
       <TextView
               android:id="@+id/tv_name"
               android:layout_width="wrap_content"
-              android:text="name"
+              android:text="@string/name_label"
               android:textColor="@color/main1"
               android:textSize="16sp"
               android:gravity="center"
@@ -21,7 +21,7 @@
     <TextView
         android:id="@+id/tv_mac"
         android:layout_width="wrap_content"
-        android:text="mac"
+        android:text="@string/mac_label"
         android:layout_marginTop="5dp"
         android:textColor="@color/main1"
         android:textSize="16sp"
@@ -33,7 +33,7 @@
         android:id="@+id/bt_copy"
         android:layout_marginTop="5dp"
         android:layout_width="100dp"
-        android:text="复制mac"
+        android:text="@string/copy_mac"
         android:layout_weight="1"
         android:background="@color/new_lan"
         android:textColor="@color/white"

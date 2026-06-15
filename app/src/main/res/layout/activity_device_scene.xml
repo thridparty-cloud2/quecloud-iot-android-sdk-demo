@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="场景列表"
+            android:text="@string/device_scene_title"
             android:textColor="@color/main1"
             android:textSize="18sp" />
 

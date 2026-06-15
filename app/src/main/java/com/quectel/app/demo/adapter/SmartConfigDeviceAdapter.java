@@ -38,14 +38,14 @@ public class SmartConfigDeviceAdapter extends BaseQuickAdapter<SmartConfigDevice
         if(device.getBindResult()==200){
             baseViewHolder.getView(R.id.tv_status).setVisibility(View.VISIBLE);
             baseViewHolder.getView(R.id.tv_start).setVisibility(View.GONE);
-            baseViewHolder.setText(R.id.tv_status, "配网成功");
+            baseViewHolder.setText(R.id.tv_status, getContext().getString(R.string.network_config_success));
         }else if(device.getBindResult()==300){
             baseViewHolder.getView(R.id.tv_status).setVisibility(View.VISIBLE);
             baseViewHolder.getView(R.id.tv_start).setVisibility(View.GONE);
-            baseViewHolder.setText(R.id.tv_status, "配网失败");
+            baseViewHolder.setText(R.id.tv_status, getContext().getString(R.string.network_config_failed));
         }else if(device.getBindResult()==100){
             baseViewHolder.getView(R.id.tv_status).setVisibility(View.VISIBLE);
-            baseViewHolder.setText(R.id.tv_status, "绑定中…");
+            baseViewHolder.setText(R.id.tv_status, getContext().getString(R.string.binding_in_progress));
             baseViewHolder.getView(R.id.tv_start).setVisibility(View.GONE);
         }else {
             baseViewHolder.getView(R.id.tv_status).setVisibility(View.GONE);

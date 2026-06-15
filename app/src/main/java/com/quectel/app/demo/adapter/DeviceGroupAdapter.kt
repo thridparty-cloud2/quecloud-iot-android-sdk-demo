@@ -17,9 +17,9 @@ class DeviceGroupAdapter(
 
         val type = item.deviceGroupType
         if (type == 1) {
-            helper.setText(R.id.tv_group_type, "自己分组")
+            helper.setText(R.id.tv_group_type, mContext.getString(R.string.own_group))
         } else {
-            helper.setText(R.id.tv_group_type, "接受别人的分组")
+            helper.setText(R.id.tv_group_type, mContext.getString(R.string.received_group))
         }
     }
 }

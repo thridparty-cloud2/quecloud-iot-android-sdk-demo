@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
-                android:text="请输入数据中心"
+                android:text="@string/custom_data_center_title"
                 android:textColor="@color/W1"
                 android:textSize="@dimen/T7_F"
                 android:textStyle="bold" />
@@ -59,14 +59,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="userDomain："
+                    android:text="@string/user_domain_label"
                     android:textColor="@color/new_lan" />
 
                 <EditText
                     android:id="@+id/edtUserDomain"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="输入userDomain" />
+                    android:hint="@string/hint_user_domain" />
             </LinearLayout>
 
             <LinearLayout
@@ -80,14 +80,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="userDomainSecret："
+                    android:text="@string/user_domain_secret_label"
                     android:textColor="@color/new_lan" />
 
                 <EditText
                     android:id="@+id/edtUserDomainSecret"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="输入userDomainSecret" />
+                    android:hint="@string/hint_user_domain_secret" />
             </LinearLayout>
 
             <LinearLayout
@@ -101,14 +101,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="baseUrl："
+                    android:text="@string/base_url_label"
                     android:textColor="@color/new_lan" />
 
                 <EditText
                     android:id="@+id/edtBaseUrl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="输入baseUrl" />
+                    android:hint="@string/hint_base_url" />
             </LinearLayout>
 
             <LinearLayout
@@ -122,14 +122,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="websocketV2Url："
+                    android:text="@string/websocket_v2_url_label"
                     android:textColor="@color/new_lan" />
 
                 <EditText
                     android:id="@+id/edtWebsocketV2Url"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="输入websocketV2Url" />
+                    android:hint="@string/hint_websocket_v2_url" />
             </LinearLayout>
 
             <LinearLayout
@@ -143,14 +143,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="mcc："
+                    android:text="@string/mcc_label"
                     android:textColor="@color/new_lan" />
 
                 <EditText
                     android:id="@+id/edtMcc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="输入mcc" />
+                    android:hint="@string/hint_mcc" />
             </LinearLayout>
 
             <LinearLayout
@@ -164,14 +164,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="tcpAddr："
+                    android:text="@string/tcp_addr_label"
                     android:textColor="@color/new_lan" />
 
                 <EditText
                     android:id="@+id/edtTcpAddr"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="输入tcpAdrr" />
+                    android:hint="@string/hint_tcp_addr" />
             </LinearLayout>
 
             <LinearLayout
@@ -185,14 +185,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="pskAddr："
+                    android:text="@string/psk_addr_label"
                     android:textColor="@color/new_lan" />
 
                 <EditText
                     android:id="@+id/edtPskAddr"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="输入pskAddr" />
+                    android:hint="@string/hint_psk_addr" />
             </LinearLayout>
 
             <LinearLayout
@@ -206,14 +206,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="tlsAddr："
+                    android:text="@string/tls_addr_label"
                     android:textColor="@color/new_lan" />
 
                 <EditText
                     android:id="@+id/edtTlsAddr"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="输入tlsAddr" />
+                    android:hint="@string/hint_tls_addr" />
             </LinearLayout>
 
             <LinearLayout
@@ -227,14 +227,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="cerAddr："
+                    android:text="@string/cer_addr_label"
                     android:textColor="@color/new_lan" />
 
                 <EditText
                     android:id="@+id/edtCerAddr"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="输入cerAddr" />
+                    android:hint="@string/hint_cer_addr" />
             </LinearLayout>
 
         </LinearLayout>
@@ -249,7 +249,7 @@
             android:layout_marginBottom="@dimen/P6"
             android:background="@drawable/quec_basic_ui_login_button_background"
             android:enabled="true"
-            android:text="读取/Download/cloud_config.jpg文件"
+            android:text="@string/read_cloud_config_file"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="@dimen/T4_F" />
@@ -260,7 +260,7 @@
             android:layout_marginLeft="@dimen/P4"
             android:layout_marginRight="@dimen/P4"
             android:textSize="@dimen/dp_12"
-            android:text="cloud_config.jpg文件内容为json文本，后缀是jpg是为了兼容Android13及以上访问文件权限"/>
+            android:text="@string/cloud_config_tip"/>
 
 
         <LinearLayout
@@ -278,7 +278,7 @@
                 android:background="@drawable/quec_basic_ui_button_background_default"
                 android:enabled="true"
                 android:paddingHorizontal="@dimen/dp_40"
-                android:text="取消"
+                android:text="@string/cancel"
                 android:textColor="@color/main2"
                 android:textSize="@dimen/T4_F" />
 
@@ -291,7 +291,7 @@
                 android:background="@drawable/quec_basic_ui_login_button_background"
                 android:enabled="true"
                 android:paddingHorizontal="@dimen/dp_40"
-                android:text="确定"
+                android:text="@string/confirm"
                 android:textColor="@color/white"
                 android:textSize="@dimen/T4_F" />
 
